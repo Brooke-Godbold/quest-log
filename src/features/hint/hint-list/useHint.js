@@ -4,6 +4,7 @@ import { getHints } from "../../../services/apiHints";
 export function useHint(id) {
   const {
     isLoading,
+    isFetching,
     data: hintData,
     isError,
   } = useQuery({
@@ -11,5 +12,5 @@ export function useHint(id) {
     queryFn: () => getHints(id),
   });
 
-  return { isLoading, hintData, isError };
+  return { isLoading, isFetching, hintData, isError };
 }

@@ -8,4 +8,10 @@ const StyledSearch = styled.div`
   min-height: 100vh;
 `;
 
-export { StyledSearch };
+const Title = styled.h1`
+  font-size: 12.8rem;
+  margin-top: 14rem;
+  color: #777;
+`;
+
+export { StyledSearch, Title };

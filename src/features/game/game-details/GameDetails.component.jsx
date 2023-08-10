@@ -16,9 +16,9 @@ import {
 
 function GameDetails({ handleAddHint }) {
   const { id } = useParams();
-  const { gameData } = useGame(id);
+  const { gameData, isFetching } = useGame(id);
 
-  if (!gameData) return <Spinner />;
+  if (!gameData || isFetching) return <Spinner />;
 
   return (
     <StyledGameDetails>

@@ -5,7 +5,8 @@ const StyledHintItem = styled.div`
   background-color: #aaa;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: auto;
   gap: 0.5rem;
   transition: all 0.3s;
 
@@ -14,10 +15,26 @@ const StyledHintItem = styled.div`
   }
 `;
 
+const HintTagsContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  grid-column: 1 / -1;
+`;
+
+const HintTag = styled.div`
+  background-color: #666;
+  color: #bbb;
+  border-radius: 4px;
+  padding: 0.25rem 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+`;
+
 const HintUpvotes = styled.div`
   display: flex;
   gap: 1rem;
   justify-self: right;
+  align-self: flex-start;
   align-items: center;
   justify-content: center;
 `;
@@ -58,4 +75,33 @@ const HintDescription = styled.p`
   grid-column: 1 / -1;
 `;
 
-export { StyledHintItem, HintDescription, HintUpvotes, Upvote, Downvote };
+const SubmittedByContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const UserAvatar = styled.img`
+  height: 6.5rem;
+  width: auto;
+  border-radius: 50%;
+  border: 6px double rgb(51, 51, 51, 0.7);
+`;
+
+const UserName = styled.h4`
+  margin-top: 0.5rem;
+  align-self: flex-start;
+`;
+
+export {
+  StyledHintItem,
+  HintDescription,
+  HintUpvotes,
+  Upvote,
+  Downvote,
+  HintTag,
+  HintTagsContainer,
+  SubmittedByContainer,
+  UserAvatar,
+  UserName,
+};

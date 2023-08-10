@@ -1,6 +1,11 @@
 import { styled } from "styled-components";
 
-const StyledNewHint = styled.form``;
+const StyledNewHint = styled.form`
+  z-index: 1;
+  background-color: #999;
+  width: 100%;
+  padding: 1rem;
+`;
 
 const NewHintHeader = styled.div`
   display: flex;

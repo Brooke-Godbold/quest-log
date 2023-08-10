@@ -4,6 +4,7 @@ import { getGame } from "../../../services/apiGames";
 export function useGame(id) {
   const {
     isLoading,
+    isFetching,
     data: gameData,
     isError,
   } = useQuery({
@@ -11,5 +12,5 @@ export function useGame(id) {
     queryFn: () => getGame(id),
   });
 
-  return { isLoading, gameData, isError };
+  return { isLoading, isFetching, gameData, isError };
 }
