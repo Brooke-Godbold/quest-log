@@ -12,11 +12,13 @@ import {
 
 import { useHint } from "./useHint";
 import NewHint from "../new-hint/NewHint.component";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function HintListSection({ isNewHint, setIsNewHint }) {
   const { id } = useParams();
   const { isLoading, isFetching, hintData } = useHint(id);
+
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const currentHint = useRef(0);
 
@@ -41,12 +43,19 @@ function HintListSection({ isNewHint, setIsNewHint }) {
     [hintData]
   );
 
+  useEffect(
+    function () {
+      if (!isFetching) setInitialLoad(false);
+    },
+    [isFetching]
+  );
+
   return (
     <StyledHintListSection>
       <HintList $scrollEnabled={!isNewHint}>
         {isNewHint && <HintListOverlay />}
         {isNewHint && <NewHint setIsNewHint={setIsNewHint} />}
-        {isLoading || isFetching || !hintData ? (
+        {((isLoading || isFetching) && initialLoad) || !hintData ? (
           <Spinner />
         ) : hintData.length === 0 ? (
           !isNewHint ? (
