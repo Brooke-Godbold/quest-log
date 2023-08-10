@@ -77,8 +77,11 @@ function HintItem({ hint, id, setCurrentHint, isNewHint }) {
         <p>{voteData ? getDownvotes(voteData) : "-"}</p>
       </HintUpvotes>
       <HintTagsContainer>
-        <HintTag>Mechanics</HintTag>
-        <HintTag>World</HintTag>
+        {hint.hintTypes
+          ? hint.hintTypes.map((type) => (
+              <HintTag key={`hint_${hint.id}_${type}`}>{type}</HintTag>
+            ))
+          : null}
       </HintTagsContainer>
       <HintDescription>{hint.description}</HintDescription>
     </StyledHintItem>

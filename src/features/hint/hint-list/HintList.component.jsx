@@ -30,8 +30,6 @@ function HintListSection({ isNewHint, setIsNewHint }) {
         `hint_${currentHint.current}`
       );
 
-      console.log(currentHintElement);
-
       if (!currentHintElement) return;
 
       currentHintElement.scrollIntoView({
@@ -45,7 +43,7 @@ function HintListSection({ isNewHint, setIsNewHint }) {
 
   return (
     <StyledHintListSection>
-      <HintList scrollEnabled={!isNewHint}>
+      <HintList $scrollEnabled={!isNewHint}>
         {isNewHint && <HintListOverlay />}
         {isNewHint && <NewHint setIsNewHint={setIsNewHint} />}
         {isLoading || isFetching || !hintData ? (

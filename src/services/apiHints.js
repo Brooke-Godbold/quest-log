@@ -15,6 +15,8 @@ export async function getHints(id) {
 }
 
 export async function addHint(hintData) {
+  console.log(hintData);
+
   const { data: hint, error } = await supabase
     .from("hint")
     .insert(hintData)

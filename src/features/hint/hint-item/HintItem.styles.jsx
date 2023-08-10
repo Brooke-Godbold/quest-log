@@ -28,6 +28,8 @@ const HintTag = styled.div`
   padding: 0.25rem 1.5rem;
   margin-bottom: 1rem;
   font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: capitalize;
 `;
 
 const HintUpvotes = styled.div`

@@ -22,7 +22,7 @@ const HintList = styled.div`
   padding: 2rem;
   height: 100%;
 
-  overflow: ${(props) => (props.scrollEnabled ? "auto" : "hidden")};
+  overflow: ${(props) => (props.$scrollEnabled ? "auto" : "hidden")};
 
   &::-webkit-scrollbar {
     width: 12px; /* width of the entire scrollbar */
@@ -42,6 +42,7 @@ const NoHints = styled.p`
   font-size: 4.8rem;
   font-weight: 700;
   color: #aaa;
+  margin-top: 10rem;
 `;
 
 export { HintList, StyledHintListSection, NoHints, HintListOverlay };

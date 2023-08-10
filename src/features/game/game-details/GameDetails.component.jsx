@@ -11,6 +11,7 @@ import {
   GameDetailsInformation,
   GameDetailsReleaseYear,
   GameDetailsTitle,
+  PublisherButton,
   StyledGameDetails,
 } from "./GameDetails.styles";
 
@@ -27,6 +28,11 @@ function GameDetails({ handleAddHint }) {
         <GameDetailsTitle>{gameData.name}</GameDetailsTitle>
         <GameDetailsReleaseYear>{gameData.releaseYear}</GameDetailsReleaseYear>
         <GameDetailsDescription>{gameData.description}</GameDetailsDescription>
+        {gameData.publisherSite ? (
+          <PublisherButton href={gameData.publisherSite} target="_blank">
+            Visit Publisher
+          </PublisherButton>
+        ) : null}
       </GameDetailsInformation>
       <AddHintButton onClick={handleAddHint}>Add Hint</AddHintButton>
     </StyledGameDetails>

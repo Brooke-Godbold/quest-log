@@ -4,6 +4,7 @@ const StyledGameDetails = styled.div`
   position: relative;
   display: grid;
   grid-template-columns: 1fr 4fr;
+  gap: 5rem;
   justify-content: center;
   align-items: center;
 
@@ -11,6 +12,7 @@ const StyledGameDetails = styled.div`
 `;
 
 const GameDetailsImage = styled.img`
+  padding: 2rem;
   justify-self: center;
   align-self: center;
 `;
@@ -48,6 +50,21 @@ const AddHintButton = styled.button`
   }
 `;
 
+const PublisherButton = styled.a`
+  display: inline-block;
+  background-color: #333;
+  color: #ddd;
+  padding: 1rem 2rem;
+  margin-top: 5rem;
+  font-size: 1.8rem;
+  transition: all 0.3s;
+
+  &:active,
+  &:hover {
+    background-color: #222;
+  }
+`;
+
 export {
   StyledGameDetails,
   GameDetailsImage,
@@ -56,4 +73,5 @@ export {
   GameDetailsReleaseYear,
   GameDetailsDescription,
   AddHintButton,
+  PublisherButton,
 };
