@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
 :root {
@@ -132,4 +132,28 @@ img {
 }
 `;
 
+const CommonButton = css`
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  border: none;
+  background-color: ${(props) => (props.$light ? "#bbb" : "#333")};
+  color: ${(props) => (props.$light ? "#333" : "#ddd")};
+  border: 4px solid transparent;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: ${(props) => (props.$light ? "#aaa" : "#222")};
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+    border: 4px solid
+      ${(props) =>
+        props.$light ? "rgb(17, 17, 17, 0.4)" : "rgb(119, 119, 119, 0.4)"};
+  }
+`;
+
 export default GlobalStyles;
+
+export { CommonButton };

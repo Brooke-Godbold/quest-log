@@ -32,37 +32,8 @@ const GameDetailsReleaseYear = styled.h3`
   margin-bottom: 5rem;
 `;
 
-const GameDetailsDescription = styled.p``;
-
-const AddHintButton = styled.button`
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  margin: 2rem;
-  padding: 1rem 2rem;
-  font-size: 2rem;
-  border: none;
-  background-color: #bbb;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: #999;
-  }
-`;
-
-const PublisherButton = styled.a`
-  display: inline-block;
-  background-color: #333;
-  color: #ddd;
-  padding: 1rem 2rem;
-  margin-top: 5rem;
-  font-size: 1.8rem;
-  transition: all 0.3s;
-
-  &:active,
-  &:hover {
-    background-color: #222;
-  }
+const GameDetailsDescription = styled.p`
+  margin-bottom: 3rem;
 `;
 
 export {
@@ -72,6 +43,4 @@ export {
   GameDetailsTitle,
   GameDetailsReleaseYear,
   GameDetailsDescription,
-  AddHintButton,
-  PublisherButton,
 };

@@ -19,7 +19,11 @@ import { useUpdateHintPopularity } from "./useUpdateHint";
 
 function HintItem({ hint, id, setCurrentHint, isNewHint }) {
   const { isLoading, voteData } = useVote(hint.id);
-  const { addVote, isLoading: isVoting } = useAddVote(hint.id);
+  const {
+    addVote,
+    isLoading: isVoting,
+    isError: isAddVoteError,
+  } = useAddVote(hint.id);
   const { updateHintPopularity } = useUpdateHintPopularity();
 
   function getUpvotes(voteData) {
@@ -34,11 +38,16 @@ function HintItem({ hint, id, setCurrentHint, isNewHint }) {
   }
 
   function upvote() {
+    if (isLoading || isVoting) return;
+
     setCurrentHint(hint.id);
     addVote({
       hintId: hint.id,
       isPositive: true,
     });
+
+    if (isAddVoteError) return;
+
     updateHintPopularity({
       hintId: hint.id,
       popularity: hint.popularity + 1,
@@ -46,11 +55,16 @@ function HintItem({ hint, id, setCurrentHint, isNewHint }) {
   }
 
   function downVote() {
+    if (isLoading || isVoting) return;
+
     setCurrentHint(hint.id);
     addVote({
       hintId: hint.id,
       isPositive: false,
     });
+
+    if (isAddVoteError) return;
+
     updateHintPopularity({
       hintId: hint.id,
       popularity: hint.popularity - 1,
@@ -64,14 +78,11 @@ function HintItem({ hint, id, setCurrentHint, isNewHint }) {
         <UserName>Ronald Drumpf</UserName>
       </SubmittedByContainer>
       <HintUpvotes>
-        <Upvote disabled={isLoading || isVoting || isNewHint} onClick={upvote}>
+        <Upvote disabled={isNewHint} onClick={upvote}>
           <HiOutlineArrowUp />
         </Upvote>
         <p>{voteData ? getUpvotes(voteData) : "-"}</p>
-        <Downvote
-          disabled={isLoading || isVoting || isNewHint}
-          onClick={downVote}
-        >
+        <Downvote disabled={isNewHint} onClick={downVote}>
           <HiOutlineArrowDown />
         </Downvote>
         <p>{voteData ? getDownvotes(voteData) : "-"}</p>

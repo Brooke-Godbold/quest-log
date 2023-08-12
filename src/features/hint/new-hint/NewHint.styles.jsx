@@ -1,10 +1,11 @@
 import { styled } from "styled-components";
 
-const StyledNewHint = styled.form`
+const StyledNewHint = styled.div`
   z-index: 1;
-  background-color: #999;
   width: 100%;
-  padding: 1rem;
+  padding: 2rem;
+  position: absolute;
+  background-color: #ccc;
 `;
 
 const NewHintHeader = styled.div`
@@ -29,26 +30,6 @@ const NewHintTextArea = styled.textarea`
 
 const NewHintHeading = styled.h2``;
 
-const NewHintButton = styled.button`
-  font-size: 2.5rem;
-  border: none;
-  padding: 0 2rem;
-  font-weight: 700;
-  background-color: #bbb;
-  border: 4px solid transparent;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: #aaa;
-  }
-
-  &:focus,
-  &:active {
-    outline: none;
-    border: 4px solid rgb(17, 17, 17, 0.4);
-  }
-`;
-
 const NewHintTagsContainer = styled.div`
   display: flex;
 
@@ -67,7 +48,6 @@ export {
   StyledNewHint,
   NewHintTextArea,
   NewHintHeading,
-  NewHintButton,
   NewHintHeader,
   NewHintTagsContainer,
 };

@@ -1,8 +1,20 @@
 import { styled } from "styled-components";
 
 const StyledHintListSection = styled.div`
-  position: relative;
   background-color: #ddd;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+`;
+
+const HintListContainer = styled.div`
+  position: relative;
   overflow: auto;
 `;
 
@@ -21,6 +33,7 @@ const HintList = styled.div`
   gap: 5px;
   padding: 2rem;
   height: 100%;
+  min-height: 0;
 
   overflow: ${(props) => (props.$scrollEnabled ? "auto" : "hidden")};
 
@@ -35,6 +48,17 @@ const HintList = styled.div`
     background-color: #777; /* color of the scroll thumb */
     border: 3px solid #777; /* creates padding around scroll thumb */
   }
+
+  &::before {
+    content: "";
+    background: #ccc;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    box-shadow: 3px 0 10px 1px rgb(0, 0, 0, 0.2);
+  }
 `;
 
 const NoHints = styled.p`
@@ -45,4 +69,18 @@ const NoHints = styled.p`
   margin-top: 10rem;
 `;
 
-export { HintList, StyledHintListSection, NoHints, HintListOverlay };
+const StyledHintListHeader = styled.div`
+  position: relative;
+  background-color: #ccc;
+  padding: 2rem 0;
+`;
+
+export {
+  HintList,
+  StyledHintListSection,
+  NoHints,
+  HintListOverlay,
+  HintListContainer,
+  ButtonContainer,
+  StyledHintListHeader,
+};

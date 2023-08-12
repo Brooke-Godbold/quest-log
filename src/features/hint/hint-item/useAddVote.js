@@ -4,7 +4,11 @@ import { addVote as addVoteApi } from "../../../services/apiVotes";
 export function useAddVote(id) {
   const queryClient = useQueryClient();
 
-  const { mutate: addVote, isLoading } = useMutation({
+  const {
+    mutate: addVote,
+    isLoading,
+    isError,
+  } = useMutation({
     mutationFn: addVoteApi,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -13,5 +17,5 @@ export function useAddVote(id) {
     },
   });
 
-  return { addVote, isLoading };
+  return { addVote, isLoading, isError };
 }

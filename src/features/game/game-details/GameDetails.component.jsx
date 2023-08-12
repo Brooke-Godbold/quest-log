@@ -1,21 +1,19 @@
 import { useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 
 import { useGame } from "./useGame";
 
 import Spinner from "../../../ui/spinner/Spinner";
 import {
-  AddHintButton,
   GameDetailsDescription,
   GameDetailsImage,
   GameDetailsInformation,
   GameDetailsReleaseYear,
   GameDetailsTitle,
-  PublisherButton,
   StyledGameDetails,
 } from "./GameDetails.styles";
+import Button from "../../../ui/button/Button.component";
 
-function GameDetails({ handleAddHint }) {
+function GameDetails() {
   const { id } = useParams();
   const { gameData, isFetching } = useGame(id);
 
@@ -29,18 +27,13 @@ function GameDetails({ handleAddHint }) {
         <GameDetailsReleaseYear>{gameData.releaseYear}</GameDetailsReleaseYear>
         <GameDetailsDescription>{gameData.description}</GameDetailsDescription>
         {gameData.publisherSite ? (
-          <PublisherButton href={gameData.publisherSite} target="_blank">
+          <Button isLight={false} isLink={true} href={gameData.publisherSite}>
             Visit Publisher
-          </PublisherButton>
+          </Button>
         ) : null}
       </GameDetailsInformation>
-      <AddHintButton onClick={handleAddHint}>Add Hint</AddHintButton>
     </StyledGameDetails>
   );
 }
-
-GameDetails.propTypes = {
-  handleAddHint: PropTypes.func.isRequired,
-};
 
 export default GameDetails;

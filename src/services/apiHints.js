@@ -4,8 +4,7 @@ export async function getHints(id) {
   const { data: hints, error } = await supabase
     .from("hint")
     .select("*")
-    .eq("gameId", id)
-    .order("popularity", { ascending: false });
+    .eq("gameId", id);
 
   if (error) {
     console.error(error);
@@ -15,8 +14,6 @@ export async function getHints(id) {
 }
 
 export async function addHint(hintData) {
-  console.log(hintData);
-
   const { data: hint, error } = await supabase
     .from("hint")
     .insert(hintData)

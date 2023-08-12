@@ -2,16 +2,16 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 
 import {
-  NewHintButton,
   NewHintHeader,
   NewHintHeading,
-  NewHintTagsContainer,
   NewHintTextArea,
   StyledNewHint,
 } from "./NewHint.styles";
+import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
 import { useAddHint } from "./useAddHint";
 import TagButton from "../tag-button/TagButton.component";
 import { useRef } from "react";
+import Button from "../../../ui/button/Button.component";
 
 function NewHint({ setIsNewHint }) {
   const { id: gameId } = useParams();
@@ -20,9 +20,7 @@ function NewHint({ setIsNewHint }) {
   const newHintTags = useRef([]);
   const newHintTextRef = useRef();
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
+  function handleClick() {
     setIsNewHint(false);
 
     const newHintText = newHintTextRef.current.value;
@@ -45,15 +43,17 @@ function NewHint({ setIsNewHint }) {
   }
 
   return (
-    <StyledNewHint onSubmit={handleSubmit}>
+    <StyledNewHint>
       <NewHintHeader>
         <NewHintHeading>New Hint</NewHintHeading>
-        <NewHintButton>+</NewHintButton>
-        <NewHintTagsContainer>
+        <Button isLight={false} onClick={handleClick}>
+          Submit
+        </Button>
+        <StyledButtonContainer>
           <TagButton tag={"Mechanics"} setHintTags={setHintTags} />
           <TagButton tag={"World"} setHintTags={setHintTags} />
           <TagButton tag={"Skills"} setHintTags={setHintTags} />
-        </NewHintTagsContainer>
+        </StyledButtonContainer>
       </NewHintHeader>
       <NewHintTextArea ref={newHintTextRef} />
     </StyledNewHint>
