@@ -13,6 +13,7 @@ import {
 
 import { useHint } from "./useHint";
 import { add, compareAsc, compareDesc } from "date-fns";
+import { useUser } from "../../auth/useUser";
 
 function HintListBody({ isNewHint }) {
   const [searchParams] = useSearchParams();
@@ -21,6 +22,8 @@ function HintListBody({ isNewHint }) {
 
   const { id } = useParams();
   const { isLoading, isFetching, hintData } = useHint(id);
+
+  const { user } = useUser();
 
   const [initialLoad, setInitialLoad] = useState(true);
 
@@ -124,6 +127,7 @@ function HintListBody({ isNewHint }) {
               currentHint={currentHint}
               setCurrentHint={setCurrentHint}
               isNewHint={isNewHint}
+              user={user}
             />
           ))
         )}

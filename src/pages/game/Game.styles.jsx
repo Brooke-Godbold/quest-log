@@ -5,7 +5,7 @@ const StyledGame = styled.div`
   grid-template-rows: 1fr 1.5fr;
   margin: 0 auto;
   gap: 5rem;
-  height: 100vh;
+  height: 100%;
   padding: 10rem;
   max-width: 75%;
 `;

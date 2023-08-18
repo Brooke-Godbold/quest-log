@@ -26,3 +26,26 @@ export async function addVote(voteData) {
 
   return vote;
 }
+
+export async function editVote(voteData) {
+  const { data: vote, error } = await supabase
+    .from("vote")
+    .update({ isPositive: voteData.isPositive })
+    .eq("id", voteData.voteId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+  }
+
+  return vote;
+}
+
+export async function deleteVote(id) {
+  const { error } = await supabase.from("vote").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+  }
+}

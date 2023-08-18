@@ -4,6 +4,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import Game from "./pages/game/Game.page";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AppLayout from "./ui/app-layout/AppLayout.component";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,9 +21,11 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route index element={<Navigate replace to="search" />} />
-          <Route path="search" element={<Search />} />
-          <Route path="game/:id" element={<Game />} />
+          <Route element={<AppLayout />}>
+            <Route index element={<Navigate replace to="search" />} />
+            <Route path="search" element={<Search />} />
+            <Route path="game/:id" element={<Game />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

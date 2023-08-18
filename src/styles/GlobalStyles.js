@@ -130,6 +130,11 @@ h6 {
 img {
   max-width: 100%;
 }
+
+div,
+p {
+  cursor: default;
+}
 `;
 
 const CommonButton = css`

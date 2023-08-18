@@ -13,7 +13,7 @@ import TagButton from "../tag-button/TagButton.component";
 import { useRef } from "react";
 import Button from "../../../ui/button/Button.component";
 
-function NewHint({ setIsNewHint }) {
+function NewHint({ setIsNewHint, user: { id: userId } }) {
   const { id: gameId } = useParams();
   const { addHint } = useAddHint();
 
@@ -27,10 +27,13 @@ function NewHint({ setIsNewHint }) {
 
     if (newHintText.length === 0) return;
 
+    console.log(userId);
+
     addHint({
       description: newHintText,
       gameId,
       hintTypes: newHintTags.current,
+      userId,
     });
   }
 
@@ -62,6 +65,7 @@ function NewHint({ setIsNewHint }) {
 
 NewHint.propTypes = {
   setIsNewHint: PropTypes.func.isRequired,
+  user: PropTypes.object,
 };
 
 export default NewHint;

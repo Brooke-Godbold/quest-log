@@ -6,11 +6,14 @@ import ToggleButton from "../../../ui/toggle-button/ToggleButton.component";
 import NewHint from "../new-hint/NewHint.component";
 import { ButtonContainer, StyledHintListHeader } from "./HintList.styles";
 import { useSearchParams } from "react-router-dom";
+import { useUser } from "../../auth/useUser";
 
 function HintListHeader({ isNewHint, setIsNewHint }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSort = searchParams.get("sort") || "popularity";
   const currentFilter = searchParams.get("filter") || "none";
+
+  const { isAuthenticated, user } = useUser();
 
   function handleAddNewHint() {
     setIsNewHint((isNewHint) => !isNewHint);
@@ -29,9 +32,11 @@ function HintListHeader({ isNewHint, setIsNewHint }) {
   return (
     <StyledHintListHeader>
       <ButtonContainer>
-        <Button isLight={false} onClick={handleAddNewHint}>
-          Add Hint
-        </Button>
+        {isAuthenticated && (
+          <Button isLight={false} onClick={handleAddNewHint}>
+            Add Hint
+          </Button>
+        )}
         <StyledButtonContainer>
           <ToggleButton
             toggleValue="popularity"
@@ -87,7 +92,7 @@ function HintListHeader({ isNewHint, setIsNewHint }) {
           </ToggleButton>
         </StyledButtonContainer>
       </ButtonContainer>
-      {isNewHint && <NewHint setIsNewHint={setIsNewHint} />}
+      {isNewHint && <NewHint setIsNewHint={setIsNewHint} user={user} />}
     </StyledHintListHeader>
   );
 }

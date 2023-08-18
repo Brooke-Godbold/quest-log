@@ -42,34 +42,52 @@ const HintUpvotes = styled.div`
 `;
 
 const Upvote = styled.button`
-  color: green;
+  color: ${(props) => (props.$authorized ? "#248f09" : "#333")};
   transition: all 0.3s;
-  border: none;
   background-color: transparent;
+  transform: none;
+  cursor: ${(props) => (props.$authorized ? "pointer" : "auto")};
+  border: none;
+
+  & svg {
+    border: ${(props) =>
+      props.$authorized && props.$voted ? "2px solid #248f09" : "none"};
+    border-radius: 50%;
+    height: 100%;
+    width: auto;
+  }
 
   &:focus {
     outline: none;
   }
 
-  &:focus,
   &:hover {
-    transform: scale(150%);
+    transform: ${(props) => (props.$authorized ? "scale(150%)" : "none")};
   }
 `;
 
 const Downvote = styled.button`
-  color: red;
+  color: ${(props) => (props.$authorized ? "#8f1209" : "#333")};
   transition: all 0.3s;
   border: none;
   background-color: transparent;
+  transform: none;
+  cursor: ${(props) => (props.$authorized ? "pointer" : "auto")};
+
+  & svg {
+    border: ${(props) =>
+      props.$authorized && props.$voted ? "2px solid #8f1209" : "none"};
+    border-radius: 50%;
+    height: 100%;
+    width: auto;
+  }
 
   &:focus {
     outline: none;
   }
 
-  &:focus,
   &:hover {
-    transform: scale(150%);
+    transform: ${(props) => (props.$authorized ? "scale(150%)" : "none")};
   }
 `;
 
