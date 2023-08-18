@@ -13,7 +13,7 @@ const LoginHeading = styled.h2`
 const FormInputTable = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: ${(props) => `repeat(${props.$rows}, 1fr)`};
   gap: 2rem;
   font-size: 2rem;
   align-items: center;

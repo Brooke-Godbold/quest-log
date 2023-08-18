@@ -40,7 +40,7 @@ function LoginForm({ onCloseModal }) {
   return (
     <StyledLoginForm onSubmit={handleSubmit(onSubmit, onError)}>
       <LoginHeading>Login</LoginHeading>
-      <FormInputTable>
+      <FormInputTable $rows={2}>
         <FormLabel>Email</FormLabel>
         <FormInput
           type="email"
