@@ -7,15 +7,19 @@ import {
   FormInput,
   FormInputTable,
   FormLabel,
+  LoginButtonsContainer,
   LoginHeading,
   StyledLoginForm,
 } from "./LoginForm.styles";
 import { useForm } from "react-hook-form";
 import { useLogin } from "./useLogin";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm({ onCloseModal }) {
   const { register, handleSubmit } = useForm();
   const { login, isLoggingIn } = useLogin();
+
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
   const [isLoginError, setIsLoginError] = useState(false);
@@ -74,9 +78,21 @@ function LoginForm({ onCloseModal }) {
         {isLoginError && <FormError>Invalid Login</FormError>}
       </FormErrorContainer>
 
-      <Button disabled={isLoggingIn} isLight={true}>
-        Login
-      </Button>
+      <LoginButtonsContainer>
+        <Button disabled={isLoggingIn} isLight={true}>
+          Login
+        </Button>
+        <Button
+          disabled={isLoggingIn}
+          isLight={true}
+          onClick={() => {
+            onCloseModal?.();
+            navigate("/signup", { replace: true });
+          }}
+        >
+          Sign Up
+        </Button>
+      </LoginButtonsContainer>
     </StyledLoginForm>
   );
 }

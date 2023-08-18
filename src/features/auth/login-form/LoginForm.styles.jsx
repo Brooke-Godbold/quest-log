@@ -51,6 +51,16 @@ const FormError = styled.span`
   color: #ffdfdf;
 `;
 
+const LoginButtonsContainer = styled.div`
+  display: flex;
+  gap: 6.4rem;
+  justify-content: center;
+
+  & button {
+    width: 30%;
+  }
+`;
+
 export {
   StyledLoginForm,
   FormInputTable,
@@ -59,4 +69,5 @@ export {
   FormInput,
   FormErrorContainer,
   FormError,
+  LoginButtonsContainer,
 };

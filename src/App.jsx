@@ -27,8 +27,8 @@ function App() {
             <Route index element={<Navigate replace to="search" />} />
             <Route path="search" element={<Search />} />
             <Route path="game/:id" element={<Game />} />
-            <Route path="signup" element={<Signup />} />
           </Route>
+          <Route path="signup" element={<Signup />} />
           <Route path="confirm-signup" element={<ConfirmSignup />} />
         </Routes>
       </BrowserRouter>
