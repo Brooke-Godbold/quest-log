@@ -7,19 +7,34 @@ const StyledGameDetails = styled.div`
   gap: 5rem;
   justify-content: center;
   align-items: center;
+  background-color: var(--color-brand-500);
+  padding: 2rem;
+`;
 
-  background-color: #ddd;
+const GameDetailsImageContainer = styled.div`
+  padding: 2rem;
+  justify-content: center;
+  align-content: center;
+
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 `;
 
 const GameDetailsImage = styled.img`
-  padding: 2rem;
-  justify-self: center;
-  align-self: center;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1 / 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const GameDetailsInformation = styled.div`
   align-self: self-start;
-  margin-top: 5rem;
+  margin-top: 1rem;
   margin-right: 50rem;
 `;
 
@@ -43,4 +58,5 @@ export {
   GameDetailsTitle,
   GameDetailsReleaseYear,
   GameDetailsDescription,
+  GameDetailsImageContainer,
 };

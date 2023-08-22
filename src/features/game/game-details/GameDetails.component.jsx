@@ -6,6 +6,7 @@ import Spinner from "../../../ui/spinner/Spinner";
 import {
   GameDetailsDescription,
   GameDetailsImage,
+  GameDetailsImageContainer,
   GameDetailsInformation,
   GameDetailsReleaseYear,
   GameDetailsTitle,
@@ -21,7 +22,9 @@ function GameDetails() {
 
   return (
     <StyledGameDetails>
-      <GameDetailsImage src={gameData.imageUrl} />
+      <GameDetailsImageContainer>
+        <GameDetailsImage src={gameData.imageUrl} />
+      </GameDetailsImageContainer>
       <GameDetailsInformation>
         <GameDetailsTitle>{gameData.name}</GameDetailsTitle>
         <GameDetailsReleaseYear>{gameData.releaseYear}</GameDetailsReleaseYear>

@@ -27,3 +27,13 @@ export async function getGame(id) {
 
   return games;
 }
+
+export async function getAllGames() {
+  const { data: games, error } = await supabase.from("game").select("*");
+
+  if (error) {
+    console.error(error);
+  }
+
+  return games;
+}

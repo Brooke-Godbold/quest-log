@@ -6,12 +6,12 @@ const StyledToggleButton = styled.button`
 
   background-color: ${(props) =>
     props.$isToggled && props.$isLight
-      ? "#888"
+      ? "var(--color-brand-200);"
       : !props.$isToggled && props.$isLight
-      ? "#bbb"
+      ? "var(--color-brand-300);"
       : props.$isToggled && !props.$isLight
-      ? "#000"
-      : "#333"};
+      ? "var(--color-brand-800)"
+      : "var(--color-brand-700)"};
 `;
 
 export { StyledToggleButton };

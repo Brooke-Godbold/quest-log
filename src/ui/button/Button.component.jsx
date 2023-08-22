@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { StyledButton, StyledLinkButton } from "./Button.styles";
 
 function Button({
-  isLight,
+  isLight = false,
   isLink = false,
   disabled = false,
   onClick,
@@ -27,7 +27,7 @@ function Button({
 export default Button;
 
 Button.propTypes = {
-  isLight: PropTypes.bool.isRequired,
+  isLight: PropTypes.bool,
   isLink: PropTypes.bool,
   href: PropTypes.string,
   onClick: PropTypes.func,

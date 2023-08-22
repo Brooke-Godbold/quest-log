@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { HiXCircle } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
 
 import { ModalCloseButton, Overlay, StyledModal } from "./Modal.styles";
 
@@ -32,16 +32,21 @@ function Open({ children, opens: opensWindowName }) {
   return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
-function Window({ children, name }) {
+function Window({ children, name, onCloseCallback }) {
   const { openName, close } = useContext(ModalContext);
 
   if (name !== openName) return null;
 
+  function closeModal() {
+    close();
+    onCloseCallback?.();
+  }
+
   return createPortal(
     <Overlay>
       <StyledModal>
-        <ModalCloseButton onClick={close}>
-          <HiXCircle />
+        <ModalCloseButton onClick={closeModal}>
+          <HiX />
         </ModalCloseButton>
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
@@ -53,6 +58,7 @@ function Window({ children, name }) {
 Window.propTypes = {
   children: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
+  onCloseCallback: PropTypes.func,
 };
 
 Modal.Open = Open;

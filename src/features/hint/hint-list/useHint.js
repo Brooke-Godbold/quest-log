@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getHints } from "../../../services/apiHints";
 
-export function useHint(id) {
+export function useHint(data) {
   const {
     isLoading,
     isFetching,
     data: hintData,
     isError,
   } = useQuery({
-    queryKey: ["hints"],
-    queryFn: () => getHints(id),
+    queryKey: ["hints", data.id],
+    queryFn: () => getHints(data),
   });
 
   return { isLoading, isFetching, hintData, isError };

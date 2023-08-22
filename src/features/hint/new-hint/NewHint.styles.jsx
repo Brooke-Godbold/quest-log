@@ -5,7 +5,7 @@ const StyledNewHint = styled.div`
   width: 100%;
   padding: 2rem;
   position: absolute;
-  background-color: #ccc;
+  background-color: var(--color-brand-500);
 `;
 
 const NewHintHeader = styled.div`
@@ -16,6 +16,7 @@ const NewHintHeader = styled.div`
 `;
 
 const NewHintTextArea = styled.textarea`
+  margin-top: 3rem;
   padding: 1.5rem 2rem;
   width: 100%;
   border: none;
@@ -27,8 +28,6 @@ const NewHintTextArea = styled.textarea`
     border: 4px solid rgb(17, 17, 17, 0.4);
   }
 `;
-
-const NewHintHeading = styled.h2``;
 
 const NewHintTagsContainer = styled.div`
   display: flex;
@@ -44,10 +43,4 @@ const NewHintTagsContainer = styled.div`
   }
 `;
 
-export {
-  StyledNewHint,
-  NewHintTextArea,
-  NewHintHeading,
-  NewHintHeader,
-  NewHintTagsContainer,
-};
+export { StyledNewHint, NewHintTextArea, NewHintHeader, NewHintTagsContainer };

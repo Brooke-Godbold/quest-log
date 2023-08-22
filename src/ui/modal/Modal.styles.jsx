@@ -8,7 +8,7 @@ const StyledModal = styled.div`
   transition: all 0.3s;
   padding: 3rem;
 
-  background-color: #333;
+  background-color: var(--color-brand-700);
   color: #bbb;
   border: 2px solid rgb(187, 187, 187, 0.5);
   border-radius: 4px;
@@ -36,6 +36,11 @@ const ModalCloseButton = styled.button`
   & svg {
     width: 2.4rem;
     height: 2.4rem;
+    transition: all 0.3s;
+  }
+
+  & svg:hover {
+    color: #888;
   }
 `;
 

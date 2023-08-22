@@ -1,22 +1,21 @@
-import PropTypes from "prop-types";
-
 import { StyledSearchInput, Input } from "./SearchInput.styles";
+import { useSearchParams } from "react-router-dom";
 
-function SearchInput({ searchQuery, setSearchQuery }) {
+function SearchInput() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   return (
     <StyledSearchInput>
       <Input
         placeholder="query..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        value={searchParams.get("query") || ""}
+        onChange={(e) => {
+          searchParams.set("query", e.target.value);
+          setSearchParams(searchParams);
+        }}
       />
     </StyledSearchInput>
   );
 }
-
-SearchInput.propTypes = {
-  searchQuery: PropTypes.string.isRequired,
-  setSearchQuery: PropTypes.func.isRequired,
-};
 
 export default SearchInput;

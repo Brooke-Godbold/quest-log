@@ -1,10 +1,25 @@
 import supabase from "./supabase";
 
-export async function getHints(id) {
+export async function getHints(data) {
+  if (!data.id) return null;
+
   const { data: hints, error } = await supabase
     .from("hint")
     .select("*")
-    .eq("gameId", id);
+    .eq(data.by, data.id);
+
+  if (error) {
+    console.error(error);
+  }
+
+  return hints;
+}
+
+export async function getHintsByHintIdList(hintIds) {
+  const { data: hints, error } = await supabase
+    .from("hint")
+    .select("*")
+    .in("id", hintIds);
 
   if (error) {
     console.error(error);
@@ -39,4 +54,13 @@ export async function updateHintPopularity(hintData) {
   }
 
   return hint;
+}
+
+export async function deleteHint(id) {
+  const { error } = await supabase.from("hint").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error(error);
+  }
 }

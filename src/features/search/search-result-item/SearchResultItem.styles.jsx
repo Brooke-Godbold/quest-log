@@ -7,7 +7,7 @@ const StyledSearchResultItem = styled.button`
   justify-content: center;
   align-items: center;
 
-  background-color: #bbb;
+  background-color: var(--color-brand-400);
   padding: 3rem;
   box-shadow: inset 0rem 0rem 0.5rem rgb(17, 17, 17, 0.2);
   border: none;
@@ -16,32 +16,36 @@ const StyledSearchResultItem = styled.button`
 
   &:hover,
   &:active {
-    background-color: #aaa;
+    background-color: var(--color-brand-500);
   }
 
-  &:focus {
-    outline: 2px solid #888;
+  @media (max-width: 75em) {
+    display: flex;
   }
 `;
 
 const SearchResultItemInformation = styled.div``;
 
 const SearchResultItemName = styled.h3`
-  color: #777;
+  color: var(--color-brand-800);
   margin-bottom: 0.25rem;
 `;
 
 const SearchResultItemReleaseYear = styled.h4`
-  color: #888;
+  color: var(--color-brand-700);
   margin-bottom: 3rem;
 `;
 
 const SearchResultItemDescription = styled.p`
   font-size: 1.25rem;
-  color: #555;
+  color: var(--color-brand-700);
 `;
 
-const SearchResultItemImage = styled.img``;
+const SearchResultItemImage = styled.img`
+  @media (max-width: 75em) {
+    display: none;
+  }
+`;
 
 export {
   StyledSearchResultItem,

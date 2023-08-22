@@ -8,10 +8,12 @@ const StyledTagButton = styled.button`
   transition: all 0.3s;
   color: #ccc;
 
-  background-color: ${(props) => (props.$isToggled ? "#555" : "#777")};
+  background-color: ${(props) =>
+    props.$isToggled ? "var(--color-brand-700);" : "var(--color-brand-600);"};
 
   &:hover {
-    background-color: ${(props) => (props.$isToggled ? "#222" : "#444")};
+    background-color: ${(props) =>
+      props.$isToggled ? "var(--color-brand-800);" : "var(--color-brand-700);"};
   }
 
   &:focus,

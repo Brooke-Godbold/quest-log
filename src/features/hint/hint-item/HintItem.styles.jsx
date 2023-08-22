@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 
 const StyledHintItem = styled.div`
   padding: 1.5rem 2.5rem;
-  background-color: #aaa;
+  background-color: var(--color-brand-600);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -10,8 +10,10 @@ const StyledHintItem = styled.div`
   gap: 0.5rem;
   transition: all 0.3s;
 
+  box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.1);
+
   &:hover {
-    background-color: #999;
+    background-color: var(--color-brand-500);
   }
 `;
 
@@ -22,7 +24,7 @@ const HintTagsContainer = styled.div`
 `;
 
 const HintTag = styled.div`
-  background-color: #666;
+  background-color: var(--color-brand-700);
   color: #bbb;
   border-radius: 4px;
   padding: 0.25rem 1.5rem;
@@ -30,6 +32,21 @@ const HintTag = styled.div`
   font-size: 1.25rem;
   font-weight: 700;
   text-transform: capitalize;
+`;
+
+const HintDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  margin-right: 2rem;
+
+  & svg {
+    transform: scale(120%);
+    color: var(--color-red-800);
+  }
+
+  & svg:hover {
+    color: var(--color-red-600);
+  }
 `;
 
 const HintUpvotes = styled.div`
@@ -103,7 +120,8 @@ const SubmittedByContainer = styled.div`
 
 const UserAvatar = styled.img`
   height: 6.5rem;
-  width: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 50%;
   border: 6px double rgb(51, 51, 51, 0.7);
 `;
@@ -124,4 +142,5 @@ export {
   SubmittedByContainer,
   UserAvatar,
   UserName,
+  HintDeleteButton,
 };

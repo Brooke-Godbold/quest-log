@@ -13,6 +13,21 @@ export async function getVotes(id) {
   return votes;
 }
 
+export async function getVotesByUser(id) {
+  if (!id) return null;
+
+  const { data: votes, error } = await supabase
+    .from("vote")
+    .select("*")
+    .eq("userId", id);
+
+  if (error) {
+    console.error(error);
+  }
+
+  return votes;
+}
+
 export async function addVote(voteData) {
   const { data: vote, error } = await supabase
     .from("vote")

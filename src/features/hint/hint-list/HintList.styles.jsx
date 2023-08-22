@@ -1,7 +1,8 @@
 import { styled } from "styled-components";
+import { CommonScrollBar } from "../../../styles/GlobalStyles";
 
 const StyledHintListSection = styled.div`
-  background-color: #ddd;
+  background-color: var(--color-brand-700);
   min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -15,7 +16,12 @@ const ButtonContainer = styled.div`
 
 const HintListContainer = styled.div`
   position: relative;
-  overflow: auto;
+  height: 0;
+  min-height: 100%;
+
+  overflow: ${(props) => (props.$scrollEnabled ? "auto" : "hidden")};
+
+  ${CommonScrollBar}
 `;
 
 const HintListOverlay = styled.div`
@@ -25,6 +31,7 @@ const HintListOverlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgb(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 `;
 
 const HintList = styled.div`
@@ -32,33 +39,7 @@ const HintList = styled.div`
   flex-direction: column;
   gap: 5px;
   padding: 2rem;
-  height: 100%;
   min-height: 0;
-
-  overflow: ${(props) => (props.$scrollEnabled ? "auto" : "hidden")};
-
-  &::-webkit-scrollbar {
-    width: 12px; /* width of the entire scrollbar */
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #999; /* color of the scroll thumb */
-    border: 3px solid #999; /* creates padding around scroll thumb */
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #777; /* color of the scroll thumb */
-    border: 3px solid #777; /* creates padding around scroll thumb */
-  }
-
-  &::before {
-    content: "";
-    background: #ccc;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    box-shadow: 3px 0 10px 1px rgb(0, 0, 0, 0.2);
-  }
 `;
 
 const NoHints = styled.p`
@@ -71,7 +52,7 @@ const NoHints = styled.p`
 
 const StyledHintListHeader = styled.div`
   position: relative;
-  background-color: #ccc;
+  background-color: var(--color-brand-500);
   padding: 2rem 0;
 `;
 

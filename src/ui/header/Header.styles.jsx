@@ -1,21 +1,27 @@
 import { styled } from "styled-components";
+import { CommonInput } from "../../styles/GlobalStyles";
+import { NavLink } from "react-router-dom";
 
 const StyledHeader = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
-  padding: 3.6rem 4.8rem;
+  height: 10rem;
+  padding: 6rem 4.8rem;
+  background-color: var(--color-brand-500);
+  box-shadow: 0 0 2px 2px #000;
 `;
 
-const HeaderLogo = styled.div``;
+const HeaderLogoImage = styled.img`
+  max-height: 10rem;
+`;
 
 const HeaderLinks = styled.div`
   display: flex;
   gap: 4.8rem;
   font-size: 2.4rem;
+  align-items: center;
 `;
 
 const HeaderButton = styled.button`
@@ -23,4 +29,27 @@ const HeaderButton = styled.button`
   background-color: transparent;
 `;
 
-export { StyledHeader, HeaderLogo, HeaderLinks, HeaderButton };
+const HeaderLink = styled(NavLink)`
+  &.active {
+    color: #943b35;
+  }
+`;
+
+const HeaderSearchForm = styled.form``;
+
+const HeaderSearch = styled.input`
+  ${CommonInput}
+
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+`;
+
+export {
+  StyledHeader,
+  HeaderLinks,
+  HeaderButton,
+  HeaderLink,
+  HeaderSearch,
+  HeaderLogoImage,
+  HeaderSearchForm,
+};

@@ -16,14 +16,14 @@ import { add, compareAsc, compareDesc } from "date-fns";
 import { useUser } from "../../auth/useUser";
 
 function HintListBody({ isNewHint }) {
-  const [searchParams] = useSearchParams();
+  const { user } = useUser();
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const sortValue = searchParams.get("sort") || "popularity";
   const filterValue = searchParams.get("filter") || "none";
 
   const { id } = useParams();
-  const { isLoading, isFetching, hintData } = useHint(id);
-
-  const { user } = useUser();
+  const { isLoading, isFetching, hintData } = useHint({ by: "gameId", id });
 
   const [initialLoad, setInitialLoad] = useState(true);
 
@@ -44,11 +44,21 @@ function HintListBody({ isNewHint }) {
 
   useEffect(
     function () {
+      if (!user && searchParams.get("filter") === "mine") {
+        searchParams.set("filter", "none");
+        setSearchParams(searchParams);
+      }
+    },
+    [searchParams, setSearchParams, user]
+  );
+
+  useEffect(
+    function () {
       if (!hintData || isNewHint) return;
 
       const currentData = [...hintData];
       const sortedData = sortHints(currentData, sortValue);
-      const filteredData = filterHints(sortedData, filterValue);
+      const filteredData = filterHints(sortedData, filterValue, user);
       setSortedFilteredData(filteredData);
 
       const currentHintElement = document.getElementById(
@@ -63,7 +73,7 @@ function HintListBody({ isNewHint }) {
         inline: "nearest",
       });
     },
-    [hintData, isNewHint, sortValue, filterValue]
+    [hintData, isNewHint, sortValue, filterValue, user]
   );
 
   function sortHints(hintData, sortBy) {
@@ -86,7 +96,7 @@ function HintListBody({ isNewHint }) {
     }
   }
 
-  function filterHints(hintData, filterBy) {
+  function filterHints(hintData, filterBy, user) {
     switch (filterBy) {
       case "none":
         return hintData;
@@ -101,7 +111,18 @@ function HintListBody({ isNewHint }) {
             ) >= 0
         );
       case "mine":
-        return hintData;
+        if (user) {
+          return hintData
+            .filter((hint) => hint.userId === user.id)
+            .sort((hintA, hintB) =>
+              compareDesc(
+                new Date(hintA.created_at),
+                new Date(hintB.created_at)
+              )
+            );
+        } else {
+          return hintData;
+        }
       default:
         console.error("Unknown Filter Type");
         return hintData;
@@ -109,8 +130,8 @@ function HintListBody({ isNewHint }) {
   }
 
   return (
-    <HintListContainer>
-      <HintList $scrollEnabled={!isNewHint}>
+    <HintListContainer $scrollEnabled={!isNewHint}>
+      <HintList>
         {isNewHint && <HintListOverlay />}
         {((isLoading || isFetching) && initialLoad) || !hintData ? (
           <Spinner />

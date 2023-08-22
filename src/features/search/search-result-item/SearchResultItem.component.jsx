@@ -25,7 +25,7 @@ function SearchResultItem({ gameItem }) {
           {gameItem.releaseYear}
         </SearchResultItemReleaseYear>
         <SearchResultItemDescription>
-          {gameItem.description}
+          {gameItem.summary}
         </SearchResultItemDescription>
       </SearchResultItemInformation>
     </StyledSearchResultItem>

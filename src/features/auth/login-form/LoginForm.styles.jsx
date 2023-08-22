@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { CommonInput } from "../../../styles/GlobalStyles";
 
 const StyledLoginForm = styled.form`
   display: flex;
@@ -7,10 +8,12 @@ const StyledLoginForm = styled.form`
 `;
 
 const LoginHeading = styled.h2`
+  text-align: center;
   margin-bottom: 2rem;
+  font-size: 3.6rem;
 `;
 
-const FormInputTable = styled.div`
+const LoginFormInputTable = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr;
   grid-template-rows: ${(props) => `repeat(${props.$rows}, 1fr)`};
@@ -19,21 +22,14 @@ const FormInputTable = styled.div`
   align-items: center;
 `;
 
-const FormInput = styled.input`
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  border: none;
-  color: #888;
-  width: 50rem;
+const LoginFormInput = styled.input`
+  ${CommonInput}
 
-  &::placeholder {
-    color: #bbb;
-  }
+  padding: 1rem 2rem;
+  width: 50rem;
 `;
 
-const FormLabel = styled.label``;
-
-const FormErrorContainer = styled.div`
+const LoginFormErrorContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -42,13 +38,9 @@ const FormErrorContainer = styled.div`
   align-items: center;
 `;
 
-const FormError = styled.span`
-  font-size: 1.6rem;
-  padding: 0.5rem;
-  background-color: rgb(255, 84, 84, 0.7);
-  border: 1px solid red;
-  border-radius: 3px;
-  color: #ffdfdf;
+const LoginModalButton = styled.button`
+  border: none;
+  background-color: transparent;
 `;
 
 const LoginButtonsContainer = styled.div`
@@ -63,11 +55,10 @@ const LoginButtonsContainer = styled.div`
 
 export {
   StyledLoginForm,
-  FormInputTable,
+  LoginFormInputTable,
   LoginHeading,
-  FormLabel,
-  FormInput,
-  FormErrorContainer,
-  FormError,
+  LoginFormInput,
+  LoginFormErrorContainer,
   LoginButtonsContainer,
+  LoginModalButton,
 };

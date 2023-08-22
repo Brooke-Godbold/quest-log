@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 const StyledSignupForm = styled.form`
-  background-color: #ddd;
+  background-color: var(--color-brand-100);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +15,7 @@ const SignupHeading = styled.h1`
 `;
 
 const SignupSuccessContainer = styled.div`
-  background-color: #ddd;
+  background-color: var(--color-brand-100);
   display: flex;
   flex-direction: column;
   align-items: center;

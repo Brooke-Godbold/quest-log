@@ -1,21 +1,25 @@
 import PropTypes from "prop-types";
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
 import Button from "../../../ui/button/Button.component";
+
 import {
-  FormError,
-  FormErrorContainer,
-  FormInput,
-  FormInputTable,
-  FormLabel,
   LoginButtonsContainer,
+  LoginFormErrorContainer,
+  LoginFormInput,
+  LoginFormInputTable,
   LoginHeading,
+  LoginModalButton,
   StyledLoginForm,
 } from "./LoginForm.styles";
-import { useForm } from "react-hook-form";
-import { useLogin } from "./useLogin";
-import { useNavigate } from "react-router-dom";
+import { FormError } from "../../../ui/form-error/FormError.styles";
 
-function LoginForm({ onCloseModal }) {
+import { useLogin } from "./useLogin";
+
+function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
   const { login, isLoggingIn } = useLogin();
 
@@ -41,12 +45,17 @@ function LoginForm({ onCloseModal }) {
     setErrors(e);
   }
 
+  function onForgottenPassword(e) {
+    e.preventDefault();
+    setIsResetPassword(true);
+  }
+
   return (
     <StyledLoginForm onSubmit={handleSubmit(onSubmit, onError)}>
       <LoginHeading>Login</LoginHeading>
-      <FormInputTable $rows={2}>
-        <FormLabel>Email</FormLabel>
-        <FormInput
+      <LoginFormInputTable $rows={2}>
+        <label>Email</label>
+        <LoginFormInput
           type="email"
           id="email"
           placeholder="john.smith@gmail.com"
@@ -55,17 +64,21 @@ function LoginForm({ onCloseModal }) {
           {...register("email", { required: true, pattern: /\S+@\S+\.\S+/ })}
         />
 
-        <FormLabel>Password</FormLabel>
-        <FormInput
+        <label>Password</label>
+        <LoginFormInput
           type="password"
           id="password"
           disabled={isLoggingIn}
           aria-invalid={errors.password ? "true" : "false"}
           {...register("password", { required: true })}
         />
-      </FormInputTable>
+      </LoginFormInputTable>
 
-      <FormErrorContainer>
+      <LoginModalButton onClick={onForgottenPassword}>
+        Forgotten your password?
+      </LoginModalButton>
+
+      <LoginFormErrorContainer>
         {errors.email && errors.email.type === "required" && (
           <FormError>Email is required</FormError>
         )}
@@ -76,7 +89,7 @@ function LoginForm({ onCloseModal }) {
           <FormError>Password is required</FormError>
         )}
         {isLoginError && <FormError>Invalid Login</FormError>}
-      </FormErrorContainer>
+      </LoginFormErrorContainer>
 
       <LoginButtonsContainer>
         <Button disabled={isLoggingIn} isLight={true}>
@@ -99,6 +112,7 @@ function LoginForm({ onCloseModal }) {
 
 LoginForm.propTypes = {
   onCloseModal: PropTypes.func,
+  setIsResetPassword: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

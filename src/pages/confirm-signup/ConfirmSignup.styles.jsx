@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 const StyledConfirmSignup = styled.div`
-  background-color: #ddd;
+  background-color: var(--color-brand-100);
   display: flex;
   flex-direction: column;
   align-items: center;

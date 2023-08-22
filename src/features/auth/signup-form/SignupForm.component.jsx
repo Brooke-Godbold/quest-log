@@ -1,11 +1,9 @@
 import { useForm } from "react-hook-form";
 import Button from "../../../ui/button/Button.component";
 import {
-  FormError,
-  FormErrorContainer,
-  FormInput,
-  FormInputTable,
-  FormLabel,
+  LoginFormErrorContainer,
+  LoginFormInput,
+  LoginFormInputTable,
 } from "../login-form/LoginForm.styles";
 import {
   SignupHeading,
@@ -19,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useProfile } from "./useProfile";
 import { useSignup } from "./useSignup";
 import { useAddProfile } from "./useAddProfile";
+import { FormError } from "../../../ui/form-error/FormError.styles";
 
 function SignupForm() {
   const { isAuthenticated } = useUser();
@@ -89,9 +88,9 @@ function SignupForm() {
       ) : (
         <StyledSignupForm onSubmit={handleSubmit(onSubmit, onError)}>
           <SignupHeading>Sign Up</SignupHeading>
-          <FormInputTable $rows={4}>
-            <FormLabel>Email</FormLabel>
-            <FormInput
+          <LoginFormInputTable $rows={4}>
+            <label>Email</label>
+            <LoginFormInput
               type="email"
               id="email"
               placeholder="john.smith@gmail.com"
@@ -103,8 +102,8 @@ function SignupForm() {
               })}
             />
 
-            <FormLabel>Username</FormLabel>
-            <FormInput
+            <label>Username</label>
+            <LoginFormInput
               type="text"
               id="username"
               placeholder="John_Smith"
@@ -118,8 +117,8 @@ function SignupForm() {
               })}
             />
 
-            <FormLabel>Password</FormLabel>
-            <FormInput
+            <label>Password</label>
+            <LoginFormInput
               type="password"
               id="password"
               disabled={isGettingProfile || isSigningUp || isAddingProfile}
@@ -131,8 +130,8 @@ function SignupForm() {
               })}
             />
 
-            <FormLabel>Confirm Password</FormLabel>
-            <FormInput
+            <label>Confirm Password</label>
+            <LoginFormInput
               type="password"
               id="passwordConfirm"
               disabled={isGettingProfile || isSigningUp || isAddingProfile}
@@ -142,9 +141,9 @@ function SignupForm() {
                 validate: (value) => value === getValues().password,
               })}
             />
-          </FormInputTable>
+          </LoginFormInputTable>
 
-          <FormErrorContainer>
+          <LoginFormErrorContainer>
             {errors.email ? (
               errors.email.type === "required" ? (
                 <FormError>Email is required</FormError>
@@ -184,11 +183,11 @@ function SignupForm() {
             {emailInUse && (
               <FormError>This email has already been registered</FormError>
             )}
-          </FormErrorContainer>
+          </LoginFormErrorContainer>
 
           <Button
             disabled={isGettingProfile || isSigningUp || isAddingProfile}
-            isLight={true}
+            isLight={false}
           >
             Sign Up
           </Button>

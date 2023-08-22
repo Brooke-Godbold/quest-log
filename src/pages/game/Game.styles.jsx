@@ -6,8 +6,9 @@ const StyledGame = styled.div`
   margin: 0 auto;
   gap: 5rem;
   height: 100%;
-  padding: 10rem;
   max-width: 75%;
+  padding: 5rem;
+  background-color: var(--color-brand-200);
 `;
 
 export { StyledGame };

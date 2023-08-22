@@ -2,15 +2,24 @@ import { createGlobalStyle, css } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
 :root {
-  /* Indigo */
-  --color-brand-50: #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
-  --color-brand-900: #312e81;
+  /* Brand */
+  --color-brand-50: #fdfbf7;
+  --color-brand-100: #f7edde;
+  --color-brand-200: #f2e4cd;
+  --color-brand-300: #eedbbd;
+  --color-brand-400: #ead2ac;
+  --color-brand-500: #bba88a;
+  --color-brand-600: #8c7e67;
+  --color-brand-700: #5e5445;
+  --color-brand-800: #171511;
+
+  /* Brown */
+  --color-brown-500: #502419;
+  --color-brown-600: #401d14;
+  --color-brown-700: #30160f;
+  --color-brown-800: #200e0a;
+  --color-brown-850: #100705;
+  --color-brown-900: #080402;
 
   /* Grey */
   --color-grey-0: #fff;
@@ -36,9 +45,13 @@ const GlobalStyles = createGlobalStyle`
   --color-indigo-100: #e0e7ff;
   --color-indigo-700: #4338ca;
 
-  --color-red-100: #fee2e2;
+  --color-red-100: #ffdfdf;
+  --color-red-600: #db2727;
   --color-red-700: #b91c1c;
   --color-red-800: #991b1b;
+
+  --color-green-300: #69db7c;
+  --color-green-500: #2b8a3e
 
   --backdrop-color: rgba(255, 255, 255, 0.1);
 
@@ -46,10 +59,9 @@ const GlobalStyles = createGlobalStyle`
   --shadow-md: 0px 0.6rem 2.4rem rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.12);
 
-  --border-radius-tiny: 3px;
-  --border-radius-sm: 5px;
-  --border-radius-md: 7px;
-  --border-radius-lg: 9px;
+  --border-radius-sm: 3px;
+  --border-radius-md: 5px;
+  --border-radius-lg: 7px;
 
   /* For dark mode */
   --image-grayscale: 0;
@@ -110,6 +122,7 @@ select:focus {
 a {
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
 ul {
@@ -137,17 +150,31 @@ p {
 }
 `;
 
+const CommonInput = css`
+  border-radius: var(--border-radius-sm);
+  border: none;
+  background-color: var(--color-brand-50);
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  color: var(--color-brand-600);
+
+  &::placeholder {
+    color: var(--color-brand-300);
+  }
+`;
+
 const CommonButton = css`
   padding: 1rem 2rem;
   font-size: 2rem;
   border: none;
-  background-color: ${(props) => (props.$light ? "#bbb" : "#333")};
+  background-color: ${(props) =>
+    props.$light ? "var(--color-brand-200)" : "var(--color-brand-700)"};
   color: ${(props) => (props.$light ? "#333" : "#ddd")};
   border: 4px solid transparent;
   transition: all 0.3s;
 
   &:hover {
-    background-color: ${(props) => (props.$light ? "#aaa" : "#222")};
+    background-color: ${(props) =>
+      props.$light ? "var(--color-brand-400)" : "var(--color-brand-800)"};
   }
 
   &:focus,
@@ -159,6 +186,20 @@ const CommonButton = css`
   }
 `;
 
+const CommonScrollBar = css`
+  &::-webkit-scrollbar {
+    width: 12px; /* width of the entire scrollbar */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-brand-600); /* color of the scroll thumb */
+    border: 3px solid var(--color-brand-600); /* creates padding around scroll thumb */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-brand-400); /* color of the scroll thumb */
+    border: 3px solid var(--color-brand-400); /* creates padding around scroll thumb */
+  }
+`;
+
 export default GlobalStyles;
 
-export { CommonButton };
+export { CommonButton, CommonInput, CommonScrollBar };

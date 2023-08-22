@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import {
   Downvote,
+  HintDeleteButton,
   HintDescription,
   HintTag,
   HintTagsContainer,
@@ -12,15 +13,28 @@ import {
   UserName,
 } from "./HintItem.styles";
 
-import { HiOutlineArrowUp, HiOutlineArrowDown } from "react-icons/hi";
+import { HiOutlineArrowUp, HiOutlineArrowDown, HiTrash } from "react-icons/hi";
 import { useVote } from "./useVote";
 import { useAddVote } from "./useAddVote";
 import { useUpdateHintPopularity } from "./useUpdateHint";
 import { useEditVote } from "./useEditVote";
 import { useDeleteVote } from "./useDeleteVote";
+import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
+import Spinner from "../../../ui/spinner/Spinner";
+import Modal from "../../../ui/modal/Modal.component";
+import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
+import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
+import { useDeleteHint } from "./useDeleteHint";
+import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
 
 function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
   const { id: userId } = user || { id: null };
+
+  const {
+    profile,
+    isGettingProfile,
+    isError: isProfileError,
+  } = useProfileByUser(hint.userId || null);
 
   const { isLoading, voteData } = useVote(hint.id);
 
@@ -30,8 +44,13 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
     isError: isAddVoteError,
   } = useAddVote(hint.id);
 
-  const { editVote, isError: isEditVoteError } = useEditVote(hint.id);
+  const {
+    deleteHint,
+    isLoading: isDeletingHint,
+    isError: isDeleteHintError,
+  } = useDeleteHint();
 
+  const { editVote, isError: isEditVoteError } = useEditVote(hint.id);
   const { deleteVote, isError: isDeleteVoteError } = useDeleteVote(hint.id);
 
   const { updateHintPopularity } = useUpdateHintPopularity();
@@ -48,12 +67,11 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
   }
 
   const userVote = voteData?.filter((vote) => vote.userId === userId)[0];
-  //console.log(userVote);
 
   function upvote() {
     if (isLoading || isVoting || !userId) return;
 
-    setCurrentHint(hint.id);
+    setCurrentHint?.(hint.id);
 
     !userVote
       ? addNewVote(true)
@@ -65,7 +83,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
   function downVote() {
     if (isLoading || isVoting || !userId) return;
 
-    setCurrentHint(hint.id);
+    setCurrentHint?.(hint.id);
 
     !userVote
       ? addNewVote(false)
@@ -113,13 +131,51 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
     });
   }
 
+  function deleteExistingHint() {
+    deleteHint(hint.id);
+  }
+
   return (
     <StyledHintItem id={id}>
       <SubmittedByContainer>
-        <UserAvatar src="https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/avatars/andy.jpg" />
-        <UserName>Ronald McDonald</UserName>
+        {isGettingProfile ? (
+          <Spinner />
+        ) : !profile || isProfileError ? (
+          <>
+            <UserAvatar
+              src={`${supabaseUrl}/${supabaseStoragePath}/avatars/andy.jpg`}
+            />
+            <UserName>Anonymous</UserName>
+          </>
+        ) : (
+          <>
+            <UserAvatar src={profile.avatarUrl} />
+            <UserName>{profile.username}</UserName>
+          </>
+        )}
       </SubmittedByContainer>
       <HintUpvotes>
+        {user && user.id === hint.userId && (
+          <Modal>
+            <Modal.Open opens="confirmDelete">
+              <HintDeleteButton>
+                <HiTrash />
+              </HintDeleteButton>
+            </Modal.Open>
+            <Modal.Window name="confirmDelete">
+              <ConfirmationCheck
+                onConfirm={deleteExistingHint}
+                actionLoading={isDeletingHint}
+                actionError={isDeleteHintError}
+              >
+                <ConfirmationText>
+                  Are you sure you wish to delete your hint? This cannot be
+                  undone!
+                </ConfirmationText>
+              </ConfirmationCheck>
+            </Modal.Window>
+          </Modal>
+        )}
         <Upvote
           disabled={isNewHint}
           onClick={upvote}
@@ -154,7 +210,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
 HintItem.propTypes = {
   hint: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
-  setCurrentHint: PropTypes.func.isRequired,
+  setCurrentHint: PropTypes.func,
   isNewHint: PropTypes.bool.isRequired,
   user: PropTypes.object,
 };

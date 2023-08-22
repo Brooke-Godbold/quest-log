@@ -20,78 +20,88 @@ function HintListHeader({ isNewHint, setIsNewHint }) {
   }
 
   function handleSetSort(toggleValue) {
+    if (searchParams.get("sort") === toggleValue) return;
+
     searchParams.set("sort", toggleValue);
     setSearchParams(searchParams);
   }
 
   function handleSetFilter(toggleValue) {
+    if (searchParams.get("filter") === toggleValue) return;
+
     searchParams.set("filter", toggleValue);
     setSearchParams(searchParams);
   }
 
   return (
     <StyledHintListHeader>
-      <ButtonContainer>
-        {isAuthenticated && (
-          <Button isLight={false} onClick={handleAddNewHint}>
-            Add Hint
-          </Button>
-        )}
-        <StyledButtonContainer>
-          <ToggleButton
-            toggleValue="popularity"
-            currentToggleValue={currentSort}
-            toggleFunction={handleSetSort}
-          >
-            Popularity
-          </ToggleButton>
-          <ToggleButton
-            toggleValue="newest"
-            currentToggleValue={currentSort}
-            toggleFunction={handleSetSort}
-          >
-            Newest
-          </ToggleButton>
-          <ToggleButton
-            toggleValue="oldest"
-            currentToggleValue={currentSort}
-            toggleFunction={handleSetSort}
-          >
-            Oldest
-          </ToggleButton>
-        </StyledButtonContainer>
+      {!isNewHint && (
+        <>
+          <ButtonContainer>
+            {isAuthenticated && (
+              <Button isLight={false} onClick={handleAddNewHint}>
+                Add Hint
+              </Button>
+            )}
+            <StyledButtonContainer>
+              <ToggleButton
+                toggleValue="popularity"
+                currentToggleValue={currentSort}
+                toggleFunction={handleSetSort}
+              >
+                Popularity
+              </ToggleButton>
+              <ToggleButton
+                toggleValue="newest"
+                currentToggleValue={currentSort}
+                toggleFunction={handleSetSort}
+              >
+                Newest
+              </ToggleButton>
+              <ToggleButton
+                toggleValue="oldest"
+                currentToggleValue={currentSort}
+                toggleFunction={handleSetSort}
+              >
+                Oldest
+              </ToggleButton>
+            </StyledButtonContainer>
 
-        <StyledButtonContainer>
-          <ToggleButton
-            toggleValue="none"
-            currentToggleValue={currentFilter}
-            toggleFunction={handleSetFilter}
-          >
-            None
-          </ToggleButton>
-          <ToggleButton
-            toggleValue="positive"
-            currentToggleValue={currentFilter}
-            toggleFunction={handleSetFilter}
-          >
-            Positive
-          </ToggleButton>
-          <ToggleButton
-            toggleValue="sixMonths"
-            currentToggleValue={currentFilter}
-            toggleFunction={handleSetFilter}
-          >
-            Last Six Months
-          </ToggleButton>
-          <ToggleButton
-            toggleValue="mine"
-            currentToggleValue={currentFilter}
-            toggleFunction={handleSetFilter}
-          >
-            My Own
-          </ToggleButton>
-        </StyledButtonContainer>
-      </ButtonContainer>
+            <StyledButtonContainer>
+              <ToggleButton
+                toggleValue="none"
+                currentToggleValue={currentFilter}
+                toggleFunction={handleSetFilter}
+              >
+                None
+              </ToggleButton>
+              <ToggleButton
+                toggleValue="positive"
+                currentToggleValue={currentFilter}
+                toggleFunction={handleSetFilter}
+              >
+                Positive
+              </ToggleButton>
+              <ToggleButton
+                toggleValue="sixMonths"
+                currentToggleValue={currentFilter}
+                toggleFunction={handleSetFilter}
+              >
+                Last Six Months
+              </ToggleButton>
+              {isAuthenticated && (
+                <ToggleButton
+                  toggleValue="mine"
+                  currentToggleValue={currentFilter}
+                  toggleFunction={handleSetFilter}
+                >
+                  My Own
+                </ToggleButton>
+              )}
+            </StyledButtonContainer>
+          </ButtonContainer>
+        </>
+      )}
       {isNewHint && <NewHint setIsNewHint={setIsNewHint} user={user} />}
     </StyledHintListHeader>
   );
