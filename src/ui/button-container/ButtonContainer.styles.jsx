@@ -12,6 +12,13 @@ const StyledButtonContainer = styled.div`
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
   }
+
+  @media (max-width: 35em) {
+    & button {
+      font-size: 1.2rem;
+      padding: 1rem;
+    }
+  }
 `;
 
 export { StyledButtonContainer };

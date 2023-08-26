@@ -7,6 +7,10 @@ const StyledAccountHints = styled.div`
   overflow: auto;
 
   ${CommonScrollBar}
+
+  @media (max-width: 50em) {
+    height: 100%;
+  }
 `;
 
 const AccountHintsList = styled.div`

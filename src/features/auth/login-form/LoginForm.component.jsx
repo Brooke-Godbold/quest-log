@@ -18,6 +18,7 @@ import {
 import { FormError } from "../../../ui/form-error/FormError.styles";
 
 import { useLogin } from "./useLogin";
+import Spinner from "../../../ui/spinner/Spinner";
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -29,7 +30,6 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
   const [isLoginError, setIsLoginError] = useState(false);
 
   function onSubmit(data) {
-    //console.log(`SUBMIT`, data);
     setErrors({});
 
     login(data, {
@@ -41,7 +41,6 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
   }
 
   function onError(e) {
-    //console.log(`ERROR`, e);
     setErrors(e);
   }
 
@@ -49,6 +48,8 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
     e.preventDefault();
     setIsResetPassword(true);
   }
+
+  if (isLoggingIn) return <Spinner />;
 
   return (
     <StyledLoginForm onSubmit={handleSubmit(onSubmit, onError)}>

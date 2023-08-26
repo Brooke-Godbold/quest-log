@@ -69,7 +69,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
   const userVote = voteData?.filter((vote) => vote.userId === userId)[0];
 
   function upvote() {
-    if (isLoading || isVoting || !userId) return;
+    if (isLoading || isVoting || !userId || userId === hint.userId) return;
 
     setCurrentHint?.(hint.id);
 
@@ -81,7 +81,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
   }
 
   function downVote() {
-    if (isLoading || isVoting || !userId) return;
+    if (isLoading || isVoting || !userId || userId === hint.userId) return;
 
     setCurrentHint?.(hint.id);
 
@@ -179,6 +179,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
         <Upvote
           disabled={isNewHint}
           onClick={upvote}
+          $canVote={userId !== hint.userId}
           $authorized={userId}
           $voted={userVote && userVote.isPositive}
         >
@@ -188,6 +189,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
         <Downvote
           disabled={isNewHint}
           onClick={downVote}
+          $canVote={userId !== hint.userId}
           $authorized={userId}
           $voted={userVote && !userVote.isPositive}
         >

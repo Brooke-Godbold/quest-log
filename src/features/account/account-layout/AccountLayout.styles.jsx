@@ -1,23 +1,40 @@
+import { NavLink } from "react-router-dom";
 import { styled } from "styled-components";
+import { CommonButton } from "../../../styles/GlobalStyles";
 
 const StyledAccountLayout = styled.div`
   max-width: 50%;
   height: 100%;
   margin: 0 auto;
-  padding-top: 10rem;
   background-color: var(--color-brand-400);
+
+  @media (max-width: 140em) {
+    max-width: 75%;
+  }
+
+  @media (max-width: 120em) {
+    max-width: 100%;
+  }
 `;
 
 const AccountSection = styled.div`
   background-color: var(--color-brand-500);
   padding: 5rem;
   min-height: 0;
+
+  @media (max-width: 50em) {
+    width: 100%;
+  }
 `;
 
 const AccountSectionHeading = styled.h1`
   font-size: 6.4rem;
   text-align: center;
-  margin-bottom: 10rem;
+  padding: 10rem 0;
+
+  @media (max-width: 45em) {
+    padding: 5rem 0;
+  }
 `;
 
 const AccountGridContainer = styled.div`
@@ -25,6 +42,10 @@ const AccountGridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 1rem;
+
+  @media (max-width: 50em) {
+    display: flex;
+  }
 `;
 
 const AccountSectionButtons = styled.div`
@@ -39,12 +60,24 @@ const AccountSectionButtons = styled.div`
   & div:last-child {
     border-bottom: none;
   }
+
+  @media (max-width: 50em) {
+    display: none;
+  }
 `;
 
 const AccountSectionButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+`;
+
+const AccountSectionNavLink = styled(NavLink)`
+  ${CommonButton}
+
+  @media (max-width: 70em) {
+    font-size: 1.4rem;
+  }
 `;
 
 export {
@@ -54,4 +87,5 @@ export {
   AccountGridContainer,
   AccountSectionHeading,
   AccountSection,
+  AccountSectionNavLink,
 };

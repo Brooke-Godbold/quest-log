@@ -39,9 +39,11 @@ function HintListHeader({ isNewHint, setIsNewHint }) {
         <>
           <ButtonContainer>
             {isAuthenticated && (
-              <Button isLight={false} onClick={handleAddNewHint}>
-                Add Hint
-              </Button>
+              <div>
+                <Button isLight={false} onClick={handleAddNewHint}>
+                  Add Hint
+                </Button>
+              </div>
             )}
             <StyledButtonContainer>
               <ToggleButton

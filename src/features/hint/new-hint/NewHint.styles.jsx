@@ -13,6 +13,16 @@ const NewHintHeader = styled.div`
   gap: 2rem;
   align-items: center;
   margin-bottom: 1rem;
+
+  @media (max-width: 45em) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const NewHintButtonsContainer = styled.div`
+  display: flex;
+  gap: 2rem;
 `;
 
 const NewHintTextArea = styled.textarea`
@@ -43,4 +53,10 @@ const NewHintTagsContainer = styled.div`
   }
 `;
 
-export { StyledNewHint, NewHintTextArea, NewHintHeader, NewHintTagsContainer };
+export {
+  StyledNewHint,
+  NewHintTextArea,
+  NewHintHeader,
+  NewHintTagsContainer,
+  NewHintButtonsContainer,
+};

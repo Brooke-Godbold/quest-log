@@ -5,6 +5,11 @@ const StyledLoginForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  align-items: center;
+
+  @media (max-width: 120em) {
+    width: 100%;
+  }
 `;
 
 const LoginHeading = styled.h2`
@@ -20,13 +25,28 @@ const LoginFormInputTable = styled.div`
   gap: 2rem;
   font-size: 2rem;
   align-items: center;
+
+  @media (max-width: 65em) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 35em) {
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 const LoginFormInput = styled.input`
   ${CommonInput}
 
   padding: 1rem 2rem;
-  width: 50rem;
+  width: 100%;
+
+  @media (max-width: 35em) {
+    width: 80%;
+  }
 `;
 
 const LoginFormErrorContainer = styled.div`
@@ -47,9 +67,21 @@ const LoginButtonsContainer = styled.div`
   display: flex;
   gap: 6.4rem;
   justify-content: center;
+  width: 80%;
 
   & button {
     width: 30%;
+  }
+
+  @media (max-width: 65em) {
+    & button {
+      width: 100%;
+      font-size: 1.6rem;
+    }
+  }
+
+  @media (max-width: 35em) {
+    width: 100%;
   }
 `;
 

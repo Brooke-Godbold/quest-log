@@ -9,6 +9,14 @@ const StyledGame = styled.div`
   max-width: 75%;
   padding: 5rem;
   background-color: var(--color-brand-200);
+
+  @media (max-width: 125em) {
+    max-width: 100%;
+  }
+
+  @media (max-width: 75em) {
+    grid-template-rows: auto 1fr;
+  }
 `;
 
 export { StyledGame };

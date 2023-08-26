@@ -11,6 +11,10 @@ const StyledHeader = styled.div`
   padding: 6rem 4.8rem;
   background-color: var(--color-brand-500);
   box-shadow: 0 0 2px 2px #000;
+
+  @media (max-width: 50em) {
+    display: none;
+  }
 `;
 
 const HeaderLogoImage = styled.img`

@@ -9,6 +9,17 @@ const StyledGameDetails = styled.div`
   align-items: center;
   background-color: var(--color-brand-500);
   padding: 2rem;
+
+  @media (max-width: 75em) {
+    display: ${(props) => (props.$detailsActive ? "grid" : "none")};
+    grid-template-columns: 1.5fr 2.5fr;
+  }
+
+  @media (max-width: 45em) {
+    display: ${(props) => (props.$detailsActive ? "flex" : "none")};
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 `;
 
 const GameDetailsImageContainer = styled.div`
@@ -19,6 +30,10 @@ const GameDetailsImageContainer = styled.div`
   height: 100%;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 45em) {
+    display: none;
+  }
 `;
 
 const GameDetailsImage = styled.img`
@@ -33,9 +48,16 @@ const GameDetailsImage = styled.img`
 `;
 
 const GameDetailsInformation = styled.div`
-  align-self: self-start;
   margin-top: 1rem;
   margin-right: 50rem;
+
+  @media (max-width: 150em) {
+    margin-right: 5rem;
+  }
+
+  @media (max-width: 45em) {
+    margin-right: 0;
+  }
 `;
 
 const GameDetailsTitle = styled.h1`

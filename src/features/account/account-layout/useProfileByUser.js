@@ -4,6 +4,7 @@ import { getProfileByUserId } from "../../../services/apiProfile";
 export function useProfileByUser(userId) {
   const {
     isLoading: isGettingProfile,
+    isFetching: isFetchingProfile,
     data: profile,
     isError,
   } = useQuery({
@@ -12,5 +13,5 @@ export function useProfileByUser(userId) {
     retry: false,
   });
 
-  return { isGettingProfile, profile, isError };
+  return { isGettingProfile, profile, isError, isFetchingProfile };
 }

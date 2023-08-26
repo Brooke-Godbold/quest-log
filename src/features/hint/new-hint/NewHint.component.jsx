@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 
 import {
+  NewHintButtonsContainer,
   NewHintHeader,
   NewHintTextArea,
   StyledNewHint,
@@ -49,26 +50,28 @@ function NewHint({ setIsNewHint, user: { id: userId } }) {
   return (
     <StyledNewHint>
       <NewHintHeader>
-        <Button isLight={true} onClick={handleCancel}>
-          Cancel
-        </Button>
-        <Modal>
-          <Modal.Open opens="confirmSubmit">
-            <Button disabled={newHintText.length <= 10} isLight={false}>
-              Submit
-            </Button>
-          </Modal.Open>
-          <Modal.Window name="confirmSubmit">
-            <ConfirmationCheck
-              onConfirm={handleSubmit}
-              actionLoading={isLoading}
-            >
-              <ConfirmationText>
-                Are you sure you wish to submit a new Hint?
-              </ConfirmationText>
-            </ConfirmationCheck>
-          </Modal.Window>
-        </Modal>
+        <NewHintButtonsContainer>
+          <Button isLight={true} onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Modal>
+            <Modal.Open opens="confirmSubmit">
+              <Button disabled={newHintText.length <= 10} isLight={false}>
+                Submit
+              </Button>
+            </Modal.Open>
+            <Modal.Window name="confirmSubmit">
+              <ConfirmationCheck
+                onConfirm={handleSubmit}
+                actionLoading={isLoading}
+              >
+                <ConfirmationText>
+                  Are you sure you wish to submit a new Hint?
+                </ConfirmationText>
+              </ConfirmationCheck>
+            </Modal.Window>
+          </Modal>
+        </NewHintButtonsContainer>
         <StyledButtonContainer>
           <TagButton tag={"Mechanics"} setHintTags={setHintTags} />
           <TagButton tag={"World"} setHintTags={setHintTags} />

@@ -1,66 +1,24 @@
-import { useEffect, useState } from "react";
-import Button from "../../../ui/button/Button.component";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 import {
   AccountGridContainer,
   AccountSection,
   AccountSectionButtons,
   AccountSectionButtonsContainer,
   AccountSectionHeading,
+  AccountSectionNavLink,
   StyledAccountLayout,
 } from "./AccountLayout.styles";
 import { useUser } from "../../auth/useUser";
 import { useNavigate } from "react-router-dom";
-import { useHint } from "../../hint/hint-list/useHint";
 import Spinner from "../../../ui/spinner/Spinner";
-import { useVotesByUser } from "./useVotesByUser";
 import { useProfileByUser } from "./useProfileByUser";
-import { useHintByHintIds } from "./useHintByHintIds";
-import AccountAvatarSection from "../account-avatar-section/AccountAvatarSection.component";
-import AccountProfileDetailsSection from "../account-profile-details-section/AccountProfileDetailsSection.component";
-import AccountHintsSection from "../account-hints-section/AccountHintsSection";
-import ResetPasswordSection from "../reset-password-section/ResetPasswordSection.component";
 
-function AccountLayout() {
+function AccountLayout({ children }) {
   const { isGettingUser, isAuthenticated, user } = useUser();
   const navigate = useNavigate();
 
-  const [activeSection, setActiveSection] = useState("profile");
-
-  const [hintIds, setHintIds] = useState([]);
-
-  const {
-    isLoading: isLoadingHints,
-    isFetching: isFetchingHints,
-    hintData: userHints,
-  } = useHint({
-    by: "userId",
-    id: user ? user.id : null,
-  });
-
-  const { isLoading: isLoadingVotes, voteData: userVotes } = useVotesByUser(
-    user ? user.id : null
-  );
-
   const { isGettingProfile } = useProfileByUser(user ? user.id : null);
-
-  const {
-    isLoading: isLoadingVotedHints,
-    isFetching: isFetchingVotedHints,
-    hintData: votedHints,
-  } = useHintByHintIds(hintIds);
-
-  //console.log("USER HINTS: ", userHints);
-  //console.log("USER VOTES: ", userVotes);
-  //console.log("USER PROFILE: ", profile);
-  //console.log("VOTED HINTS", votedHints);
-
-  const isLoading =
-    isLoadingHints ||
-    isFetchingHints ||
-    isLoadingVotes ||
-    isGettingProfile ||
-    isLoadingVotedHints ||
-    isFetchingVotedHints;
 
   useEffect(
     function () {
@@ -70,82 +28,48 @@ function AccountLayout() {
     [isAuthenticated, navigate, isGettingUser]
   );
 
-  useEffect(
-    function () {
-      if (!userVotes) return;
-
-      let hintIds = [];
-
-      switch (activeSection) {
-        case "upvotes":
-          hintIds = userVotes
-            .filter((vote) => vote.isPositive)
-            .map((vote) => vote.hintId);
-          setHintIds(hintIds);
-          break;
-        case "downvotes":
-          hintIds = userVotes
-            .filter((vote) => !vote.isPositive)
-            .map((vote) => vote.hintId);
-          setHintIds(hintIds);
-          break;
-        default:
-          setHintIds([]);
-      }
-    },
-    [activeSection, userVotes]
-  );
-
   return (
     <StyledAccountLayout>
       <AccountSectionHeading>Account</AccountSectionHeading>
-      {isLoading ? (
+      {isGettingProfile ? (
         <Spinner />
       ) : (
         <AccountGridContainer>
           <AccountSectionButtons>
             <AccountSectionButtonsContainer>
-              <Button onClick={() => setActiveSection("profile")}>
+              <AccountSectionNavLink to="account/profile">
                 Profile Details
-              </Button>
-              <Button onClick={() => setActiveSection("avatar")}>Avatar</Button>
+              </AccountSectionNavLink>
+              <AccountSectionNavLink to="account/avatar">
+                Avatar
+              </AccountSectionNavLink>
             </AccountSectionButtonsContainer>
             <AccountSectionButtonsContainer>
-              <Button onClick={() => setActiveSection("userHints")}>
+              <AccountSectionNavLink to="account/hints?type=user">
                 My Hints
-              </Button>
-              <Button onClick={() => setActiveSection("upvotes")}>
+              </AccountSectionNavLink>
+              <AccountSectionNavLink to="account/hints?type=upvotes">
                 My Upvotes
-              </Button>
-              <Button onClick={() => setActiveSection("downvotes")}>
+              </AccountSectionNavLink>
+              <AccountSectionNavLink to="account/hints?type=downvotes">
                 My Downvotes
-              </Button>
+              </AccountSectionNavLink>
             </AccountSectionButtonsContainer>
             <AccountSectionButtonsContainer>
-              <Button onClick={() => setActiveSection("resetPassword")}>
+              <AccountSectionNavLink to="account/reset-password">
                 Reset Password
-              </Button>
+              </AccountSectionNavLink>
             </AccountSectionButtonsContainer>
           </AccountSectionButtons>
-          <AccountSection>
-            {activeSection === "profile" && <AccountProfileDetailsSection />}
-
-            {activeSection === "avatar" && <AccountAvatarSection />}
-
-            {activeSection === "userHints" && (
-              <AccountHintsSection hintsList={userHints} user={user} />
-            )}
-
-            {(activeSection === "upvotes" || activeSection === "downvotes") && (
-              <AccountHintsSection hintsList={votedHints} user={user} />
-            )}
-
-            {activeSection === "resetPassword" && <ResetPasswordSection />}
-          </AccountSection>
+          <AccountSection>{children}</AccountSection>
         </AccountGridContainer>
       )}
     </StyledAccountLayout>
   );
 }
+
+AccountLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default AccountLayout;

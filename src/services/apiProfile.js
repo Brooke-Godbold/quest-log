@@ -40,8 +40,6 @@ export async function addProfile(profileData) {
 }
 
 export async function updateProfile(profileData) {
-  console.log(profileData);
-
   let newProfileData = profileData;
 
   if (profileData.avatar) {

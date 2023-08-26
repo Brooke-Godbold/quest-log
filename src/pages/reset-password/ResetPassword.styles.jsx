@@ -12,6 +12,11 @@ const StyledResetPassword = styled.div`
 const ResetPasswordHeading = styled.h1`
   font-size: 5.4rem;
   margin-bottom: 8.4rem;
+
+  @media (max-width: 45em) {
+    font-size: 3.6rem;
+    text-align: center;
+  }
 `;
 
 export { StyledResetPassword, ResetPasswordHeading };

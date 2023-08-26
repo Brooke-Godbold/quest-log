@@ -15,6 +15,11 @@ const StyledHintItem = styled.div`
   &:hover {
     background-color: var(--color-brand-500);
   }
+
+  @media (max-width: 30em) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const HintTagsContainer = styled.div`
@@ -59,11 +64,13 @@ const HintUpvotes = styled.div`
 `;
 
 const Upvote = styled.button`
-  color: ${(props) => (props.$authorized ? "#248f09" : "#333")};
+  color: ${(props) =>
+    props.$authorized && props.$canVote ? "#248f09" : "#333"};
   transition: all 0.3s;
   background-color: transparent;
   transform: none;
-  cursor: ${(props) => (props.$authorized ? "pointer" : "auto")};
+  cursor: ${(props) =>
+    props.$authorized && props.$canVote ? "pointer" : "auto"};
   border: none;
 
   & svg {
@@ -79,17 +86,20 @@ const Upvote = styled.button`
   }
 
   &:hover {
-    transform: ${(props) => (props.$authorized ? "scale(150%)" : "none")};
+    transform: ${(props) =>
+      props.$authorized && props.$canVote ? "scale(150%)" : "none"};
   }
 `;
 
 const Downvote = styled.button`
-  color: ${(props) => (props.$authorized ? "#8f1209" : "#333")};
+  color: ${(props) =>
+    props.$authorized && props.$canVote ? "#8f1209" : "#333"};
   transition: all 0.3s;
   border: none;
   background-color: transparent;
   transform: none;
-  cursor: ${(props) => (props.$authorized ? "pointer" : "auto")};
+  cursor: ${(props) =>
+    props.$authorized && props.$canVote ? "pointer" : "auto"};
 
   & svg {
     border: ${(props) =>
@@ -104,7 +114,8 @@ const Downvote = styled.button`
   }
 
   &:hover {
-    transform: ${(props) => (props.$authorized ? "scale(150%)" : "none")};
+    transform: ${(props) =>
+      props.$authorized && props.$canVote ? "scale(150%)" : "none"};
   }
 `;
 

@@ -8,10 +8,18 @@ const StyledSignupForm = styled.form`
   justify-content: center;
   gap: 10rem;
   height: 100vh;
+
+  @media (max-width: 65em) {
+    gap: 2.4rem;
+  }
 `;
 
 const SignupHeading = styled.h1`
   font-size: 7.4rem;
+
+  @media (max-width: 25em) {
+    font-size: 3.6rem;
+  }
 `;
 
 const SignupSuccessContainer = styled.div`

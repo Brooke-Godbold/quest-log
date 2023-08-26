@@ -6,12 +6,20 @@ const StyledHintListSection = styled.div`
   min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;
+
+  @media (max-width: 75em) {
+    display: ${(props) => (!props.$detailsActive ? "grid" : "none")};
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: 2rem;
   padding: 2rem;
+
+  @media (max-width: 65em) {
+    flex-direction: column;
+  }
 `;
 
 const HintListContainer = styled.div`
@@ -35,6 +43,7 @@ const HintListOverlay = styled.div`
 `;
 
 const HintList = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 5px;

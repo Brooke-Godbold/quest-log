@@ -12,6 +12,11 @@ const StyledConfirmSignup = styled.div`
 
 const ConfirmSignupHeading = styled.h1`
   font-size: 7.4rem;
+
+  @media (max-width: 45em) {
+    font-size: 3.6rem;
+    text-align: center;
+  }
 `;
 
 export { StyledConfirmSignup, ConfirmSignupHeading };
