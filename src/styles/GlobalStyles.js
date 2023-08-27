@@ -166,6 +166,8 @@ const CommonButton = css`
   padding: 1rem 2rem;
   font-size: 2rem;
   border: none;
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-radius: 5px;
   background-color: ${(props) =>
     props.$light ? "var(--color-brand-200)" : "var(--color-brand-700)"};
   color: ${(props) => (props.$light ? "#333" : "#ddd")};

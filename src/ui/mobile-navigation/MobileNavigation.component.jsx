@@ -13,7 +13,7 @@ import { useLogout } from "../../features/auth/useLogout";
 function MobileNavigation() {
   const [isMobileNavActive, setIsMobileNavActive] = useState(false);
 
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, user } = useUser();
 
   const { logout, isLoggingOut } = useLogout();
 
@@ -39,6 +39,16 @@ function MobileNavigation() {
               >
                 Search
               </MobileNavLink>
+            </div>
+            <div>
+              {isAuthenticated && (
+                <MobileNavLink
+                  onClick={() => setIsMobileNavActive(false)}
+                  to={`/social/${user.id}`}
+                >
+                  My Feed
+                </MobileNavLink>
+              )}
             </div>
             <div>
               {isAuthenticated ? (

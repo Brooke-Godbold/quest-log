@@ -4,11 +4,11 @@ import { useUser } from "../../features/auth/useUser";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, user } = useUser();
 
   const navigate = useNavigate();
 
-  isAuthenticated && navigate(-1);
+  isAuthenticated && navigate(`/social/${user.id}`);
 
   return (
     <StyledLogin>{!isAuthenticated ? <LoginContainer /> : null}</StyledLogin>

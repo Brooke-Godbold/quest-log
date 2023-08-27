@@ -3,6 +3,10 @@ import { styled } from "styled-components";
 const StyledButtonContainer = styled.div`
   display: flex;
 
+  & * {
+    border-radius: 0;
+  }
+
   & *:first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;

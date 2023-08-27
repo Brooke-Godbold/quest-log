@@ -9,23 +9,27 @@ import {
 } from "./SearchResultItem.styles";
 import { useNavigate } from "react-router-dom";
 
-function SearchResultItem({ gameItem }) {
+const MAX_SUMMARY = 200;
+
+function SearchResultItem({ to, imageUrl, title, year, summary }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate(`/game/${gameItem.id}`);
+    navigate(to);
   }
 
   return (
     <StyledSearchResultItem onClick={handleClick}>
-      <SearchResultItemImage src={gameItem.imageUrl} />
+      <SearchResultItemImage src={imageUrl} />
       <SearchResultItemInformation>
-        <SearchResultItemName>{gameItem.name}</SearchResultItemName>
-        <SearchResultItemReleaseYear>
-          {gameItem.releaseYear}
-        </SearchResultItemReleaseYear>
+        <SearchResultItemName>{title}</SearchResultItemName>
+        {year && (
+          <SearchResultItemReleaseYear>{year}</SearchResultItemReleaseYear>
+        )}
         <SearchResultItemDescription>
-          {gameItem.summary}
+          {summary.length > MAX_SUMMARY
+            ? `${summary.substring(0, MAX_SUMMARY)}...`
+            : summary}
         </SearchResultItemDescription>
       </SearchResultItemInformation>
     </StyledSearchResultItem>
@@ -33,7 +37,11 @@ function SearchResultItem({ gameItem }) {
 }
 
 SearchResultItem.propTypes = {
-  gameItem: PropTypes.object.isRequired,
+  to: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  summary: PropTypes.string.isRequired,
+  year: PropTypes.string,
 };
 
 export default SearchResultItem;

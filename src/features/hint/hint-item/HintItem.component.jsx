@@ -7,10 +7,7 @@ import {
   HintTagsContainer,
   HintUpvotes,
   StyledHintItem,
-  SubmittedByContainer,
   Upvote,
-  UserAvatar,
-  UserName,
 } from "./HintItem.styles";
 
 import { HiOutlineArrowUp, HiOutlineArrowDown, HiTrash } from "react-icons/hi";
@@ -19,22 +16,14 @@ import { useAddVote } from "./useAddVote";
 import { useUpdateHintPopularity } from "./useUpdateHint";
 import { useEditVote } from "./useEditVote";
 import { useDeleteVote } from "./useDeleteVote";
-import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
-import Spinner from "../../../ui/spinner/Spinner";
 import Modal from "../../../ui/modal/Modal.component";
 import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
 import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
 import { useDeleteHint } from "./useDeleteHint";
-import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
+import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
 
 function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
   const { id: userId } = user || { id: null };
-
-  const {
-    profile,
-    isGettingProfile,
-    isError: isProfileError,
-  } = useProfileByUser(hint.userId || null);
 
   const { isLoading, voteData } = useVote(hint.id);
 
@@ -137,23 +126,7 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
 
   return (
     <StyledHintItem id={id}>
-      <SubmittedByContainer>
-        {isGettingProfile ? (
-          <Spinner />
-        ) : !profile || isProfileError ? (
-          <>
-            <UserAvatar
-              src={`${supabaseUrl}/${supabaseStoragePath}/avatars/andy.jpg`}
-            />
-            <UserName>Anonymous</UserName>
-          </>
-        ) : (
-          <>
-            <UserAvatar src={profile.avatarUrl} />
-            <UserName>{profile.username}</UserName>
-          </>
-        )}
-      </SubmittedByContainer>
+      <AvatarNavLink userId={hint.userId} />
       <HintUpvotes>
         {user && user.id === hint.userId && (
           <Modal>

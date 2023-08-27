@@ -11,6 +11,7 @@ import ConfirmSignup from "./pages/confirm-signup/ConfirmSignup.page";
 import Account from "./pages/account/Account.page";
 import ResetPassword from "./pages/reset-password/ResetPassword.page";
 import Login from "./pages/login/Login.page";
+import User from "./pages/user/User.page";
 import AccountProfileDetailsSection from "./features/account/account-profile-details-section/AccountProfileDetailsSection.component";
 import AccountAvatarSection from "./features/account/account-avatar-section/AccountAvatarSection.component";
 import AccountHintsSection from "./features/account/account-hints-section/AccountHintsSection";
@@ -36,6 +37,7 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path="game/:id" element={<Game />} />
             <Route path="/login" element={<Login />} />
+            <Route path="social/:userId" element={<User />} />
             <Route element={<Account />}>
               <Route
                 path="account/profile"

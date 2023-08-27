@@ -1,17 +1,17 @@
 import { styled } from "styled-components";
+import { CommonScrollBar } from "../../../styles/GlobalStyles";
 
 const StyledAccountProfileDetails = styled.form`
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  margin-top: 5.4rem;
+  margin: 5.4rem 0;
   width: 80%;
 `;
 
 const ProfileDetailsRow = styled.div`
   display: grid;
   grid-template-columns: 1.5fr 4fr;
-  grid-template-rows: repeat(2, 1fr);
   gap: 0 7.2rem;
   align-items: center;
 
@@ -79,6 +79,31 @@ const CurrentlyPlayingButton = styled.button`
   }
 `;
 
+const AccountProfileBioSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
+
+const AccountProfileBio = styled.textarea`
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-brand-50);
+  color: var(--color-brand-600);
+  height: 25rem;
+  width: 100%;
+  padding: 1.6rem;
+
+  ${CommonScrollBar}
+`;
+
+const BioTextCount = styled.p`
+  font-size: 1.4rem;
+  align-self: flex-end;
+  margin-right: 1.6rem;
+`;
+
 export {
   StyledAccountProfileDetails,
   ProfileDetailsRow,
@@ -88,4 +113,7 @@ export {
   CurrentlyPlayingRow,
   CurrentlyPlaying,
   CurrentlyPlayingButton,
+  AccountProfileBio,
+  AccountProfileBioSection,
+  BioTextCount,
 };

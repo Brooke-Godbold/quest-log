@@ -4,6 +4,9 @@ import { LoginFormInput } from "../../auth/login-form/LoginForm.styles";
 import { useUser } from "../../auth/useUser";
 import { useProfileByUser } from "../account-layout/useProfileByUser";
 import {
+  AccountProfileBio,
+  AccountProfileBioSection,
+  BioTextCount,
   CurrentlyPlaying,
   CurrentlyPlayingButton,
   CurrentlyPlayingContainer,
@@ -18,6 +21,8 @@ import { useUpdateProfile } from "../useUpdateProfile";
 import { useAllGames } from "./useAllGames";
 import { useEffect, useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
+
+const BIO_MAX_LENGTH = 450;
 
 function AccountProfileDetailsSection() {
   const { user, isGettingUser } = useUser();
@@ -40,8 +45,10 @@ function AccountProfileDetailsSection() {
   const {
     register: registerProfile,
     handleSubmit: handleSubmitProfile,
+    watch,
     formState: { errors },
   } = useForm({ mode: "onBlur" });
+  const watchBio = watch("bio", "");
 
   const {
     register: registerCurrentPlaying,
@@ -49,10 +56,15 @@ function AccountProfileDetailsSection() {
   } = useForm({ mode: "onChange" });
 
   function onSubmitProfile(data) {
-    if (!profile) return;
+    if (
+      !profile ||
+      (data.username === profile.username && data.bio === profile.bio)
+    )
+      return;
 
-    if (data.username !== profile.username)
-      updateProfile({ userId: user.id, data: { username: data.username } });
+    const newProfileData = { username: data.userName, bio: data.bio };
+
+    updateProfile({ userId: user.id, data: newProfileData });
   }
 
   function onProfileError(e) {
@@ -158,6 +170,29 @@ function AccountProfileDetailsSection() {
               )
             ) : null}
             {isError && <FormError>Unable to update Username</FormError>}
+          </ProfileDetailsErrorContainer>
+        </ProfileDetailsRow>
+
+        <ProfileDetailsRow>
+          <ProfileDetailsLabel>Bio</ProfileDetailsLabel>
+          <AccountProfileBioSection>
+            <AccountProfileBio
+              id="bio"
+              type="text"
+              {...registerProfile("bio", {
+                maxLength: BIO_MAX_LENGTH,
+              })}
+              defaultValue={profile?.bio || ""}
+              disabled={isLoading}
+            />
+            <BioTextCount>{`${
+              watchBio?.length || 0
+            } / ${BIO_MAX_LENGTH}`}</BioTextCount>
+          </AccountProfileBioSection>
+          <ProfileDetailsErrorContainer>
+            {errors.bio && (
+              <FormError>Bio cannot be more than 450 characters!</FormError>
+            )}
           </ProfileDetailsErrorContainer>
         </ProfileDetailsRow>
       </StyledAccountProfileDetails>

@@ -29,6 +29,13 @@ const StyledSearchResultsGrid = styled.div`
   }
 `;
 
+const SearchResultsDivider = styled.div`
+  width: 80%;
+  height: 3px;
+  background-color: rgba(34, 34, 34, 0.1);
+  margin-bottom: 5rem;
+`;
+
 const NoResults = styled.p`
   color: #aaa;
   text-align: center;
@@ -36,4 +43,4 @@ const NoResults = styled.p`
   text-transform: capitalize;
 `;
 
-export { StyledSearchResultsGrid, NoResults };
+export { StyledSearchResultsGrid, NoResults, SearchResultsDivider };

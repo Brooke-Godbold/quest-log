@@ -17,10 +17,10 @@ import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
 import LoginModal from "../login-modal/LoginModal.component";
 
 function Header() {
-  const { isGettingUser, isAuthenticated } = useUser();
+  const { isGettingUser, isAuthenticated, user } = useUser();
   const { logout, isLoggingOut } = useLogout();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ function Header() {
   function onSearch(data) {
     console.log(data);
 
+    reset();
     navigate(`/search?query=${data.search}`, { replace: true });
   }
 
@@ -46,8 +47,11 @@ function Header() {
         )}
         {isAuthenticated ? (
           <>
+            <HeaderLink disabled={isLoggingOut} to={`/social/${user.id}`}>
+              My Feed
+            </HeaderLink>
             <HeaderLink disabled={isLoggingOut} to="/account/profile">
-              Profile
+              Account
             </HeaderLink>
             <HeaderButton onClick={logout} disabled={isLoggingOut}>
               Logout
