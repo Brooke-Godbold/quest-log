@@ -16,13 +16,15 @@ import { useUser } from "../../auth/useUser";
 import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
 import { useEffect, useState } from "react";
 import { compareDesc } from "date-fns";
+import { useReplyByPostId } from "../useReplyByPostId";
+import { usePostById } from "../usePostById";
 
 function SocialFeedContainer() {
-  const { userId } = useParams();
+  const { userId, postId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [sortedPosts, setSortedPosts] = useState([]);
 
-  const { user } = useUser();
+  const { isAuthenticated, user } = useUser();
 
   const {
     gameData,
@@ -31,6 +33,7 @@ function SocialFeedContainer() {
   } = useAllGames();
 
   const { posts, isGettingPosts, isError: isPostError } = usePostByUser(userId);
+
   const {
     hintData,
     isLoading: isGettingHints,
@@ -41,6 +44,16 @@ function SocialFeedContainer() {
     id: userId,
   });
 
+  const { post, isGettingPost, isError: isPostIdError } = usePostById(postId);
+
+  const {
+    replies,
+    isGettingReplies,
+    isError: isRepliesError,
+  } = useReplyByPostId(post?.id);
+
+  const isLoadingReplies =
+    isGettingPost || isPostIdError || isGettingReplies || isRepliesError;
   const isLoadingHints = isGettingHints || isFetchingHints || isHintError;
   const isLoadingPosts = isGettingPosts || isPostError;
   const isLoadingGames = isGettingGames || isGamesError;
@@ -52,30 +65,81 @@ function SocialFeedContainer() {
 
   useEffect(
     function () {
-      if (!posts) return;
+      if (!posts && !replies) return;
 
-      setSortedPosts([
-        ...posts.sort((postA, postB) =>
-          compareDesc(new Date(postA.created_at), new Date(postB.created_at))
-        ),
-      ]);
+      if (posts) {
+        setSortedPosts([
+          ...posts.sort((postA, postB) =>
+            compareDesc(new Date(postA.created_at), new Date(postB.created_at))
+          ),
+        ]);
+      } else {
+        setSortedPosts([
+          ...replies.sort((postA, postB) =>
+            compareDesc(new Date(postA.created_at), new Date(postB.created_at))
+          ),
+        ]);
+      }
     },
-    [posts]
+    [posts, replies]
+  );
+
+  useEffect(
+    function () {
+      if (
+        !isAuthenticated &&
+        (searchParams.get("view") === "following" ||
+          searchParams.get("view") === "discover")
+      ) {
+        searchParams.set("view", "trending");
+        setSearchParams(searchParams);
+      }
+    },
+    [isAuthenticated, searchParams, setSearchParams]
   );
 
   return (
     <StyledSocialFeedContainer>
-      <SocialFeedButtons>
-        <SocialFeedButton onClick={() => setView("posts")}>
-          Posts
-        </SocialFeedButton>
-        <SocialFeedButton onClick={() => setView("hints")}>
-          Hints
-        </SocialFeedButton>
-      </SocialFeedButtons>
+      {!postId && (
+        <SocialFeedButtons>
+          {userId ? (
+            <>
+              <SocialFeedButton onClick={() => setView("posts")}>
+                Posts
+              </SocialFeedButton>
+              <SocialFeedButton onClick={() => setView("hints")}>
+                Hints
+              </SocialFeedButton>
+            </>
+          ) : isAuthenticated ? (
+            <>
+              <SocialFeedButton onClick={() => setView("trending")}>
+                Trending
+              </SocialFeedButton>
+              <SocialFeedButton onClick={() => setView("following")}>
+                Following
+              </SocialFeedButton>
+              <SocialFeedButton onClick={() => setView("discover")}>
+                Discover
+              </SocialFeedButton>
+            </>
+          ) : null}
+        </SocialFeedButtons>
+      )}
       <SocialFeedContent>
-        {searchParams.get("view") === "hints" ? (
-          isLoadingHints || !hintData ? (
+        {postId && isLoadingReplies ? (
+          <Spinner />
+        ) : postId && !isLoadingReplies ? (
+          sortedPosts.map((post) => (
+            <SocialFeedPost
+              key={post.id}
+              post={post}
+              gameData={gameData}
+              isReply={post.postId}
+            />
+          ))
+        ) : searchParams.get("view") === "hints" ? (
+          isLoadingHints || !hintData || !userId ? (
             <Spinner />
           ) : (
             hintData.map((hint) => (
@@ -88,12 +152,23 @@ function SocialFeedContainer() {
               />
             ))
           )
-        ) : isLoadingPosts || !sortedPosts || isLoadingGames || !gameData ? (
+        ) : isLoadingPosts ||
+          !sortedPosts ||
+          isLoadingGames ||
+          !gameData ||
+          !userId ? (
           <Spinner />
         ) : (
-          sortedPosts.map((post) => (
-            <SocialFeedPost key={post.id} post={post} gameData={gameData} />
-          ))
+          sortedPosts
+            .filter((post) => !post.postId)
+            .map((post) => (
+              <SocialFeedPost
+                key={post.id}
+                post={post}
+                gameData={gameData}
+                isReply={post.postId}
+              />
+            ))
         )}
       </SocialFeedContent>
     </StyledSocialFeedContainer>

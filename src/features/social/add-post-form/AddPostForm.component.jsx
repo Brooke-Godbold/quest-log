@@ -19,7 +19,7 @@ import { FormError } from "../../../ui/form-error/FormError.styles";
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
 
-function AddPostForm({ gameData, currentGames, userId, onCloseModal }) {
+function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
   const {
     register,
     handleSubmit,
@@ -32,12 +32,11 @@ function AddPostForm({ gameData, currentGames, userId, onCloseModal }) {
   const { addPost, isLoading } = useAddPost();
 
   function onPost(data) {
-    console.log(data);
-
     const newPost = {
       description: data.postContent,
       userId,
-      gameId: data.gameId,
+      ...(currentGames && { gameId: data.gameId }),
+      ...(postId && { postId }),
     };
 
     addPost(newPost, {
@@ -60,23 +59,25 @@ function AddPostForm({ gameData, currentGames, userId, onCloseModal }) {
   return (
     <StyledAddPostForm onSubmit={handleSubmit(onPost, onError)}>
       <AddPostHeader>
-        <h3>New Post</h3>
-        <AddPostGame
-          disabled={isLoading}
-          id="gameId"
-          {...register("gameId", {
-            validate: (value) => value !== "placeholder",
-          })}
-        >
-          <option key="placeholder" value="placeholder">
-            Please select...
-          </option>
-          {currentGames.map((gameId) => (
-            <option key={gameId} value={gameId}>
-              {gameData.filter((game) => game.id === gameId)[0].name}
+        <h3>{!currentGames ? "Reply" : "New Post"}</h3>
+        {currentGames && (
+          <AddPostGame
+            disabled={isLoading}
+            id="gameId"
+            {...register("gameId", {
+              validate: (value) => value !== "placeholder",
+            })}
+          >
+            <option key="placeholder" value="placeholder">
+              Please select...
             </option>
-          ))}
-        </AddPostGame>
+            {currentGames.map((gameId) => (
+              <option key={gameId} value={gameId}>
+                {gameData.filter((game) => game.id === gameId)[0].name}
+              </option>
+            ))}
+          </AddPostGame>
+        )}
       </AddPostHeader>
       <AddPostTextSection>
         <AddPostTextArea
@@ -119,8 +120,9 @@ function AddPostForm({ gameData, currentGames, userId, onCloseModal }) {
 }
 
 AddPostForm.propTypes = {
-  gameData: PropTypes.array.isRequired,
-  currentGames: PropTypes.array.isRequired,
+  gameData: PropTypes.array,
+  currentGames: PropTypes.array,
+  postId: PropTypes.number,
   onCloseModal: PropTypes.func,
   userId: PropTypes.string.isRequired,
 };

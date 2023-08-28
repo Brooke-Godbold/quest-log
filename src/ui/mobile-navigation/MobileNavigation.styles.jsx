@@ -12,6 +12,7 @@ const StyledMobileNavigation = styled.div`
   color: var(--color-brand-800);
   font-weight: 700;
   pointer-events: none;
+  z-index: 1000;
 
   @media (max-width: 50em) {
     display: block;

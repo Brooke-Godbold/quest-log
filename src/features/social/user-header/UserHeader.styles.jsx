@@ -7,6 +7,8 @@ const StyledUserHeader = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 4.2rem;
+
+  flex: 0.5;
 `;
 
 const UserProfile = styled.div`
@@ -14,7 +16,6 @@ const UserProfile = styled.div`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 7px;
   width: 100%;
-  min-height: 35rem;
 
   padding: 5.4rem;
   position: relative;
@@ -196,6 +197,8 @@ const FollowButton = styled.button`
 
 const AddNewPostButton = styled.button`
   ${CommonButton}
+
+  width: 15%;
 
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px;

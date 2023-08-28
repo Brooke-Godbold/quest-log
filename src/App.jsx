@@ -16,6 +16,8 @@ import AccountProfileDetailsSection from "./features/account/account-profile-det
 import AccountAvatarSection from "./features/account/account-avatar-section/AccountAvatarSection.component";
 import AccountHintsSection from "./features/account/account-hints-section/AccountHintsSection";
 import ResetPasswordSection from "./features/account/reset-password-section/ResetPasswordSection.component";
+import SocialFeed from "./pages/social-feed/SocialFeed.page";
+import SocialPost from "./pages/social-post/SocialPost.page";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +40,8 @@ function App() {
             <Route path="game/:id" element={<Game />} />
             <Route path="/login" element={<Login />} />
             <Route path="social/:userId" element={<User />} />
+            <Route path="social/feed" element={<SocialFeed />} />
+            <Route path="social/post/:postId" element={<SocialPost />} />
             <Route element={<Account />}>
               <Route
                 path="account/profile"

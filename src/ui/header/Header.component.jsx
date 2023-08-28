@@ -42,11 +42,26 @@ function Header() {
       <HeaderLinks>
         {location.pathname !== "/search" && (
           <HeaderSearchForm onSubmit={handleSubmit(onSearch)}>
-            <HeaderSearch {...register("search", { required: true })} />
+            <HeaderSearch
+              disabled={isLoggingOut}
+              {...register("search", { required: true })}
+            />
           </HeaderSearchForm>
         )}
+        <HeaderLink disabled={isLoggingOut} to="/social/feed?view=trending">
+          Trending
+        </HeaderLink>
         {isAuthenticated ? (
           <>
+            <HeaderLink
+              disabled={isLoggingOut}
+              to="/social/feed?view=following"
+            >
+              Following
+            </HeaderLink>
+            <HeaderLink disabled={isLoggingOut} to="/social/feed?view=discover">
+              Discover
+            </HeaderLink>
             <HeaderLink disabled={isLoggingOut} to={`/social/${user.id}`}>
               My Feed
             </HeaderLink>

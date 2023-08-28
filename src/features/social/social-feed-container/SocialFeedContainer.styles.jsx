@@ -35,6 +35,8 @@ const SocialFeedButtons = styled.div`
 const SocialFeedButton = styled.button`
   ${CommonButton}
 
+  width: 25%;
+
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;
   border-bottom-left-radius: 0;

@@ -41,13 +41,33 @@ function MobileNavigation() {
               </MobileNavLink>
             </div>
             <div>
+              <MobileNavLink
+                onClick={() => setIsMobileNavActive(false)}
+                to="/social/feed?view=trending"
+              >
+                Trending
+              </MobileNavLink>
               {isAuthenticated && (
-                <MobileNavLink
-                  onClick={() => setIsMobileNavActive(false)}
-                  to={`/social/${user.id}`}
-                >
-                  My Feed
-                </MobileNavLink>
+                <>
+                  <MobileNavLink
+                    onClick={() => setIsMobileNavActive(false)}
+                    to="/social/feed?view=following"
+                  >
+                    Following
+                  </MobileNavLink>
+                  <MobileNavLink
+                    onClick={() => setIsMobileNavActive(false)}
+                    to="/social/feed?view=discover"
+                  >
+                    Discover
+                  </MobileNavLink>
+                  <MobileNavLink
+                    onClick={() => setIsMobileNavActive(false)}
+                    to={`/social/${user.id}`}
+                  >
+                    My Feed
+                  </MobileNavLink>
+                </>
               )}
             </div>
             <div>

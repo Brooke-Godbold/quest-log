@@ -5,6 +5,7 @@ const StyledAvatarNavLink = styled(NavLink)`
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+  align-self: flex-start;
 
   & img,
   & h4 {

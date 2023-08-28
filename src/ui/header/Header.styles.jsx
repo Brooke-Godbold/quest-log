@@ -26,6 +26,11 @@ const HeaderLinks = styled.div`
   gap: 4.8rem;
   font-size: 2.4rem;
   align-items: center;
+
+  @media (max-width: 80em) {
+    font-size: 1.6rem;
+    gap: 2.4rem;
+  }
 `;
 
 const HeaderButton = styled.button`
@@ -39,7 +44,11 @@ const HeaderLink = styled(NavLink)`
   }
 `;
 
-const HeaderSearchForm = styled.form``;
+const HeaderSearchForm = styled.form`
+  @media (max-width: 60em) {
+    display: none;
+  }
+`;
 
 const HeaderSearch = styled.input`
   ${CommonInput}
