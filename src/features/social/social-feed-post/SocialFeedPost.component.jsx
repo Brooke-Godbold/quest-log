@@ -6,7 +6,6 @@ import {
   PostContent,
   PostCreatedTime,
   PostDetails,
-  PostGameTag,
   RepliesCount,
   ReplyButton,
   StyledSocialFeedPost,
@@ -15,32 +14,57 @@ import { format } from "date-fns";
 import { useUser } from "../../auth/useUser";
 import Modal from "../../../ui/modal/Modal.component";
 import AddPostForm from "../add-post-form/AddPostForm.component";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useReplyByPostId } from "../useReplyByPostId";
+import Votes from "../../../ui/votes/Votes.component";
+import { useUpdatePost } from "../useUpdatePost";
+import GameTag from "../../../ui/game-tag/GameTag.component";
 
-function SocialFeedPost({ post, gameData, isDetail = false, isReply = false }) {
+function SocialFeedPost({
+  post,
+  id,
+  gameData,
+  isDetail = false,
+  parentPostId = null,
+}) {
   const { isAuthenticated, user } = useUser();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const { replies } = useReplyByPostId(post.id);
 
+  function onDetail() {
+    searchParams.set("post", post.id);
+    setSearchParams(searchParams);
+  }
+
+  const { updatePost } = useUpdatePost();
+
   return (
-    <StyledSocialFeedPost>
+    <StyledSocialFeedPost id={id}>
       <AvatarNavLink userId={post.userId} />
       <PostContent>{post.description}</PostContent>
       <PostDetails>
         {post.gameId && (
-          <PostGameTag to={`/game/${post.gameId}`}>
+          <GameTag to={`/game/${post.gameId}`}>
             {gameData.filter((game) => game.id === post.gameId)[0].name}
-          </PostGameTag>
+          </GameTag>
         )}
+        <Votes
+          postId={post.id}
+          itemId={post.id}
+          updateItem={updatePost}
+          upvotes={post.upvotes}
+          downvotes={post.downvotes}
+          userId={post.userId}
+        />
         <PostCreatedTime>{`Posted at: ${format(
           new Date(post.created_at),
           "Pp"
         )}`}</PostCreatedTime>
       </PostDetails>
-      {isAuthenticated && !isReply && (
+      {isAuthenticated && !parentPostId && (
         <PostButtonsContainer>
           {replies && replies.length > 0 && (
             <RepliesCount>{`${replies.length} replies!`}</RepliesCount>
@@ -56,7 +80,9 @@ function SocialFeedPost({ post, gameData, isDetail = false, isReply = false }) {
           {isDetail ? (
             <ReplyButton onClick={() => navigate(-1)}>Back</ReplyButton>
           ) : (
-            <DetailLink to={`/social/post/${post.id}`}>Detail</DetailLink>
+            <DetailLink onClick={onDetail} to={`/social/post/${post.id}`}>
+              Detail
+            </DetailLink>
           )}
         </PostButtonsContainer>
       )}
@@ -68,7 +94,8 @@ SocialFeedPost.propTypes = {
   post: PropTypes.object.isRequired,
   gameData: PropTypes.array.isRequired,
   isDetail: PropTypes.bool,
-  isReply: PropTypes.bool,
+  parentPostId: PropTypes.number,
+  id: PropTypes.string,
 };
 
 export default SocialFeedPost;

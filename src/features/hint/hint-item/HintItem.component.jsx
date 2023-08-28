@@ -1,37 +1,31 @@
 import PropTypes from "prop-types";
 import {
-  Downvote,
+  HintActionsContainer,
   HintDeleteButton,
   HintDescription,
   HintTag,
   HintTagsContainer,
-  HintUpvotes,
+  NavLinkContainer,
   StyledHintItem,
-  Upvote,
 } from "./HintItem.styles";
 
-import { HiOutlineArrowUp, HiOutlineArrowDown, HiTrash } from "react-icons/hi";
-import { useVote } from "./useVote";
-import { useAddVote } from "./useAddVote";
-import { useUpdateHintPopularity } from "./useUpdateHint";
-import { useEditVote } from "./useEditVote";
-import { useDeleteVote } from "./useDeleteVote";
+import { HiTrash } from "react-icons/hi";
 import Modal from "../../../ui/modal/Modal.component";
 import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
 import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
 import { useDeleteHint } from "./useDeleteHint";
 import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
+import Votes from "../../../ui/votes/Votes.component";
+import { useUpdateHint } from "./useUpdateHint";
+import GameTag from "../../../ui/game-tag/GameTag.component";
+import { useParams } from "react-router-dom";
+import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
 
-function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
-  const { id: userId } = user || { id: null };
+function HintItem({ hint, id, user }) {
+  const { userId } = useParams();
+  const { updateHint } = useUpdateHint();
 
-  const { isLoading, voteData } = useVote(hint.id);
-
-  const {
-    addVote,
-    isLoading: isVoting,
-    isError: isAddVoteError,
-  } = useAddVote(hint.id);
+  const { gameData } = useAllGames();
 
   const {
     deleteHint,
@@ -39,95 +33,16 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
     isError: isDeleteHintError,
   } = useDeleteHint();
 
-  const { editVote, isError: isEditVoteError } = useEditVote(hint.id);
-  const { deleteVote, isError: isDeleteVoteError } = useDeleteVote(hint.id);
-
-  const { updateHintPopularity } = useUpdateHintPopularity();
-
-  function getUpvotes(voteData) {
-    return voteData.reduce((acc, vote) => (vote.isPositive ? acc + 1 : acc), 0);
-  }
-
-  function getDownvotes(voteData) {
-    return voteData.reduce(
-      (acc, vote) => (!vote.isPositive ? acc + 1 : acc),
-      0
-    );
-  }
-
-  const userVote = voteData?.filter((vote) => vote.userId === userId)[0];
-
-  function upvote() {
-    if (isLoading || isVoting || !userId || userId === hint.userId) return;
-
-    setCurrentHint?.(hint.id);
-
-    !userVote
-      ? addNewVote(true)
-      : userVote.isPositive
-      ? deleteExistingVote()
-      : editExistingVote(true);
-  }
-
-  function downVote() {
-    if (isLoading || isVoting || !userId || userId === hint.userId) return;
-
-    setCurrentHint?.(hint.id);
-
-    !userVote
-      ? addNewVote(false)
-      : !userVote.isPositive
-      ? deleteExistingVote()
-      : editExistingVote(false);
-  }
-
-  function addNewVote(isPositive) {
-    addVote({
-      hintId: hint.id,
-      isPositive,
-      userId,
-    });
-
-    if (isAddVoteError) return;
-
-    updateHintPopularity({
-      hintId: hint.id,
-      popularity: isPositive ? hint.popularity + 1 : hint.popularity - 1,
-    });
-  }
-
-  function editExistingVote(isPositive) {
-    editVote({ isPositive, voteId: userVote.id });
-
-    if (isEditVoteError) return;
-
-    updateHintPopularity({
-      hintId: hint.id,
-      popularity: isPositive ? hint.popularity + 2 : hint.popularity - 2,
-    });
-  }
-
-  function deleteExistingVote() {
-    deleteVote(userVote.id);
-
-    if (isDeleteVoteError) return;
-
-    updateHintPopularity({
-      hintId: hint.id,
-      popularity: userVote.isPositive
-        ? hint.popularity - 1
-        : hint.popularity + 1,
-    });
-  }
-
   function deleteExistingHint() {
     deleteHint(hint.id);
   }
 
   return (
     <StyledHintItem id={id}>
-      <AvatarNavLink userId={hint.userId} />
-      <HintUpvotes>
+      <NavLinkContainer>
+        <AvatarNavLink userId={hint.userId} view="hints" gameId={hint.gameId} />
+      </NavLinkContainer>
+      <HintActionsContainer>
         {user && user.id === hint.userId && (
           <Modal>
             <Modal.Open opens="confirmDelete">
@@ -149,27 +64,14 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
             </Modal.Window>
           </Modal>
         )}
-        <Upvote
-          disabled={isNewHint}
-          onClick={upvote}
-          $canVote={userId !== hint.userId}
-          $authorized={userId}
-          $voted={userVote && userVote.isPositive}
-        >
-          <HiOutlineArrowUp />
-        </Upvote>
-        <p>{voteData ? getUpvotes(voteData) : "-"}</p>
-        <Downvote
-          disabled={isNewHint}
-          onClick={downVote}
-          $canVote={userId !== hint.userId}
-          $authorized={userId}
-          $voted={userVote && !userVote.isPositive}
-        >
-          <HiOutlineArrowDown />
-        </Downvote>
-        <p>{voteData ? getDownvotes(voteData) : "-"}</p>
-      </HintUpvotes>
+        <Votes
+          itemId={hint.id}
+          updateItem={updateHint}
+          upvotes={hint.upvotes}
+          downvotes={hint.downvotes}
+          userId={hint.userId}
+        />
+      </HintActionsContainer>
       <HintTagsContainer>
         {hint.hintTypes
           ? hint.hintTypes.map((type) => (
@@ -178,6 +80,11 @@ function HintItem({ hint, id, setCurrentHint, isNewHint, user }) {
           : null}
       </HintTagsContainer>
       <HintDescription>{hint.description}</HintDescription>
+      {userId && gameData && (
+        <GameTag to={`/game/${hint.gameId}`}>
+          {gameData.filter((game) => game.id === hint.gameId)[0]?.name}
+        </GameTag>
+      )}
     </StyledHintItem>
   );
 }

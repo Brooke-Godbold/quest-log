@@ -18,6 +18,9 @@ import { useEffect, useState } from "react";
 import { compareDesc } from "date-fns";
 import { useReplyByPostId } from "../useReplyByPostId";
 import { usePostById } from "../usePostById";
+import { useAllPosts } from "../useAllPosts";
+import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
+import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
 
 function SocialFeedContainer() {
   const { userId, postId } = useParams();
@@ -32,7 +35,13 @@ function SocialFeedContainer() {
     isError: isGamesError,
   } = useAllGames();
 
-  const { posts, isGettingPosts, isError: isPostError } = usePostByUser(userId);
+  const {
+    posts: userPosts,
+    isGettingPosts,
+    isError: isPostError,
+  } = usePostByUser(userId);
+
+  const { posts: allPosts } = useAllPosts();
 
   const {
     hintData,
@@ -45,6 +54,8 @@ function SocialFeedContainer() {
   });
 
   const { post, isGettingPost, isError: isPostIdError } = usePostById(postId);
+
+  const { profile } = useProfileByUser(user?.id);
 
   const {
     replies,
@@ -65,23 +76,96 @@ function SocialFeedContainer() {
 
   useEffect(
     function () {
-      if (!posts && !replies) return;
+      if (!allPosts && !userPosts && !replies) return;
 
-      if (posts) {
-        setSortedPosts([
-          ...posts.sort((postA, postB) =>
-            compareDesc(new Date(postA.created_at), new Date(postB.created_at))
-          ),
-        ]);
-      } else {
-        setSortedPosts([
-          ...replies.sort((postA, postB) =>
-            compareDesc(new Date(postA.created_at), new Date(postB.created_at))
-          ),
-        ]);
+      setSortedPosts([]);
+
+      switch (searchParams.get("view")) {
+        case "trending":
+          setSortedPosts([
+            ...allPosts.sort(
+              (postA, postB) =>
+                postB.upvotes.length -
+                postB.downvotes.length -
+                (postA.upvotes.length - postA.downvotes.length)
+            ),
+          ]);
+          break;
+
+        case "following":
+          if (!profile) break;
+          setSortedPosts([
+            ...allPosts
+              .filter((post) => profile.following.includes(post.userId))
+              .sort((postA, postB) =>
+                compareDesc(
+                  new Date(postA.created_at),
+                  new Date(postB.created_at)
+                )
+              ),
+          ]);
+          break;
+
+        case "discover":
+          if (!profile) break;
+          setSortedPosts([
+            ...allPosts
+              .filter(
+                (post) =>
+                  profile.currentGames.includes(post.gameId) &&
+                  !profile.following.includes(post.userId)
+              )
+              .sort((postA, postB) =>
+                compareDesc(
+                  new Date(postA.created_at),
+                  new Date(postB.created_at)
+                )
+              ),
+          ]);
+          break;
+
+        case "posts":
+          setSortedPosts([
+            ...userPosts
+              .sort((postA, postB) =>
+                compareDesc(
+                  new Date(postA.created_at),
+                  new Date(postB.created_at)
+                )
+              )
+              .filter((post) =>
+                searchParams.get("game")
+                  ? post.gameId === Number(searchParams.get("game"))
+                  : post
+              ),
+          ]);
+          break;
+
+        case "hints":
+          if (!hintData) break;
+          setSortedPosts([
+            ...hintData.filter((hint) =>
+              searchParams.get("game")
+                ? hint.gameId === Number(searchParams.get("game"))
+                : hint
+            ),
+          ]);
+          break;
+
+        default:
+          if (replies) {
+            setSortedPosts([
+              ...replies.sort((postA, postB) =>
+                compareDesc(
+                  new Date(postA.created_at),
+                  new Date(postB.created_at)
+                )
+              ),
+            ]);
+          }
       }
     },
-    [posts, replies]
+    [allPosts, searchParams, profile, userPosts, replies, hintData]
   );
 
   useEffect(
@@ -98,6 +182,34 @@ function SocialFeedContainer() {
     [isAuthenticated, searchParams, setSearchParams]
   );
 
+  useEffect(
+    function () {
+      setTimeout(() => {
+        if (!searchParams.get("post")) return;
+
+        const currentPost = document.getElementById(
+          `post_${searchParams.get("post")}`
+        );
+
+        if (!currentPost) return;
+
+        currentPost.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
+      }, 150);
+    },
+    [searchParams]
+  );
+
+  function setGameFilter(e) {
+    e.target.value >= 0
+      ? searchParams.set("game", e.target.value)
+      : searchParams.delete("game");
+    setSearchParams(searchParams);
+  }
+
   return (
     <StyledSocialFeedContainer>
       {!postId && (
@@ -107,6 +219,19 @@ function SocialFeedContainer() {
               <SocialFeedButton onClick={() => setView("posts")}>
                 Posts
               </SocialFeedButton>
+              <GameSelect
+                value={searchParams.get("game") || -1}
+                onChange={setGameFilter}
+              >
+                <option key={"none"} value={-1}>
+                  None
+                </option>
+                {gameData?.map((game) => (
+                  <option key={game.id} value={game.id}>
+                    {game.name}
+                  </option>
+                ))}
+              </GameSelect>
               <SocialFeedButton onClick={() => setView("hints")}>
                 Hints
               </SocialFeedButton>
@@ -132,17 +257,18 @@ function SocialFeedContainer() {
         ) : postId && !isLoadingReplies ? (
           sortedPosts.map((post) => (
             <SocialFeedPost
+              id={`post_${post.id}`}
               key={post.id}
               post={post}
               gameData={gameData}
-              isReply={post.postId}
+              parentPostId={post.postId}
             />
           ))
         ) : searchParams.get("view") === "hints" ? (
           isLoadingHints || !hintData || !userId ? (
             <Spinner />
           ) : (
-            hintData.map((hint) => (
+            sortedPosts.map((hint) => (
               <HintItem
                 hint={hint}
                 id={`hint_${hint.id}`}
@@ -152,23 +278,20 @@ function SocialFeedContainer() {
               />
             ))
           )
-        ) : isLoadingPosts ||
-          !sortedPosts ||
-          isLoadingGames ||
-          !gameData ||
-          !userId ? (
-          <Spinner />
-        ) : (
+        ) : !isLoadingPosts && sortedPosts && !isLoadingGames && gameData ? (
           sortedPosts
             .filter((post) => !post.postId)
             .map((post) => (
               <SocialFeedPost
                 key={post.id}
+                id={`post_${post.id}`}
                 post={post}
                 gameData={gameData}
-                isReply={post.postId}
+                parentPostId={post.postId}
               />
             ))
+        ) : (
+          <Spinner />
         )}
       </SocialFeedContent>
     </StyledSocialFeedContainer>

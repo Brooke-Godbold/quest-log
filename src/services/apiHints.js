@@ -28,6 +28,22 @@ export async function getHintsByHintIdList(hintIds) {
   return hints;
 }
 
+export async function getHintsByListContainsValue(data) {
+  if (!data.value || data.column === "user") return null;
+
+  const { data: hints, error } = await supabase
+    .from("hint")
+    .select()
+    .contains(data.column, data.value);
+
+  if (error) {
+    console.error(error);
+    throw new Error(error);
+  }
+
+  return hints;
+}
+
 export async function addHint(hintData) {
   const { data: hint, error } = await supabase
     .from("hint")
@@ -42,11 +58,11 @@ export async function addHint(hintData) {
   return hint;
 }
 
-export async function updateHintPopularity(hintData) {
+export async function updateHint(hintData) {
   const { data: hint, error } = await supabase
     .from("hint")
-    .update({ popularity: hintData.popularity })
-    .eq("id", hintData.hintId)
+    .update(hintData.data)
+    .eq(hintData.by, hintData.id)
     .select();
 
   if (error) {

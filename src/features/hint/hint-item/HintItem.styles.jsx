@@ -1,25 +1,31 @@
 import { styled } from "styled-components";
 
 const StyledHintItem = styled.div`
-  padding: 1.5rem 2.5rem;
-  background-color: var(--color-brand-600);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
   grid-template-rows: auto;
   gap: 0.5rem;
+
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-radius: 5px;
+  padding: 1.5rem 2.5rem;
+  background-color: var(--color-brand-500);
+
   transition: all 0.3s;
 
-  box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.1);
-
   &:hover {
-    background-color: var(--color-brand-500);
+    background-color: var(--color-brand-400);
   }
 
   @media (max-width: 30em) {
     display: flex;
     flex-direction: column;
   }
+`;
+
+const NavLinkContainer = styled.div`
+  display: flex;
 `;
 
 const HintTagsContainer = styled.div`
@@ -39,6 +45,15 @@ const HintTag = styled.div`
   text-transform: capitalize;
 `;
 
+const HintActionsContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-self: right;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+`;
+
 const HintDeleteButton = styled.button`
   border: none;
   background-color: transparent;
@@ -52,15 +67,6 @@ const HintDeleteButton = styled.button`
   & svg:hover {
     color: var(--color-red-600);
   }
-`;
-
-const HintUpvotes = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-self: right;
-  align-self: flex-start;
-  align-items: center;
-  justify-content: center;
 `;
 
 const Upvote = styled.button`
@@ -121,6 +127,7 @@ const Downvote = styled.button`
 
 const HintDescription = styled.p`
   grid-column: 1 / -1;
+  padding-bottom: 1.8rem;
 `;
 
 const SubmittedByContainer = styled.div`
@@ -144,8 +151,8 @@ const UserName = styled.h4`
 
 export {
   StyledHintItem,
+  NavLinkContainer,
   HintDescription,
-  HintUpvotes,
   Upvote,
   Downvote,
   HintTag,
@@ -154,4 +161,5 @@ export {
   UserAvatar,
   UserName,
   HintDeleteButton,
+  HintActionsContainer,
 };

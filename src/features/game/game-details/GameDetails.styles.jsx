@@ -7,8 +7,11 @@ const StyledGameDetails = styled.div`
   gap: 5rem;
   justify-content: center;
   align-items: center;
+
   background-color: var(--color-brand-500);
   padding: 2rem;
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-radius: 7px;
 
   @media (max-width: 75em) {
     display: ${(props) => (props.$detailsActive ? "grid" : "none")};
@@ -38,13 +41,16 @@ const GameDetailsImageContainer = styled.div`
 
 const GameDetailsImage = styled.img`
   display: block;
-  max-width: 100%;
-  max-height: 100%;
-  aspect-ratio: 1 / 1;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  width: 80%;
+  border: double 7px rgba(34, 34, 34, 0.5);
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 `;
 
 const GameDetailsInformation = styled.div`

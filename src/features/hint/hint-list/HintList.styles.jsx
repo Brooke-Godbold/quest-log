@@ -7,6 +7,9 @@ const StyledHintListSection = styled.div`
   display: grid;
   grid-template-rows: auto 1fr;
 
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-radius: 7px;
+
   @media (max-width: 75em) {
     display: ${(props) => (!props.$detailsActive ? "grid" : "none")};
   }
@@ -61,8 +64,12 @@ const NoHints = styled.p`
 
 const StyledHintListHeader = styled.div`
   position: relative;
-  background-color: var(--color-brand-500);
+  background-color: var(--color-brand-600);
   padding: 2rem 0;
+
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
 `;
 
 export {

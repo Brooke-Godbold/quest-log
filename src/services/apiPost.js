@@ -1,5 +1,13 @@
 import supabase from "./supabase";
 
+export async function getAllPosts() {
+  const { data, error } = await supabase.from("post").select("*");
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function getPostsByUserId(userId) {
   if (!userId) return null;
 
@@ -42,7 +50,22 @@ export async function getReplyByPostId(postId) {
 }
 
 export async function addPost(postData) {
-  const { data, error } = await supabase.from("post").insert(postData).select();
+  const { data, error } = await supabase
+    .from("post")
+    .insert(postData)
+    .single()
+    .select();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
+export async function updatePost(postData) {
+  const { data, error } = await supabase
+    .from("post")
+    .update(postData.data)
+    .eq(postData.by, postData.id);
 
   if (error) throw new Error(error.message);
 

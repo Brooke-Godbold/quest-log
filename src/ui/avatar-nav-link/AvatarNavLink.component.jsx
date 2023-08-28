@@ -8,7 +8,7 @@ import {
   UserName,
 } from "./AvatarNavLink.styles";
 
-function AvatarNavLink({ userId }) {
+function AvatarNavLink({ userId, gameId, view = "posts" }) {
   const {
     profile,
     isGettingProfile,
@@ -16,7 +16,12 @@ function AvatarNavLink({ userId }) {
   } = useProfileByUser(userId);
 
   return (
-    <StyledAvatarNavLink to={`/social/${userId}?view=posts`}>
+    <StyledAvatarNavLink
+      to={
+        userId &&
+        `/social/${userId}?view=${view}${gameId ? `&game=${gameId}` : ""}`
+      }
+    >
       {isGettingProfile ? (
         <Spinner />
       ) : !profile || isProfileError ? (
@@ -38,6 +43,8 @@ function AvatarNavLink({ userId }) {
 
 AvatarNavLink.propTypes = {
   userId: PropTypes.string.isRequired,
+  gameId: PropTypes.number,
+  view: PropTypes.string,
 };
 
 export default AvatarNavLink;

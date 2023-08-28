@@ -15,11 +15,15 @@ import {
 import { useForm } from "react-hook-form";
 import { useAddPost } from "./useAddPost";
 import { FormError } from "../../../ui/form-error/FormError.styles";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
 
 function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -40,9 +44,15 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
     };
 
     addPost(newPost, {
-      onSuccess: () => {
+      onSuccess: ({ id }) => {
         reset();
         onCloseModal?.();
+
+        if (postId) {
+          searchParams.set("post", postId);
+          setSearchParams(searchParams);
+          navigate(`/social/post/${postId}?post=${id}`, { replace: true });
+        }
       },
     });
   }

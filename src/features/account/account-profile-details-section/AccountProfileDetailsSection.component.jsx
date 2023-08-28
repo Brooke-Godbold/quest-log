@@ -7,10 +7,7 @@ import {
   AccountProfileBio,
   AccountProfileBioSection,
   BioTextCount,
-  CurrentlyPlaying,
-  CurrentlyPlayingButton,
   CurrentlyPlayingContainer,
-  CurrentlyPlayingRow,
   ProfileDetailsErrorContainer,
   ProfileDetailsLabel,
   ProfileDetailsRow,
@@ -20,7 +17,7 @@ import { FormError } from "../../../ui/form-error/FormError.styles";
 import { useUpdateProfile } from "../useUpdateProfile";
 import { useAllGames } from "./useAllGames";
 import { useEffect, useState } from "react";
-import { HiMinus, HiPlus } from "react-icons/hi";
+import CurrentlyPlayingRow from "../currently-playing-row/CurrentlyPlayingRow.component";
 
 const BIO_MAX_LENGTH = 450;
 
@@ -96,6 +93,8 @@ function AccountProfileDetailsSection() {
       const games = gameData.reduce((acc, cur) => [...acc, cur.name], []);
 
       setAvailableGames(games);
+
+      if (currentlyPlaying?.length === 0) addNewCurrentlyPlaying();
     },
     [gameData, currentlyPlaying]
   );
@@ -104,13 +103,13 @@ function AccountProfileDetailsSection() {
     function () {
       if (!profile) return;
 
-      setCurrentlyPlaying(profile.currentGames);
+      setCurrentlyPlaying(profile.currentGames || []);
     },
     [profile]
   );
 
   function addNewCurrentlyPlaying(e) {
-    e.preventDefault();
+    e?.preventDefault();
 
     setCurrentlyPlaying((currentlyPlaying) => [...currentlyPlaying, null]);
   }
@@ -200,70 +199,26 @@ function AccountProfileDetailsSection() {
       <StyledAccountProfileDetails
         onChange={handleSubmitCurrentlyPlaying(onSubmitCurrentlyPlaying)}
       >
-        {availableGames && gameData && currentlyPlaying.length ? (
+        {availableGames && gameData && currentlyPlaying ? (
           <ProfileDetailsRow>
             <ProfileDetailsLabel>Currently Playing</ProfileDetailsLabel>
             <CurrentlyPlayingContainer>
-              {currentlyPlaying.map((gameId, index) => (
-                <CurrentlyPlayingRow key={`currentlyPlaying_${gameId}`}>
-                  <CurrentlyPlaying
-                    disabled={isLoading}
-                    value={
-                      gameId
-                        ? gameData.filter((game) => game.id === gameId)[0].name
-                        : "placeholder"
-                    }
-                    id={`currentlyPlaying_${index}`}
-                    {...registerCurrentPlaying(`currentlyPlaying_${index}`)}
-                  >
-                    <option key="placeholder" value="placeholder">
-                      Please Select...
-                    </option>
-                    {gameId && (
-                      <option
-                        key={
-                          gameData.filter((data) => data.id === gameId)[0].name
-                        }
-                        value={
-                          gameData.filter((data) => data.id === gameId)[0].name
-                        }
-                      >
-                        {gameData.filter((data) => data.id === gameId)[0].name}
-                      </option>
-                    )}
-
-                    {availableGames
-                      .filter(
-                        (availableGame) =>
-                          !currentlyPlaying.includes(
-                            gameData.filter(
-                              (data) => data.name === availableGame
-                            )[0].id
-                          )
-                      )
-                      .map((game) => (
-                        <option key={game} value={game}>
-                          {game}
-                        </option>
-                      ))}
-                  </CurrentlyPlaying>
-
-                  {currentlyPlaying.length <= 3 &&
-                    !currentlyPlaying.includes(null) && (
-                      <CurrentlyPlayingButton onClick={addNewCurrentlyPlaying}>
-                        <HiPlus />
-                      </CurrentlyPlayingButton>
-                    )}
-
-                  {currentlyPlaying.length > 1 && (
-                    <CurrentlyPlayingButton
-                      onClick={(e) => removeCurrentlyPlaying(e, gameId)}
-                    >
-                      <HiMinus />
-                    </CurrentlyPlayingButton>
-                  )}
-                </CurrentlyPlayingRow>
-              ))}
+              {currentlyPlaying.length > 0
+                ? currentlyPlaying.map((gameId, index) => (
+                    <CurrentlyPlayingRow
+                      key={`currentlyPlaying_${gameId}`}
+                      gameId={gameId}
+                      gameData={gameData}
+                      rowIndex={index}
+                      isLoading={isLoading}
+                      currentlyPlaying={currentlyPlaying}
+                      register={registerCurrentPlaying}
+                      addNewCurrentlyPlaying={addNewCurrentlyPlaying}
+                      removeCurrentlyPlaying={removeCurrentlyPlaying}
+                      availableGames={availableGames}
+                    />
+                  ))
+                : null}
             </CurrentlyPlayingContainer>
           </ProfileDetailsRow>
         ) : (

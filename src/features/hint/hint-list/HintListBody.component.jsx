@@ -31,10 +31,6 @@ function HintListBody({ isNewHint }) {
 
   const currentHint = useRef(0);
 
-  function setCurrentHint(current) {
-    currentHint.current = current;
-  }
-
   useEffect(
     function () {
       if (!isFetching) setInitialLoad(false);
@@ -80,7 +76,10 @@ function HintListBody({ isNewHint }) {
     switch (sortBy) {
       case "popularity":
         return hintData.sort(
-          (hintA, hintB) => hintB.popularity - hintA.popularity
+          (hintA, hintB) =>
+            hintB.upvotes.length -
+            hintB.downvotes.length -
+            (hintA.upvotes.length - hintA.downvotes.length)
         );
       case "newest":
         return hintData.sort((hintA, hintB) =>
@@ -101,7 +100,9 @@ function HintListBody({ isNewHint }) {
       case "none":
         return hintData;
       case "positive":
-        return hintData.filter((hint) => hint.popularity >= 0);
+        return hintData.filter(
+          (hint) => hint.upvotes.length - hint.downvotes.length >= 0
+        );
       case "sixMonths":
         return hintData.filter(
           (hint) =>
@@ -146,8 +147,6 @@ function HintListBody({ isNewHint }) {
               key={hint.id}
               id={`hint_${hint.id}`}
               currentHint={currentHint}
-              setCurrentHint={setCurrentHint}
-              isNewHint={isNewHint}
               user={user}
             />
           ))

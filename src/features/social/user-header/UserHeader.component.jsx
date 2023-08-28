@@ -4,7 +4,7 @@ import { useProfileByUser } from "../../account/account-layout/useProfileByUser"
 import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
 
 import { HiPlus } from "react-icons/hi";
-//import { HiCheck } from "react-icons/hi";
+import { HiCheck } from "react-icons/hi";
 
 import {
   AddNewPostButton,
@@ -23,21 +23,48 @@ import {
 import { useUser } from "../../auth/useUser";
 import Modal from "../../../ui/modal/Modal.component";
 import AddPostForm from "../add-post-form/AddPostForm.component";
+import { useUpdateProfile } from "../../account/useUpdateProfile";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
 
   const { userId } = useParams();
 
-  const { profile, isFetchingProfile, isGettingProfile, isError } =
-    useProfileByUser(userId);
+  const {
+    profile: viewedProfile,
+    isFetchingProfile: isFetchingViewedProfile,
+    isGettingProfile: isGettingViewedProfile,
+    isError,
+  } = useProfileByUser(userId);
   const { gameData, isLoading: isLoadingGames } = useAllGames();
 
-  const isLoadingProfile = isFetchingProfile || isGettingProfile;
+  const isLoadingViewedProfile =
+    isFetchingViewedProfile || isGettingViewedProfile;
+
+  const { profile: userProfile } = useProfileByUser(user?.id);
+
+  const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
+    userProfile?.userId
+  );
+
+  function onFollow() {
+    if (!userProfile) return;
+
+    const newFollowing = userProfile.following.includes(userId)
+      ? userProfile.following.filter((followedUser) => followedUser !== userId)
+      : [...userProfile.following, userId];
+
+    updateProfile({
+      userId: userProfile.userId,
+      data: { following: newFollowing },
+    });
+  }
+
+  //<HiPlus />
 
   return (
     <StyledUserHeader>
-      {isLoadingProfile ? (
+      {isLoadingViewedProfile ? (
         <Spinner />
       ) : isError ? (
         <UserHeaderError>We couldn&apos;t find that one...</UserHeaderError>
@@ -45,23 +72,35 @@ function UserHeader() {
         <>
           <UserProfile>
             <UserMain>
-              <UserAvatar src={profile.avatarUrl} />
-              <UserName>{profile.username}</UserName>
+              <UserAvatar src={viewedProfile.avatarUrl} />
+              <UserName>{viewedProfile.username}</UserName>
               {isAuthenticated && user && user.id !== userId && (
-                <FollowButton $following={false}>
-                  Follow <HiPlus />
+                <FollowButton
+                  disabled={isUpdatingProfile}
+                  onClick={onFollow}
+                  $following={userProfile?.following.includes(userId)}
+                >
+                  {userProfile?.following.includes(userId) ? (
+                    <>
+                      Following <HiCheck />
+                    </>
+                  ) : (
+                    <>
+                      Follow <HiPlus />
+                    </>
+                  )}
                 </FollowButton>
               )}
             </UserMain>
-            <UserBio>{profile.bio}</UserBio>
-            {isLoadingGames || isLoadingProfile ? (
+            <UserBio>{viewedProfile.bio}</UserBio>
+            {isLoadingGames || isLoadingViewedProfile ? (
               <Spinner />
             ) : (
               <CurrentlyPlayingContainer>
-                {profile.currentGames && (
+                {viewedProfile.currentGames && (
                   <>
                     <Heading>Currently Playing</Heading>
-                    {profile.currentGames.map((gameId) => (
+                    {viewedProfile.currentGames.map((gameId) => (
                       <CurrentlyPlaying key={gameId} to={`/game/${gameId}`}>
                         {gameData.filter((game) => game.id === gameId)[0].name}
                       </CurrentlyPlaying>
@@ -75,7 +114,7 @@ function UserHeader() {
             user &&
             user.id === userId &&
             gameData &&
-            profile && (
+            viewedProfile && (
               <Modal>
                 <Modal.Open opens="addPost">
                   <AddNewPostButton>Add New Post</AddNewPostButton>
@@ -83,7 +122,7 @@ function UserHeader() {
                 <Modal.Window name="addPost">
                   <AddPostForm
                     gameData={gameData}
-                    currentGames={profile.currentGames}
+                    currentGames={viewedProfile.currentGames}
                     userId={user.id}
                   />
                 </Modal.Window>

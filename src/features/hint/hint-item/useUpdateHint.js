@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateHintPopularity as updateHintPopularityApi } from "../../../services/apiHints";
+import { updateHint as updateHintApi } from "../../../services/apiHints";
 
-export function useUpdateHintPopularity() {
+export function useUpdateHint() {
   const queryClient = useQueryClient();
 
-  const { mutate: updateHintPopularity, isLoading } = useMutation({
-    mutationFn: updateHintPopularityApi,
+  const { mutate: updateHint, isLoading: isUpdatingHint } = useMutation({
+    mutationFn: updateHintApi,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["hints"],
@@ -13,5 +13,5 @@ export function useUpdateHintPopularity() {
     },
   });
 
-  return { updateHintPopularity, isLoading };
+  return { updateHint, isUpdatingHint };
 }
