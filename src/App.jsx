@@ -18,6 +18,7 @@ import AccountHintsSection from "./features/account/account-hints-section/Accoun
 import ResetPasswordSection from "./features/account/reset-password-section/ResetPasswordSection.component";
 import SocialFeed from "./pages/social-feed/SocialFeed.page";
 import SocialPost from "./pages/social-post/SocialPost.page";
+import NotFound from "./pages/not-found/NotFound.page";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,6 +59,7 @@ function App() {
           <Route path="signup" element={<Signup />} />
           <Route path="confirm-signup" element={<ConfirmSignup />} />
           <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

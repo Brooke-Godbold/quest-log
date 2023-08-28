@@ -42,7 +42,7 @@ function SearchResultsGrid({ searchQuery }) {
             {profile.map((profile) => (
               <SearchResultItem
                 key={profile.userId}
-                to={`/social/${profile.userId}`}
+                to={`/social/${profile.userId}?view=posts`}
                 imageUrl={profile.avatarUrl}
                 title={profile.username}
                 summary={profile.bio}

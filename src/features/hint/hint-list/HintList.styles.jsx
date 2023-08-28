@@ -1,5 +1,9 @@
 import { styled } from "styled-components";
-import { CommonScrollBar } from "../../../styles/GlobalStyles";
+import {
+  CommonButton,
+  CommonInput,
+  CommonScrollBar,
+} from "../../../styles/GlobalStyles";
 
 const StyledHintListSection = styled.div`
   background-color: var(--color-brand-700);
@@ -72,6 +76,46 @@ const StyledHintListHeader = styled.div`
   border-top-right-radius: 7px;
 `;
 
+const UserSearch = styled.form`
+  display: flex;
+  width: 25%;
+`;
+
+const UserSearchInput = styled.input`
+  ${CommonInput}
+
+  height: 100%;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+  flex: 1;
+
+  &::placeholder {
+    color: var(--color-brand-500);
+  }
+`;
+
+const ResetUserButton = styled.button`
+  ${CommonButton}
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  width: auto;
+
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+  & svg {
+    transform: scale(125%);
+  }
+`;
+
 export {
   HintList,
   StyledHintListSection,
@@ -80,4 +124,7 @@ export {
   HintListContainer,
   ButtonContainer,
   StyledHintListHeader,
+  UserSearch,
+  UserSearchInput,
+  ResetUserButton,
 };

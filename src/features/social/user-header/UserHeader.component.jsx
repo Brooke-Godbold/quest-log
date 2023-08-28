@@ -101,7 +101,10 @@ function UserHeader() {
                   <>
                     <Heading>Currently Playing</Heading>
                     {viewedProfile.currentGames.map((gameId) => (
-                      <CurrentlyPlaying key={gameId} to={`/game/${gameId}`}>
+                      <CurrentlyPlaying
+                        key={gameId}
+                        to={`/game/${gameId}?username=${viewedProfile.username}`}
+                      >
                         {gameData.filter((game) => game.id === gameId)[0].name}
                       </CurrentlyPlaying>
                     ))}

@@ -14,6 +14,7 @@ import {
 import { useHint } from "./useHint";
 import { add, compareAsc, compareDesc } from "date-fns";
 import { useUser } from "../../auth/useUser";
+import { useProfilesByUsername } from "../../search/search-results-grid/useProfilesByUsername";
 
 function HintListBody({ isNewHint }) {
   const { user } = useUser();
@@ -21,9 +22,23 @@ function HintListBody({ isNewHint }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const sortValue = searchParams.get("sort") || "popularity";
   const filterValue = searchParams.get("filter") || "none";
+  const searchUsername = searchParams.get("username");
 
   const { id } = useParams();
-  const { isLoading, isFetching, hintData } = useHint({ by: "gameId", id });
+  const {
+    isLoading: isLoadingHints,
+    isFetching: isFetchingHints,
+    hintData,
+  } = useHint({ by: "gameId", id });
+
+  const {
+    profile: profileData,
+    isGettingProfile,
+    isFetchingProfile,
+  } = useProfilesByUsername(searchUsername);
+
+  const isLoading =
+    isLoadingHints || isFetchingHints || isGettingProfile || isFetchingProfile;
 
   const [initialLoad, setInitialLoad] = useState(true);
 
@@ -33,9 +48,9 @@ function HintListBody({ isNewHint }) {
 
   useEffect(
     function () {
-      if (!isFetching) setInitialLoad(false);
+      if (!isFetchingHints) setInitialLoad(false);
     },
-    [isFetching]
+    [isFetchingHints]
   );
 
   useEffect(
@@ -45,7 +60,7 @@ function HintListBody({ isNewHint }) {
         setSearchParams(searchParams);
       }
     },
-    [searchParams, setSearchParams, user]
+    [searchParams, setSearchParams, user, profileData, hintData]
   );
 
   useEffect(
@@ -55,7 +70,12 @@ function HintListBody({ isNewHint }) {
       const currentData = [...hintData];
       const sortedData = sortHints(currentData, sortValue);
       const filteredData = filterHints(sortedData, filterValue, user);
-      setSortedFilteredData(filteredData);
+
+      setSortedFilteredData(
+        searchParams.get("username") && profileData
+          ? filterByUser(filteredData)
+          : filteredData
+      );
 
       const currentHintElement = document.getElementById(
         `hint_${currentHint.current}`
@@ -68,8 +88,23 @@ function HintListBody({ isNewHint }) {
         block: "nearest",
         inline: "nearest",
       });
+
+      function filterByUser(hints) {
+        return hints.filter((hint) => {
+          return profileData.some((profile) => hint.userId === profile.userId);
+        });
+      }
     },
-    [hintData, isNewHint, sortValue, filterValue, user]
+
+    [
+      hintData,
+      isNewHint,
+      sortValue,
+      filterValue,
+      user,
+      searchParams,
+      profileData,
+    ]
   );
 
   function sortHints(hintData, sortBy) {
@@ -134,7 +169,7 @@ function HintListBody({ isNewHint }) {
     <HintListContainer $scrollEnabled={!isNewHint}>
       <HintList>
         {isNewHint && <HintListOverlay />}
-        {((isLoading || isFetching) && initialLoad) || !hintData ? (
+        {(isLoading && initialLoad) || !hintData ? (
           <Spinner />
         ) : hintData.length === 0 ? (
           !isNewHint ? (

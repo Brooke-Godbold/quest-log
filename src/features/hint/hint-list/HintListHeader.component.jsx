@@ -4,14 +4,24 @@ import { StyledButtonContainer } from "../../../ui/button-container/ButtonContai
 import Button from "../../../ui/button/Button.component";
 import ToggleButton from "../../../ui/toggle-button/ToggleButton.component";
 import NewHint from "../new-hint/NewHint.component";
-import { ButtonContainer, StyledHintListHeader } from "./HintList.styles";
+import {
+  ButtonContainer,
+  ResetUserButton,
+  StyledHintListHeader,
+  UserSearch,
+  UserSearchInput,
+} from "./HintList.styles";
 import { useSearchParams } from "react-router-dom";
 import { useUser } from "../../auth/useUser";
+import { useForm } from "react-hook-form";
+import { HiX } from "react-icons/hi";
 
 function HintListHeader({ isNewHint, setIsNewHint }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSort = searchParams.get("sort") || "popularity";
   const currentFilter = searchParams.get("filter") || "none";
+
+  const { register, handleSubmit, reset } = useForm();
 
   const { isAuthenticated, user } = useUser();
 
@@ -30,6 +40,18 @@ function HintListHeader({ isNewHint, setIsNewHint }) {
     if (searchParams.get("filter") === toggleValue) return;
 
     searchParams.set("filter", toggleValue);
+    setSearchParams(searchParams);
+  }
+
+  function handleSearchUsername(data) {
+    searchParams.set("username", data.username);
+    setSearchParams(searchParams);
+
+    reset();
+  }
+
+  function resetSearchUsername() {
+    searchParams.delete("username");
     setSearchParams(searchParams);
   }
 
@@ -101,6 +123,17 @@ function HintListHeader({ isNewHint, setIsNewHint }) {
                 </ToggleButton>
               )}
             </StyledButtonContainer>
+            <UserSearch onSubmit={handleSubmit(handleSearchUsername)}>
+              <UserSearchInput
+                {...register("username", { required: true })}
+                placeholder={
+                  searchParams.get("username") || "Search by username..."
+                }
+              />
+              <ResetUserButton onClick={resetSearchUsername}>
+                <HiX />
+              </ResetUserButton>
+            </UserSearch>
           </ButtonContainer>
         </>
       )}
