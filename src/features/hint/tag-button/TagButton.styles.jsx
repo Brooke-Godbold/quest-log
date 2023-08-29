@@ -9,11 +9,11 @@ const StyledTagButton = styled.button`
   color: #ccc;
 
   background-color: ${(props) =>
-    props.$isToggled ? "var(--color-brand-700);" : "var(--color-brand-600);"};
+    props.$isToggled ? "var(--color-brand-600);" : "var(--color-brand-500);"};
 
   &:hover {
     background-color: ${(props) =>
-      props.$isToggled ? "var(--color-brand-800);" : "var(--color-brand-700);"};
+      props.$isToggled ? "var(--color-brand-800);" : "var(--color-brand-600);"};
   }
 
   &:focus,

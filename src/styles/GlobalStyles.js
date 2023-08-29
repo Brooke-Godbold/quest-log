@@ -158,7 +158,7 @@ const CommonInput = css`
   color: var(--color-brand-600);
 
   &::placeholder {
-    color: var(--color-brand-300);
+    color: var(--color-brand-400);
   }
 `;
 
@@ -185,6 +185,10 @@ const CommonButton = css`
     border: 4px solid
       ${(props) =>
         props.$light ? "rgb(17, 17, 17, 0.4)" : "rgb(119, 119, 119, 0.4)"};
+  }
+
+  @media (max-width: 120em) {
+    font-size: 1.6rem;
   }
 `;
 

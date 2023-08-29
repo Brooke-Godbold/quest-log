@@ -1,6 +1,8 @@
 import { styled } from "styled-components";
 
-const StyledConfirmationCheck = styled.div``;
+const StyledConfirmationCheck = styled.div`
+  padding: 3.2rem;
+`;
 
 const ConfirmationText = styled.p`
   text-align: center;

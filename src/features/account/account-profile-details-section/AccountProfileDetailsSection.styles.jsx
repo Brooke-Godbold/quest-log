@@ -79,12 +79,6 @@ const CurrentlyPlayingButton = styled.button`
   }
 `;
 
-const AccountProfileBioSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-`;
-
 const AccountProfileBio = styled.textarea`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border: none;
@@ -98,10 +92,36 @@ const AccountProfileBio = styled.textarea`
   ${CommonScrollBar}
 `;
 
-const BioTextCount = styled.p`
-  font-size: 1.4rem;
-  align-self: flex-end;
-  margin-right: 1.6rem;
+const AccountSocialMediaContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+`;
+
+const AccountSocialMediaInputRow = styled.div`
+  position: relative;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 2fr 3.5fr;
+  gap: 0.8rem;
+
+  & label {
+    font-size: 2rem;
+  }
+
+  & p {
+    font-weight: 700;
+    justify-self: end;
+  }
+
+  & svg {
+    position: absolute;
+    right: 15px;
+    color: var(--color-brand-400);
+    transform: scale(150%);
+    pointer-events: none;
+  }
 `;
 
 export {
@@ -114,6 +134,6 @@ export {
   CurrentlyPlaying,
   CurrentlyPlayingButton,
   AccountProfileBio,
-  AccountProfileBioSection,
-  BioTextCount,
+  AccountSocialMediaInputRow,
+  AccountSocialMediaContainer,
 };

@@ -30,7 +30,7 @@ const AccountSection = styled.div`
 const AccountSectionHeading = styled.h1`
   font-size: 6.4rem;
   text-align: center;
-  padding: 10rem 0;
+  padding: 7.4rem 0;
 
   @media (max-width: 45em) {
     padding: 5rem 0;

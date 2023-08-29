@@ -82,6 +82,7 @@ function SocialFeedContainer() {
 
       switch (searchParams.get("view")) {
         case "trending":
+          if (!allPosts) break;
           setSortedPosts([
             ...allPosts.sort(
               (postA, postB) =>
@@ -93,7 +94,7 @@ function SocialFeedContainer() {
           break;
 
         case "following":
-          if (!profile) break;
+          if (!profile || !allPosts) break;
           setSortedPosts([
             ...allPosts
               .filter((post) => profile.following.includes(post.userId))
@@ -107,13 +108,14 @@ function SocialFeedContainer() {
           break;
 
         case "discover":
-          if (!profile) break;
+          if (!profile || !allPosts) break;
           setSortedPosts([
             ...allPosts
               .filter(
                 (post) =>
                   profile.currentGames.includes(post.gameId) &&
-                  !profile.following.includes(post.userId)
+                  !profile.following.includes(post.userId) &&
+                  post.userId !== user?.id
               )
               .sort((postA, postB) =>
                 compareDesc(
@@ -125,6 +127,7 @@ function SocialFeedContainer() {
           break;
 
         case "posts":
+          if (!userPosts) break;
           setSortedPosts([
             ...userPosts
               .sort((postA, postB) =>
@@ -153,19 +156,18 @@ function SocialFeedContainer() {
           break;
 
         default:
-          if (replies) {
-            setSortedPosts([
-              ...replies.sort((postA, postB) =>
-                compareDesc(
-                  new Date(postA.created_at),
-                  new Date(postB.created_at)
-                )
-              ),
-            ]);
-          }
+          if (!replies) break;
+          setSortedPosts([
+            ...replies.sort((postA, postB) =>
+              compareDesc(
+                new Date(postA.created_at),
+                new Date(postB.created_at)
+              )
+            ),
+          ]);
       }
     },
-    [allPosts, searchParams, profile, userPosts, replies, hintData]
+    [allPosts, searchParams, profile, userPosts, replies, hintData, user]
   );
 
   useEffect(

@@ -8,7 +8,6 @@ import {
   AddPostGame,
   AddPostHeader,
   AddPostTextArea,
-  AddPostTextCount,
   AddPostTextSection,
   StyledAddPostForm,
 } from "./AddPostForm.styles";
@@ -16,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { useAddPost } from "./useAddPost";
 import { FormError } from "../../../ui/form-error/FormError.styles";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import TextCount from "../../../ui/text-count/TextCount.component";
 
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
@@ -99,9 +99,11 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
             maxLength: MAX_LENGTH,
           })}
         />
-        <AddPostTextCount>{`${
-          watchPostContent.length || 0
-        } / ${MAX_LENGTH}`}</AddPostTextCount>
+        <TextCount
+          value={watchPostContent}
+          minLength={MIN_LENGTH}
+          maxLength={MAX_LENGTH}
+        />
       </AddPostTextSection>
       {errors && (
         <AddPostErrorContainer>

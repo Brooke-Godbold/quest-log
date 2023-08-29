@@ -17,7 +17,7 @@ const UserProfile = styled.div`
   border-radius: 7px;
   width: 100%;
 
-  padding: 5.4rem;
+  padding: 3.6rem;
   position: relative;
 
   display: flex;
@@ -92,18 +92,62 @@ const UserName = styled.h1`
 
 const Heading = styled.h3``;
 
+const UserDetailsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  flex: 1;
+`;
+
+const SocialMediaContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+
+  height: 20%;
+`;
+
+const SocialMediaButton = styled.a`
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0px 0px 7px 3px rgb(31, 31, 31, 0.25);
+  padding: 0.3rem 1.2rem;
+  width: 25%;
+
+  background-color: ${(props) =>
+    props.$active ? "var(--color-brand-700)" : "rgba(122, 122, 122, 0.3)"};
+
+  cursor: ${(props) => (props.$active ? "pointer" : "auto")};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.3s;
+
+  &:hover {
+    transform: ${(props) => (props.$active ? "scale(110%)" : "scale(100%)")};
+  }
+
+  & svg {
+    color: ${(props) =>
+      props.$active ? "var(--color-brand-500)" : "rgba(85, 85, 85, 0.3)"};
+    transform: scale(150%);
+  }
+`;
+
 const UserBio = styled.p`
   background-color: var(--color-brand-700);
   color: var(--color-brand-300);
-  padding: 2.4rem;
+  padding: 1.6rem;
   border-radius: 3px;
   height: 0;
-  min-height: 100%;
+  min-height: 75%;
   overflow: auto;
+  font-size: 1.6rem;
 
   ${CommonScrollBar}
-
-  flex: 1;
 
   @media (max-width: 70em) {
     padding: 0.8rem;
@@ -225,4 +269,7 @@ export {
   UserMain,
   UserProfile,
   AddNewPostButton,
+  UserDetailsContainer,
+  SocialMediaContainer,
+  SocialMediaButton,
 };

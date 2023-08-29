@@ -4,17 +4,17 @@ const StyledButtonContainer = styled.div`
   display: flex;
 
   & * {
-    border-radius: 0;
+    border-radius: 0 !important;
   }
 
   & *:first-child {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
   }
 
   & *:last-child {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
   }
 
   @media (max-width: 35em) {

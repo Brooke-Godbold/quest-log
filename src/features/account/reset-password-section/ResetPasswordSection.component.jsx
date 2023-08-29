@@ -14,6 +14,9 @@ import {
   ResetPasswordSuccessContainer,
 } from "./ResetPasswordSection.styles";
 import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
+import TextCount from "../../../ui/text-count/TextCount.component";
+
+const PASSWORD_MIN_LENGTH = 8;
 
 function ResetPasswordSection() {
   const {
@@ -21,8 +24,10 @@ function ResetPasswordSection() {
     handleSubmit,
     getValues,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
+  const watchPassword = watch("password", "");
 
   const { updatePassword, isLoading, isError, isSuccess } = useUpdatePassword();
 
@@ -40,11 +45,12 @@ function ResetPasswordSection() {
           id="password"
           {...register("password", {
             required: true,
-            minLength: 8,
+            minLength: PASSWORD_MIN_LENGTH,
             validate: (value) => !value.includes(" "),
           })}
           disabled={isLoading}
         ></LoginFormInput>
+        <TextCount value={watchPassword} minLength={PASSWORD_MIN_LENGTH} />
         <ProfileDetailsErrorContainer>
           {errors.password ? (
             errors.password.type === "required" ? (

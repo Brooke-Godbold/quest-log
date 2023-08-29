@@ -1,22 +1,16 @@
-import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 
 import Spinner from "../../../ui/spinner/Spinner";
 import HintItem from "../hint-item/HintItem.component";
-import {
-  HintList,
-  HintListContainer,
-  HintListOverlay,
-  NoHints,
-} from "./HintList.styles";
+import { HintList, HintListContainer, NoHints } from "./HintList.styles";
 
 import { useHint } from "./useHint";
 import { add, compareAsc, compareDesc } from "date-fns";
 import { useUser } from "../../auth/useUser";
 import { useProfilesByUsername } from "../../search/search-results-grid/useProfilesByUsername";
 
-function HintListBody({ isNewHint }) {
+function HintListBody() {
   const { user } = useUser();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,17 +59,22 @@ function HintListBody({ isNewHint }) {
 
   useEffect(
     function () {
-      if (!hintData || isNewHint) return;
+      if (!hintData) return;
 
       const currentData = [...hintData];
       const sortedData = sortHints(currentData, sortValue);
       const filteredData = filterHints(sortedData, filterValue, user);
 
-      setSortedFilteredData(
+      const usernameFiltered =
         searchParams.get("username") && profileData
           ? filterByUser(filteredData)
-          : filteredData
-      );
+          : filteredData;
+
+      const tagFiltered = searchParams.get("tag")
+        ? filterByTags(usernameFiltered)
+        : usernameFiltered;
+
+      setSortedFilteredData(tagFiltered);
 
       const currentHintElement = document.getElementById(
         `hint_${currentHint.current}`
@@ -94,17 +93,15 @@ function HintListBody({ isNewHint }) {
           return profileData.some((profile) => hint.userId === profile.userId);
         });
       }
+
+      function filterByTags(hints) {
+        return hints.filter((hint) =>
+          hint.hintTypes.includes(searchParams.get("tag"))
+        );
+      }
     },
 
-    [
-      hintData,
-      isNewHint,
-      sortValue,
-      filterValue,
-      user,
-      searchParams,
-      profileData,
-    ]
+    [hintData, sortValue, filterValue, user, searchParams, profileData]
   );
 
   function sortHints(hintData, sortBy) {
@@ -166,15 +163,12 @@ function HintListBody({ isNewHint }) {
   }
 
   return (
-    <HintListContainer $scrollEnabled={!isNewHint}>
+    <HintListContainer>
       <HintList>
-        {isNewHint && <HintListOverlay />}
         {(isLoading && initialLoad) || !hintData ? (
           <Spinner />
         ) : hintData.length === 0 ? (
-          !isNewHint ? (
-            <NoHints>Nothing here yet...</NoHints>
-          ) : null
+          <NoHints>Nothing here yet...</NoHints>
         ) : (
           sortedFilteredData.map((hint) => (
             <HintItem
@@ -190,9 +184,5 @@ function HintListBody({ isNewHint }) {
     </HintListContainer>
   );
 }
-
-HintListBody.propTypes = {
-  isNewHint: PropTypes.bool.isRequired,
-};
 
 export default HintListBody;

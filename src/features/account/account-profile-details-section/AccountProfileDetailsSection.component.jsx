@@ -5,8 +5,8 @@ import { useUser } from "../../auth/useUser";
 import { useProfileByUser } from "../account-layout/useProfileByUser";
 import {
   AccountProfileBio,
-  AccountProfileBioSection,
-  BioTextCount,
+  AccountSocialMediaContainer,
+  AccountSocialMediaInputRow,
   CurrentlyPlayingContainer,
   ProfileDetailsErrorContainer,
   ProfileDetailsLabel,
@@ -18,7 +18,15 @@ import { useUpdateProfile } from "../useUpdateProfile";
 import { useAllGames } from "./useAllGames";
 import { useEffect, useState } from "react";
 import CurrentlyPlayingRow from "../currently-playing-row/CurrentlyPlayingRow.component";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 
+import { FaTwitch } from "react-icons/fa";
+import { GrYoutube } from "react-icons/gr";
+import { RiKickFill } from "react-icons/ri";
+
+const USERNAME_MIN_LENGTH = 8;
+const USERNAME_MAX_LENGTH = 20;
 const BIO_MAX_LENGTH = 450;
 
 function AccountProfileDetailsSection() {
@@ -45,6 +53,7 @@ function AccountProfileDetailsSection() {
     watch,
     formState: { errors },
   } = useForm({ mode: "onBlur" });
+  const watchUsername = watch("username", "");
   const watchBio = watch("bio", "");
 
   const {
@@ -55,11 +64,17 @@ function AccountProfileDetailsSection() {
   function onSubmitProfile(data) {
     if (
       !profile ||
-      (data.username === profile.username && data.bio === profile.bio)
+      (data.username === profile.username &&
+        data.bio === profile.bio &&
+        data.twitch === profile.twitch)
     )
       return;
 
-    const newProfileData = { username: data.userName, bio: data.bio };
+    const newProfileData = {
+      username: data.userName,
+      bio: data.bio,
+      twitch: data.twitch?.length > 0 ? data.twitch : null,
+    };
 
     updateProfile({ userId: user.id, data: newProfileData });
   }
@@ -147,13 +162,18 @@ function AccountProfileDetailsSection() {
             type="text"
             {...registerProfile("username", {
               required: true,
-              minLength: 8,
-              maxLength: 20,
+              minLength: USERNAME_MIN_LENGTH,
+              maxLength: USERNAME_MAX_LENGTH,
               validate: (value) => !value.includes(" "),
             })}
             defaultValue={profile.username}
             disabled={isLoading}
           ></LoginFormInput>
+          <TextCount
+            value={watchUsername}
+            minLength={USERNAME_MIN_LENGTH}
+            maxLength={USERNAME_MAX_LENGTH}
+          />
           <ProfileDetailsErrorContainer>
             {errors.username ? (
               errors.username.type === "required" ? (
@@ -174,20 +194,16 @@ function AccountProfileDetailsSection() {
 
         <ProfileDetailsRow>
           <ProfileDetailsLabel>Bio</ProfileDetailsLabel>
-          <AccountProfileBioSection>
-            <AccountProfileBio
-              id="bio"
-              type="text"
-              {...registerProfile("bio", {
-                maxLength: BIO_MAX_LENGTH,
-              })}
-              defaultValue={profile?.bio || ""}
-              disabled={isLoading}
-            />
-            <BioTextCount>{`${
-              watchBio?.length || 0
-            } / ${BIO_MAX_LENGTH}`}</BioTextCount>
-          </AccountProfileBioSection>
+          <AccountProfileBio
+            id="bio"
+            type="text"
+            {...registerProfile("bio", {
+              maxLength: BIO_MAX_LENGTH,
+            })}
+            defaultValue={profile?.bio || ""}
+            disabled={isLoading}
+          />
+          <TextCount value={watchBio} maxLength={BIO_MAX_LENGTH} />
           <ProfileDetailsErrorContainer>
             {errors.bio && (
               <FormError>Bio cannot be more than 450 characters!</FormError>
@@ -224,6 +240,63 @@ function AccountProfileDetailsSection() {
         ) : (
           <Spinner />
         )}
+      </StyledAccountProfileDetails>
+
+      <StyledAccountProfileDetails
+        onBlur={handleSubmitProfile(onSubmitProfile, onProfileError)}
+      >
+        <ProfileDetailsRow>
+          <ProfileDetailsLabel>Social Media</ProfileDetailsLabel>
+          <AccountSocialMediaContainer>
+            <AccountSocialMediaInputRow>
+              <label>Twitch</label>
+              <p>{`${twitchUrl}`}</p>
+              <LoginFormInput
+                id="twitch"
+                type="text"
+                {...registerProfile("twitch", {
+                  validate: (value) => !value.includes(" "),
+                })}
+                defaultValue={profile.twitch || ""}
+                disabled={isLoading}
+                placeholder="myTwitchUser"
+              ></LoginFormInput>
+              <FaTwitch />
+            </AccountSocialMediaInputRow>
+
+            <AccountSocialMediaInputRow>
+              <label>YouTube</label>
+              <p>{`${youtubeUrl}`}</p>
+              <LoginFormInput
+                id="youtube"
+                type="text"
+                {...registerProfile("youtube", {
+                  validate: (value) => !value.includes(" "),
+                })}
+                defaultValue={profile.youtube || ""}
+                disabled={isLoading}
+                placeholder="myYoutubeChannel"
+              ></LoginFormInput>
+              <GrYoutube />
+            </AccountSocialMediaInputRow>
+
+            <AccountSocialMediaInputRow>
+              <label>Kick</label>
+              <p>{`${kickUrl}`}</p>
+              <LoginFormInput
+                id="kick"
+                type="text"
+                {...registerProfile("kick", {
+                  validate: (value) => !value.includes(" "),
+                })}
+                defaultValue={profile.kick || ""}
+                disabled={isLoading}
+                placeholder="myKickUser"
+              ></LoginFormInput>
+              <RiKickFill />
+            </AccountSocialMediaInputRow>
+          </AccountSocialMediaContainer>
+        </ProfileDetailsRow>
       </StyledAccountProfileDetails>
     </>
   );

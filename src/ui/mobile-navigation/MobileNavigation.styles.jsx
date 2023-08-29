@@ -24,11 +24,16 @@ const MobileNavigationMenuButton = styled.button`
   top: 2rem;
   right: 2rem;
   background-color: var(--color-brand-300);
-  border: solid 2px var(--color-brand-500);
+  box-shadow: 0px 0px 3px 3px rgb(31, 31, 31, 0.2);
+  border: none;
   height: 5rem;
   width: 5rem;
   border-radius: 5px;
   pointer-events: all;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   & svg {
     transform: scale(150%);

@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 
 const FormError = styled.span`
+  display: inline-block;
   font-size: 1.6rem;
   padding: 0.5rem;
   background-color: rgb(255, 84, 84, 0.7);

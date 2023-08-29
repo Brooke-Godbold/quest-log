@@ -56,7 +56,7 @@ function CurrentlyPlayingRow({
           ))}
       </CurrentlyPlaying>
 
-      {currentlyPlaying.length <= 3 && !currentlyPlaying.includes(null) && (
+      {currentlyPlaying.length <= 2 && !currentlyPlaying.includes(null) && (
         <CurrentlyPlayingButton onClick={addNewCurrentlyPlaying}>
           <HiPlus />
         </CurrentlyPlayingButton>

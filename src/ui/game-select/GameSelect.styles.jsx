@@ -10,13 +10,14 @@ const GameSelect = styled.select`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border: none;
 
-  border-top-left-radius: 9px;
-  border-top-right-radius: 9px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-radius: 9px;
 
   & option {
     text-align: center;
+  }
+
+  @media (max-width: 120em) {
+    font-size: 1.6rem;
   }
 `;
 

@@ -6,6 +6,9 @@ const StyledLoginForm = styled.form`
   flex-direction: column;
   gap: 2rem;
   align-items: center;
+  justify-content: center;
+
+  height: 100%;
 
   @media (max-width: 120em) {
     width: 100%;
@@ -25,6 +28,7 @@ const LoginFormInputTable = styled.div`
   gap: 2rem;
   font-size: 2rem;
   align-items: center;
+  width: 75%;
 
   @media (max-width: 65em) {
     display: flex;
@@ -43,6 +47,9 @@ const LoginFormInput = styled.input`
 
   padding: 1rem 2rem;
   width: 100%;
+
+  border: ${(props) =>
+    props.$error ? "3px solid var(--color-red-600)" : "none"};
 
   @media (max-width: 35em) {
     width: 80%;
@@ -81,7 +88,7 @@ const LoginButtonsContainer = styled.div`
   }
 
   @media (max-width: 35em) {
-    width: 100%;
+    width: 75%;
   }
 `;
 

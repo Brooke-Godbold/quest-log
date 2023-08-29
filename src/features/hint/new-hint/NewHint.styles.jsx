@@ -1,11 +1,8 @@
 import { styled } from "styled-components";
 
-const StyledNewHint = styled.div`
+const StyledNewHint = styled.form`
   z-index: 1;
-  width: 100%;
-  padding: 2rem;
-  position: absolute;
-  background-color: var(--color-brand-500);
+  padding: 4.8rem;
 `;
 
 const NewHintHeader = styled.div`
@@ -25,10 +22,17 @@ const NewHintButtonsContainer = styled.div`
   gap: 2rem;
 `;
 
+const NewHintBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+`;
+
 const NewHintTextArea = styled.textarea`
   margin-top: 3rem;
   padding: 1.5rem 2rem;
   width: 100%;
+  height: 20rem;
   border: none;
   box-shadow: inset 0 0 1rem rgb(17, 17, 17, 0.2);
   border: 4px solid transparent;
@@ -59,4 +63,5 @@ export {
   NewHintHeader,
   NewHintTagsContainer,
   NewHintButtonsContainer,
+  NewHintBody,
 };

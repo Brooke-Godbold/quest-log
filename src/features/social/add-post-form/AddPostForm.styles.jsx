@@ -48,12 +48,6 @@ const AddPostTextArea = styled.textarea`
   ${CommonScrollBar}
 `;
 
-const AddPostTextCount = styled.p`
-  font-size: 1.4rem;
-  align-self: flex-end;
-  margin-right: 1.6rem;
-`;
-
 const AddPostButtons = styled.div`
   display: flex;
   justify-content: center;
@@ -86,5 +80,4 @@ export {
   AddPostGame,
   AddPostErrorContainer,
   AddPostTextSection,
-  AddPostTextCount,
 };

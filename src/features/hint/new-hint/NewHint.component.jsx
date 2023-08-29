@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 
 import {
+  NewHintBody,
   NewHintButtonsContainer,
   NewHintHeader,
   NewHintTextArea,
@@ -10,33 +11,55 @@ import {
 import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
 import { useAddHint } from "./useAddHint";
 import TagButton from "../tag-button/TagButton.component";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Button from "../../../ui/button/Button.component";
-import Modal from "../../../ui/modal/Modal.component";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
-import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
+import { useForm } from "react-hook-form";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import { TAGS } from "../../../data/consts";
 
-function NewHint({ setIsNewHint, user: { id: userId } }) {
+const MIN_LENGTH = 25;
+const MAX_LENGTH = 450;
+
+function NewHint({ onCloseModal, user: { id: userId } }) {
   const { id: gameId } = useParams();
   const { addHint, isLoading } = useAddHint();
 
   const newHintTags = useRef([]);
-  const [newHintText, setNewHintText] = useState("");
 
-  function handleSubmit() {
-    setIsNewHint(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors },
+  } = useForm();
 
-    addHint({
-      description: newHintText,
-      gameId,
-      hintTypes: newHintTags.current,
-      userId,
-    });
+  const watchContent = watch("content");
+
+  function onNewHint(data) {
+    console.log(newHintTags.current.length);
+
+    if (newHintTags.current.length === 0) {
+      setError("tags", { type: "minLength" });
+      return;
+    }
+
+    addHint(
+      {
+        description: data.content,
+        gameId,
+        hintTypes: newHintTags.current,
+        userId,
+      },
+      { onSuccess: onCloseModal?.() }
+    );
   }
 
-  function handleCancel() {
-    setIsNewHint(false);
+  function handleCancel(e) {
+    e.preventDefault();
+    onCloseModal?.();
   }
 
   function setHintTags(newTag) {
@@ -45,46 +68,53 @@ function NewHint({ setIsNewHint, user: { id: userId } }) {
     } else {
       newHintTags.current.push(newTag);
     }
+
+    clearErrors("tags");
   }
 
   return (
-    <StyledNewHint>
+    <StyledNewHint onSubmit={handleSubmit(onNewHint)}>
       <NewHintHeader>
         <NewHintButtonsContainer>
           <Button isLight={true} onClick={handleCancel}>
             Cancel
           </Button>
-          <Modal>
-            <Modal.Open opens="confirmSubmit">
-              <Button disabled={newHintText.length <= 10} isLight={false}>
-                Submit
-              </Button>
-            </Modal.Open>
-            <Modal.Window name="confirmSubmit">
-              <ConfirmationCheck
-                onConfirm={handleSubmit}
-                actionLoading={isLoading}
-              >
-                <ConfirmationText>
-                  Are you sure you wish to submit a new Hint?
-                </ConfirmationText>
-              </ConfirmationCheck>
-            </Modal.Window>
-          </Modal>
+          <Button disabled={isLoading} isLight={false}>
+            Submit
+          </Button>
         </NewHintButtonsContainer>
         <StyledButtonContainer>
-          <TagButton tag={"Mechanics"} setHintTags={setHintTags} />
-          <TagButton tag={"World"} setHintTags={setHintTags} />
-          <TagButton tag={"Skills"} setHintTags={setHintTags} />
+          {TAGS.map((tag) => (
+            <TagButton key={tag} tag={tag} setHintTags={setHintTags} />
+          ))}
         </StyledButtonContainer>
       </NewHintHeader>
-      <NewHintTextArea
-        value={newHintText}
-        onChange={(e) => setNewHintText(e.target.value)}
-      />
-      {newHintText.length <= 10 && (
-        <FormError>Your hint must be at least 10 characters!</FormError>
-      )}
+      <NewHintBody>
+        <NewHintTextArea
+          {...register("content", {
+            required: true,
+            minLength: MIN_LENGTH,
+            maxLength: MAX_LENGTH,
+          })}
+        />
+        <TextCount
+          value={watchContent}
+          minLength={MIN_LENGTH}
+          maxLength={MAX_LENGTH}
+        />
+        <div>
+          {(errors.content?.type === "required" ||
+            errors.content?.type === "minLength") && (
+            <FormError>{`Your hint must be at least ${MIN_LENGTH} characters!`}</FormError>
+          )}
+          {errors.content?.type === "maxLength" && (
+            <FormError>{`Your hint cannot be more than ${MAX_LENGTH} characters!`}</FormError>
+          )}
+          {errors.tags?.type === "minLength" && (
+            <FormError>{`Your hint must have at least 1 tag!`}</FormError>
+          )}
+        </div>
+      </NewHintBody>
     </StyledNewHint>
   );
 }
@@ -92,6 +122,7 @@ function NewHint({ setIsNewHint, user: { id: userId } }) {
 NewHint.propTypes = {
   setIsNewHint: PropTypes.func.isRequired,
   user: PropTypes.object,
+  onCloseModal: PropTypes.func,
 };
 
 export default NewHint;

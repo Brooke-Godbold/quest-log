@@ -63,7 +63,7 @@ function MobileNavigation() {
                   </MobileNavLink>
                   <MobileNavLink
                     onClick={() => setIsMobileNavActive(false)}
-                    to={`/social/${user.id}`}
+                    to={`/social/${user.id}?view=posts`}
                   >
                     My Feed
                   </MobileNavLink>

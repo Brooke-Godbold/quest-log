@@ -3,9 +3,10 @@ import Button from "../../../ui/button/Button.component";
 import {
   LoginFormErrorContainer,
   LoginFormInput,
-  LoginFormInputTable,
 } from "../login-form/LoginForm.styles";
 import {
+  SignUpGridContainer,
+  SignUpGridItem,
   SignupHeading,
   SignupSuccessContainer,
   SignupSuccessText,
@@ -18,6 +19,12 @@ import { useProfile } from "./useProfile";
 import { useSignup } from "./useSignup";
 import { useAddProfile } from "./useAddProfile";
 import { FormError } from "../../../ui/form-error/FormError.styles";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import { ProfileDetailsLabel } from "../../account/account-profile-details-section/AccountProfileDetailsSection.styles";
+
+const USERNAME_MIN_LENGTH = 8;
+const USERNAME_MAX_LENGTH = 20;
+const PASSWORD_MIN_LENGTH = 8;
 
 function SignupForm() {
   const { isAuthenticated } = useUser();
@@ -25,9 +32,16 @@ function SignupForm() {
 
   if (isAuthenticated) navigate("/search", { replace: true });
 
-  const { register, handleSubmit, getValues } = useForm();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const watchUsername = watch("username", "");
+  const watchPassword = watch("password", "");
 
-  const [errors, setErrors] = useState({});
   const [emailCheck, setEmailCheck] = useState("");
   const [emailInUse, setEmailInUse] = useState(false);
 
@@ -39,14 +53,12 @@ function SignupForm() {
 
   function onSubmit(data) {
     console.log(`SUBMIT`, data);
-    setErrors({});
     setEmailInUse(false);
     setEmailCheck(data.email);
   }
 
   function onError(e) {
     console.log(`ERROR`, e);
-    setErrors(e);
   }
 
   useEffect(
@@ -88,60 +100,81 @@ function SignupForm() {
       ) : (
         <StyledSignupForm onSubmit={handleSubmit(onSubmit, onError)}>
           <SignupHeading>Sign Up</SignupHeading>
-          <LoginFormInputTable $rows={4}>
-            <label>Email</label>
-            <LoginFormInput
-              type="email"
-              id="email"
-              placeholder="john.smith@gmail.com"
-              disabled={isGettingProfile || isSigningUp || isAddingProfile}
-              aria-invalid={errors.email ? "true" : "false"}
-              {...register("email", {
-                required: true,
-                pattern: /\S+@\S+\.\S+/,
-              })}
-            />
+          <SignUpGridContainer>
+            <SignUpGridItem>
+              <ProfileDetailsLabel>Email</ProfileDetailsLabel>
+              <LoginFormInput
+                type="email"
+                id="email"
+                placeholder="john.smith@gmail.com"
+                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                aria-invalid={errors.email ? "true" : "false"}
+                {...register("email", {
+                  required: true,
+                  pattern: /\S+@\S+\.\S+/,
+                })}
+                $error={errors.email}
+              />
+            </SignUpGridItem>
 
-            <label>Username</label>
-            <LoginFormInput
-              type="text"
-              id="username"
-              placeholder="John_Smith"
-              disabled={isGettingProfile || isSigningUp || isAddingProfile}
-              aria-invalid={errors.username ? "true" : "false"}
-              {...register("username", {
-                required: true,
-                minLength: 8,
-                maxLength: 20,
-                validate: (value) => !value.includes(" "),
-              })}
-            />
+            <SignUpGridItem>
+              <ProfileDetailsLabel>Username</ProfileDetailsLabel>
+              <LoginFormInput
+                type="text"
+                id="username"
+                placeholder="John_Smith"
+                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                aria-invalid={errors.username ? "true" : "false"}
+                {...register("username", {
+                  required: true,
+                  minLength: USERNAME_MIN_LENGTH,
+                  maxLength: USERNAME_MAX_LENGTH,
+                  validate: (value) => !value.includes(" "),
+                })}
+                $error={errors.username}
+              />
+              <TextCount
+                value={watchUsername}
+                minLength={USERNAME_MIN_LENGTH}
+                maxLength={USERNAME_MAX_LENGTH}
+              />
+            </SignUpGridItem>
 
-            <label>Password</label>
-            <LoginFormInput
-              type="password"
-              id="password"
-              disabled={isGettingProfile || isSigningUp || isAddingProfile}
-              aria-invalid={errors.password ? "true" : "false"}
-              {...register("password", {
-                required: true,
-                minLength: 8,
-                validate: (value) => !value.includes(" "),
-              })}
-            />
+            <SignUpGridItem>
+              <ProfileDetailsLabel>Password</ProfileDetailsLabel>
+              <LoginFormInput
+                type="password"
+                id="password"
+                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                aria-invalid={errors.password ? "true" : "false"}
+                {...register("password", {
+                  required: true,
+                  minLength: PASSWORD_MIN_LENGTH,
+                  validate: (value) => !value.includes(" "),
+                })}
+                $error={errors.password}
+              />
+              <TextCount
+                value={watchPassword}
+                minLength={PASSWORD_MIN_LENGTH}
+              />
+            </SignUpGridItem>
 
-            <label>Confirm Password</label>
-            <LoginFormInput
-              type="password"
-              id="passwordConfirm"
-              disabled={isGettingProfile || isSigningUp || isAddingProfile}
-              aria-invalid={errors.passwordConfirm ? "true" : "false"}
-              {...register("passwordConfirm", {
-                required: true,
-                validate: (value) => value === getValues().password,
-              })}
-            />
-          </LoginFormInputTable>
+            <SignUpGridItem>
+              <ProfileDetailsLabel>Confirm Password</ProfileDetailsLabel>
+              <LoginFormInput
+                type="password"
+                id="passwordConfirm"
+                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                aria-invalid={errors.passwordConfirm ? "true" : "false"}
+                {...register("passwordConfirm", {
+                  required: true,
+                  validate: (value) => value === getValues().password,
+                })}
+                $error={errors.passwordConfirm}
+              />
+            </SignUpGridItem>
+          </SignUpGridContainer>
 
           <LoginFormErrorContainer>
             {errors.email ? (

@@ -1,10 +1,11 @@
 import SignupForm from "../../features/auth/signup-form/SignupForm.component";
+import { StyledSignup } from "./Signup.styles";
 
 function Signup() {
   return (
-    <div>
+    <StyledSignup>
       <SignupForm />
-    </div>
+    </StyledSignup>
   );
 }
 

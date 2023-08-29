@@ -30,6 +30,11 @@ const SocialFeedContent = styled.div`
 const SocialFeedButtons = styled.div`
   display: flex;
   justify-content: space-around;
+
+  & select {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 `;
 
 const SocialFeedButton = styled.button`

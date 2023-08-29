@@ -23,6 +23,7 @@ const ButtonContainer = styled.div`
   display: flex;
   gap: 2rem;
   padding: 2rem;
+  justify-content: space-between;
 
   @media (max-width: 65em) {
     flex-direction: column;
@@ -34,19 +35,9 @@ const HintListContainer = styled.div`
   height: 0;
   min-height: 100%;
 
-  overflow: ${(props) => (props.$scrollEnabled ? "auto" : "hidden")};
+  overflow: auto;
 
   ${CommonScrollBar}
-`;
-
-const HintListOverlay = styled.div`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
 `;
 
 const HintList = styled.div`
@@ -74,11 +65,21 @@ const StyledHintListHeader = styled.div`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
+
+  @media (max-width: 100em) {
+    padding: 0;
+  }
 `;
 
 const UserSearch = styled.form`
   display: flex;
   width: 25%;
+
+  @media (max-width: 65em) {
+    & input {
+      height: auto;
+    }
+  }
 `;
 
 const UserSearchInput = styled.input`
@@ -120,7 +121,6 @@ export {
   HintList,
   StyledHintListSection,
   NoHints,
-  HintListOverlay,
   HintListContainer,
   ButtonContainer,
   StyledHintListHeader,

@@ -8,11 +8,10 @@ const StyledModal = styled.div`
   transition: all 0.3s;
   padding: 3rem;
 
-  background-color: var(--color-brand-700);
+  background-color: var(--color-brand-600);
   color: #bbb;
-  border: 2px solid rgb(187, 187, 187, 0.5);
   border-radius: 4px;
-  box-shadow: 0 0 2px 2px rgb(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 5px 1px rgb(31, 31, 31, 0.7);
 `;
 
 const Overlay = styled.div`
@@ -29,18 +28,34 @@ const Overlay = styled.div`
 const ModalCloseButton = styled.button`
   position: absolute;
   border: none;
+  border-radius: 5px;
   background: none;
-  right: 0.5rem;
-  top: 0.5rem;
+  right: 0.75rem;
+  top: 0.75rem;
+
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-brand-500);
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.15);
+
+  transition: all 0.3s;
 
   & svg {
     width: 2.4rem;
     height: 2.4rem;
+    color: var(--color-brand-600);
+
     transition: all 0.3s;
   }
 
-  & svg:hover {
-    color: #888;
+  &:hover {
+    background-color: var(--color-brand-400);
+
+    & svg {
+      color: var(--color-brand-500);
+    }
   }
 `;
 

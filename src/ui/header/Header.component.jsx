@@ -62,7 +62,10 @@ function Header() {
             <HeaderLink disabled={isLoggingOut} to="/social/feed?view=discover">
               Discover
             </HeaderLink>
-            <HeaderLink disabled={isLoggingOut} to={`/social/${user.id}`}>
+            <HeaderLink
+              disabled={isLoggingOut}
+              to={`/social/${user.id}?view=posts`}
+            >
               My Feed
             </HeaderLink>
             <HeaderLink disabled={isLoggingOut} to="/account/profile">
@@ -73,11 +76,13 @@ function Header() {
             </HeaderButton>
           </>
         ) : (
-          <LoginModal
-            loginButton={
-              <HeaderButton disabled={isGettingUser}>Login</HeaderButton>
-            }
-          />
+          location.pathname !== "/login" && (
+            <LoginModal
+              loginButton={
+                <HeaderButton disabled={isGettingUser}>Login</HeaderButton>
+              }
+            />
+          )
         )}
       </HeaderLinks>
     </StyledHeader>

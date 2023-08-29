@@ -5,6 +5,9 @@ import { useAllGames } from "../../account/account-profile-details-section/useAl
 
 import { HiPlus } from "react-icons/hi";
 import { HiCheck } from "react-icons/hi";
+import { FaTwitch } from "react-icons/fa";
+import { GrYoutube } from "react-icons/gr";
+import { RiKickFill } from "react-icons/ri";
 
 import {
   AddNewPostButton,
@@ -12,9 +15,12 @@ import {
   CurrentlyPlayingContainer,
   FollowButton,
   Heading,
+  SocialMediaButton,
+  SocialMediaContainer,
   StyledUserHeader,
   UserAvatar,
   UserBio,
+  UserDetailsContainer,
   UserHeaderError,
   UserMain,
   UserName,
@@ -24,22 +30,15 @@ import { useUser } from "../../auth/useUser";
 import Modal from "../../../ui/modal/Modal.component";
 import AddPostForm from "../add-post-form/AddPostForm.component";
 import { useUpdateProfile } from "../../account/useUpdateProfile";
+import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
 
   const { userId } = useParams();
 
-  const {
-    profile: viewedProfile,
-    isFetchingProfile: isFetchingViewedProfile,
-    isGettingProfile: isGettingViewedProfile,
-    isError,
-  } = useProfileByUser(userId);
-  const { gameData, isLoading: isLoadingGames } = useAllGames();
-
-  const isLoadingViewedProfile =
-    isFetchingViewedProfile || isGettingViewedProfile;
+  const { profile: viewedProfile, isError } = useProfileByUser(userId);
+  const { gameData } = useAllGames();
 
   const { profile: userProfile } = useProfileByUser(user?.id);
 
@@ -60,11 +59,9 @@ function UserHeader() {
     });
   }
 
-  //<HiPlus />
-
   return (
     <StyledUserHeader>
-      {isLoadingViewedProfile ? (
+      {!viewedProfile ? (
         <Spinner />
       ) : isError ? (
         <UserHeaderError>We couldn&apos;t find that one...</UserHeaderError>
@@ -92,8 +89,39 @@ function UserHeader() {
                 </FollowButton>
               )}
             </UserMain>
-            <UserBio>{viewedProfile.bio}</UserBio>
-            {isLoadingGames || isLoadingViewedProfile ? (
+            <UserDetailsContainer>
+              <UserBio>{viewedProfile.bio}</UserBio>
+              <SocialMediaContainer>
+                <SocialMediaButton
+                  $active={viewedProfile.twitch}
+                  href={
+                    viewedProfile.twitch &&
+                    `${twitchUrl}${viewedProfile.twitch}`
+                  }
+                  target="_blank"
+                >
+                  <FaTwitch />
+                </SocialMediaButton>
+                <SocialMediaButton
+                  $active={viewedProfile.youtube}
+                  href={
+                    viewedProfile.youtube &&
+                    `${youtubeUrl}${viewedProfile.youtube}`
+                  }
+                  target="_blank"
+                >
+                  <GrYoutube />
+                </SocialMediaButton>
+                <SocialMediaButton
+                  $active={viewedProfile.kick}
+                  href={viewedProfile.kick && `${kickUrl}${viewedProfile.kick}`}
+                  target="_blank"
+                >
+                  <RiKickFill />
+                </SocialMediaButton>
+              </SocialMediaContainer>
+            </UserDetailsContainer>
+            {!gameData || !viewedProfile ? (
               <Spinner />
             ) : (
               <CurrentlyPlayingContainer>

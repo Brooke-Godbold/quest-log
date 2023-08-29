@@ -54,7 +54,7 @@ function GameDetails({ detailsActive }) {
 }
 
 GameDetails.propTypes = {
-  detailsActive: PropTypes.func.isRequired,
+  detailsActive: PropTypes.bool.isRequired,
 };
 
 export default GameDetails;
