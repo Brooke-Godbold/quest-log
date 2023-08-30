@@ -18,6 +18,10 @@ const StyledSocialFeed = styled.div`
   @media (max-width: 100em) {
     max-width: 100%;
   }
+
+  @media (max-width: 40em) {
+    padding: 10rem 1.2rem;
+  }
 `;
 
 export { StyledSocialFeed };

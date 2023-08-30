@@ -14,8 +14,7 @@ function ResetPassword() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(event, session);
+    supabase.auth.onAuthStateChange(async (event) => {
       if (event == "PASSWORD_RECOVERY") {
         setIsShowPasswordReset(true);
       }

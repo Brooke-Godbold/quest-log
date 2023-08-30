@@ -20,8 +20,11 @@ import { FormError } from "../../../ui/form-error/FormError.styles";
 import { useLogin } from "./useLogin";
 import Spinner from "../../../ui/spinner/Spinner";
 
-//import { AiOutlineLogin } from "react-icons/ai";
-//import { MdAppRegistration } from "react-icons/md";
+import { AiOutlineLogin } from "react-icons/ai";
+import { MdAppRegistration } from "react-icons/md";
+import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -30,16 +33,21 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
-  const [isLoginError, setIsLoginError] = useState(false);
 
   function onSubmit(data) {
     setErrors({});
 
     login(data, {
       onSuccess: () => {
-        setIsLoginError(false), onCloseModal?.();
+        onCloseModal?.();
       },
-      onError: () => setIsLoginError(true),
+      onError: () =>
+        toast.error((t) => (
+          <Notification
+            toast={t}
+            text="Unable to login at this time, check your credentials"
+          />
+        )),
     });
   }
 
@@ -99,22 +107,28 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
             {errors.password && errors.password.type === "required" && (
               <FormError>Password is required</FormError>
             )}
-            {isLoginError && <FormError>Invalid Login</FormError>}
           </LoginFormErrorContainer>
 
           <LoginButtonsContainer>
             <Button disabled={isLoggingIn} isLight={true}>
-              Login
+              <ResponsiveButtonContent>
+                <p>Login</p>
+                <AiOutlineLogin />
+              </ResponsiveButtonContent>
             </Button>
             <Button
               disabled={isLoggingIn}
               isLight={true}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 onCloseModal?.();
                 navigate("/signup", { replace: true });
               }}
             >
-              Sign Up
+              <ResponsiveButtonContent>
+                <p>Sign Up</p>
+                <MdAppRegistration />
+              </ResponsiveButtonContent>
             </Button>
           </LoginButtonsContainer>
         </>

@@ -17,6 +17,8 @@ const UserProfile = styled.div`
   border-radius: 7px;
   width: 100%;
 
+  min-height: 35rem;
+
   padding: 3.6rem;
   position: relative;
 
@@ -66,6 +68,23 @@ const UserMain = styled.div`
     transform: translate(-50%, -30%);
     gap: 0;
   }
+
+  @media (max-width: 35em) {
+    position: static;
+    transform: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: 1.2rem;
+  }
+
+  @media (max-width: 30em) {
+    grid-template-columns: 1.5fr 2fr;
+  }
+
+  @media (max-width: 20em) {
+    display: flex;
+  }
 `;
 
 const UserAvatar = styled.img`
@@ -79,14 +98,34 @@ const UserAvatar = styled.img`
   @media (max-width: 50em) {
     height: 16rem;
   }
+
+  @media (max-width: 35em) {
+    grid-row: 1 / -1;
+    height: 12rem;
+    width: auto;
+  }
+
+  @media (max-width: 30em) {
+    height: 8rem;
+  }
+
+  @media (max-width: 20em) {
+    display: none;
+  }
 `;
 
 const UserName = styled.h1`
   margin-top: 1.6rem;
   font-size: 5.4rem;
+  text-align: center;
 
   @media (max-width: 50em) {
-    margin-top: 0;
+    font-size: 3.6rem;
+    line-height: 3.2rem;
+  }
+
+  @media (max-width: 35em) {
+    font-size: 2.4rem;
   }
 `;
 
@@ -155,9 +194,7 @@ const UserBio = styled.p`
   }
 
   @media (max-width: 35em) {
-    min-height: 0;
-    margin-top: 15rem;
-    flex: 5;
+    min-height: 75%;
   }
 `;
 
@@ -166,6 +203,7 @@ const CurrentlyPlayingContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.8rem;
 
   width: 20%;
@@ -189,7 +227,8 @@ const CurrentlyPlayingContainer = styled.div`
   }
 
   @media (max-width: 35em) {
-    flex: initial;
+    //flex: initial;
+    display: none;
   }
 `;
 
@@ -211,17 +250,22 @@ const CurrentlyPlaying = styled(NavLink)`
   }
 `;
 
-const FollowButton = styled.button`
-  margin-top: 2.4rem;
+const UserActionsContainer = styled.div`
+  margin-top: 1.2rem;
+  display: flex;
+  gap: 2.4rem;
+`;
+
+const ActionButton = styled.button`
   border: none;
   border-radius: 3px;
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
-  padding: 0.6rem 2.4rem;
+  padding: 0.8rem 1.2rem;
 
   background-color: ${(props) =>
-    props.$following ? "var(--color-brand-700)" : "var(--color-brand-400)"};
+    props.$active ? "var(--color-brand-700)" : "var(--color-brand-400)"};
   color: ${(props) =>
-    props.$following ? "var(--color-brand-300)" : "var(--color-brand-700)"};
+    props.$active ? "var(--color-brand-300)" : "var(--color-brand-700)"};
 
   font-size: 2.4rem;
   font-weight: 700;
@@ -230,12 +274,12 @@ const FollowButton = styled.button`
   display: flex;
   align-items: center;
 
-  & svg {
-    margin-left: 2rem;
-  }
-
   &:hover {
     transform: scale(110%);
+  }
+
+  @media (max-width: 35em) {
+    font-size: 1.8rem;
   }
 `;
 
@@ -248,6 +292,14 @@ const AddNewPostButton = styled.button`
   border-bottom-right-radius: 9px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+
+  @media (max-width: 75em) {
+    width: 35%;
+  }
+
+  @media (max-width: 35em) {
+    width: 75%;
+  }
 `;
 
 const UserHeaderError = styled.h2`
@@ -264,7 +316,7 @@ export {
   CurrentlyPlaying,
   CurrentlyPlayingContainer,
   UserHeaderError,
-  FollowButton,
+  ActionButton,
   UserBio,
   UserMain,
   UserProfile,
@@ -272,4 +324,5 @@ export {
   UserDetailsContainer,
   SocialMediaContainer,
   SocialMediaButton,
+  UserActionsContainer,
 };

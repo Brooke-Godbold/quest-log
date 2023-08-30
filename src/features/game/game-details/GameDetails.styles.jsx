@@ -69,6 +69,10 @@ const GameDetailsInformation = styled.div`
 const GameDetailsTitle = styled.h1`
   font-size: 4.8rem;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 25em) {
+    font-size: xx-large;
+  }
 `;
 
 const GameDetailsReleaseYear = styled.h3`

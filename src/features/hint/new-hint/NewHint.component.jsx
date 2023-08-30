@@ -17,6 +17,8 @@ import { FormError } from "../../../ui/form-error/FormError.styles";
 import { useForm } from "react-hook-form";
 import TextCount from "../../../ui/text-count/TextCount.component";
 import { TAGS } from "../../../data/consts";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 const MIN_LENGTH = 25;
 const MAX_LENGTH = 450;
@@ -39,8 +41,6 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
   const watchContent = watch("content");
 
   function onNewHint(data) {
-    console.log(newHintTags.current.length);
-
     if (newHintTags.current.length === 0) {
       setError("tags", { type: "minLength" });
       return;
@@ -53,7 +53,16 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
         hintTypes: newHintTags.current,
         userId,
       },
-      { onSuccess: onCloseModal?.() }
+      {
+        onSuccess: () => {
+          toast((t) => <Notification toast={t} text="Added a new Hint!" />);
+          onCloseModal?.();
+        },
+        onError: () =>
+          toast.error((t) => (
+            <Notification toast={t} text="Unable to add your Hint" />
+          )),
+      }
     );
   }
 
@@ -120,7 +129,6 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
 }
 
 NewHint.propTypes = {
-  setIsNewHint: PropTypes.func.isRequired,
   user: PropTypes.object,
   onCloseModal: PropTypes.func,
 };

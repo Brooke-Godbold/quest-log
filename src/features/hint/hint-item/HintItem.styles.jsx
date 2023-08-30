@@ -59,6 +59,16 @@ const HintDeleteButton = styled.button`
   background-color: transparent;
   margin-right: 2rem;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: all 0.3s;
+
+  &:hover {
+    transform: scale(120%);
+  }
+
   & svg {
     transform: scale(120%);
     color: var(--color-red-800);

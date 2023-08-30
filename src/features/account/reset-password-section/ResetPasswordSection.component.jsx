@@ -15,6 +15,8 @@ import {
 } from "./ResetPasswordSection.styles";
 import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
 import TextCount from "../../../ui/text-count/TextCount.component";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -32,7 +34,19 @@ function ResetPasswordSection() {
   const { updatePassword, isLoading, isError, isSuccess } = useUpdatePassword();
 
   function onChangePassword(data) {
-    updatePassword(data.password);
+    updatePassword(data.password, {
+      onSuccess: () =>
+        toast((t) => (
+          <Notification toast={t} text="Successfully updated Password!" />
+        )),
+      onError: () =>
+        toast.error((t) => (
+          <Notification
+            toast={t}
+            text="Unable to update Password at this time"
+          />
+        )),
+    });
     reset();
   }
 

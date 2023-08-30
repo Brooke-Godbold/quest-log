@@ -20,6 +20,11 @@ import Votes from "../../../ui/votes/Votes.component";
 import { useUpdatePost } from "../useUpdatePost";
 import GameTag from "../../../ui/game-tag/GameTag.component";
 
+import { BsReplyFill } from "react-icons/bs";
+import { TbMessage2Search } from "react-icons/tb";
+import { IoArrowBackOutline } from "react-icons/io5";
+import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+
 function SocialFeedPost({
   post,
   id,
@@ -71,17 +76,39 @@ function SocialFeedPost({
           )}
           <Modal>
             <Modal.Open opens="reply">
-              <ReplyButton>Reply</ReplyButton>
+              <ReplyButton>
+                <ResponsiveButtonContent>
+                  <p>Reply</p>
+                  <BsReplyFill />
+                </ResponsiveButtonContent>
+              </ReplyButton>
             </Modal.Open>
             <Modal.Window name="reply">
               <AddPostForm userId={user.id} postId={post.id} />
             </Modal.Window>
           </Modal>
           {isDetail ? (
-            <ReplyButton onClick={() => navigate(-1)}>Back</ReplyButton>
+            <ReplyButton
+              onClick={() =>
+                navigate(`/social/${post.userId}?view=posts&post=${post.id}`, {
+                  replace: true,
+                })
+              }
+            >
+              <ResponsiveButtonContent>
+                <p>Back</p>
+                <IoArrowBackOutline />
+              </ResponsiveButtonContent>
+            </ReplyButton>
           ) : (
-            <DetailLink onClick={onDetail} to={`/social/post/${post.id}`}>
-              Detail
+            <DetailLink
+              onClick={onDetail}
+              to={`/social/post/${post.id}?view=recent`}
+            >
+              <ResponsiveButtonContent>
+                <p>View</p>
+                <TbMessage2Search />
+              </ResponsiveButtonContent>
             </DetailLink>
           )}
         </PostButtonsContainer>

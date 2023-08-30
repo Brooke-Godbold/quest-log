@@ -3,21 +3,26 @@ import Spinner from "../../../ui/spinner/Spinner";
 import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
 import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
 
+import { toast } from "react-hot-toast";
+
 import { HiPlus } from "react-icons/hi";
 import { HiCheck } from "react-icons/hi";
 import { FaTwitch } from "react-icons/fa";
 import { GrYoutube } from "react-icons/gr";
 import { RiKickFill } from "react-icons/ri";
+import { ImBlocked } from "react-icons/im";
+import { BiMessageDetail } from "react-icons/bi";
 
 import {
   AddNewPostButton,
   CurrentlyPlaying,
   CurrentlyPlayingContainer,
-  FollowButton,
+  ActionButton,
   Heading,
   SocialMediaButton,
   SocialMediaContainer,
   StyledUserHeader,
+  UserActionsContainer,
   UserAvatar,
   UserBio,
   UserDetailsContainer,
@@ -31,6 +36,7 @@ import Modal from "../../../ui/modal/Modal.component";
 import AddPostForm from "../add-post-form/AddPostForm.component";
 import { useUpdateProfile } from "../../account/useUpdateProfile";
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
+import Notification from "../../../ui/notification/Notification.component";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
@@ -53,10 +59,33 @@ function UserHeader() {
       ? userProfile.following.filter((followedUser) => followedUser !== userId)
       : [...userProfile.following, userId];
 
-    updateProfile({
-      userId: userProfile.userId,
-      data: { following: newFollowing },
-    });
+    updateProfile(
+      {
+        userId: userProfile.userId,
+        data: { following: newFollowing },
+      },
+      {
+        onSuccess: () => {
+          toast((t) => (
+            <Notification
+              toast={t}
+              text={
+                newFollowing.includes(viewedProfile.userId)
+                  ? `Now following ${viewedProfile.username}!`
+                  : `Unfollowed ${viewedProfile.username}`
+              }
+            />
+          ));
+        },
+        onError: () =>
+          toast.error((t) => (
+            <Notification
+              toast={t}
+              text={`Unable to follow ${viewedProfile.username}`}
+            />
+          )),
+      }
+    );
   }
 
   return (
@@ -72,21 +101,25 @@ function UserHeader() {
               <UserAvatar src={viewedProfile.avatarUrl} />
               <UserName>{viewedProfile.username}</UserName>
               {isAuthenticated && user && user.id !== userId && (
-                <FollowButton
-                  disabled={isUpdatingProfile}
-                  onClick={onFollow}
-                  $following={userProfile?.following.includes(userId)}
-                >
-                  {userProfile?.following.includes(userId) ? (
-                    <>
-                      Following <HiCheck />
-                    </>
-                  ) : (
-                    <>
-                      Follow <HiPlus />
-                    </>
-                  )}
-                </FollowButton>
+                <UserActionsContainer>
+                  <ActionButton>
+                    <ImBlocked />
+                  </ActionButton>
+                  <ActionButton
+                    disabled={isUpdatingProfile}
+                    onClick={onFollow}
+                    $active={userProfile?.following.includes(userId)}
+                  >
+                    {userProfile?.following.includes(userId) ? (
+                      <HiCheck />
+                    ) : (
+                      <HiPlus />
+                    )}
+                  </ActionButton>
+                  <ActionButton>
+                    <BiMessageDetail />
+                  </ActionButton>
+                </UserActionsContainer>
               )}
             </UserMain>
             <UserDetailsContainer>

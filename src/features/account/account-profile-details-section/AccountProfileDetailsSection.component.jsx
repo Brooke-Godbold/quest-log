@@ -24,6 +24,8 @@ import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 import { FaTwitch } from "react-icons/fa";
 import { GrYoutube } from "react-icons/gr";
 import { RiKickFill } from "react-icons/ri";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 const USERNAME_MIN_LENGTH = 8;
 const USERNAME_MAX_LENGTH = 20;
@@ -62,21 +64,35 @@ function AccountProfileDetailsSection() {
   } = useForm({ mode: "onChange" });
 
   function onSubmitProfile(data) {
+    const newProfileData = {
+      username: data.username,
+      bio: data.bio,
+      twitch: data.twitch?.length > 0 ? data.twitch : null,
+      youtube: data.twitch?.length > 0 ? data.youtube : null,
+      kick: data.twitch?.length > 0 ? data.kick : null,
+    };
+
     if (
       !profile ||
-      (data.username === profile.username &&
-        data.bio === profile.bio &&
-        data.twitch === profile.twitch)
+      (newProfileData.username === profile.username &&
+        newProfileData.bio === profile.bio &&
+        newProfileData.twitch === profile.twitch &&
+        newProfileData.youtube === profile.youtube &&
+        newProfileData.kick === profile.kick)
     )
       return;
 
-    const newProfileData = {
-      username: data.userName,
-      bio: data.bio,
-      twitch: data.twitch?.length > 0 ? data.twitch : null,
-    };
-
-    updateProfile({ userId: user.id, data: newProfileData });
+    updateProfile(
+      { userId: user.id, data: newProfileData },
+      {
+        onSuccess: () =>
+          toast((t) => <Notification toast={t} text="Updated Profile!" />),
+        onError: () =>
+          toast.error((t) => (
+            <Notification toast={t} text="Unable to update Profile right now" />
+          )),
+      }
+    );
   }
 
   function onProfileError(e) {
@@ -93,12 +109,22 @@ function AccountProfileDetailsSection() {
       })
       .filter((game) => game);
 
-    updateProfile({
-      userId: user.id,
-      data: {
-        currentGames,
+    updateProfile(
+      {
+        userId: user.id,
+        data: {
+          currentGames,
+        },
       },
-    });
+      {
+        onSuccess: () =>
+          toast((t) => <Notification toast={t} text="Updated Profile!" />),
+        onError: () =>
+          toast.error((t) => (
+            <Notification toast={t} text="Unable to update Profile right now" />
+          )),
+      }
+    );
   }
 
   useEffect(

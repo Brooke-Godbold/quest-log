@@ -14,6 +14,8 @@ const StyledHintListSection = styled.div`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 7px;
 
+  max-width: 100%;
+
   @media (max-width: 75em) {
     display: ${(props) => (!props.$detailsActive ? "grid" : "none")};
   }
@@ -60,7 +62,6 @@ const NoHints = styled.p`
 const StyledHintListHeader = styled.div`
   position: relative;
   background-color: var(--color-brand-600);
-  padding: 2rem 0;
 
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-top-left-radius: 7px;
@@ -71,13 +72,27 @@ const StyledHintListHeader = styled.div`
   }
 `;
 
+const HintHeaderFilterSection = styled.div`
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+
+  & select {
+    width: 100%;
+  }
+
+  @media (max-width: 65em) {
+    width: 100%;
+  }
+`;
+
 const UserSearch = styled.form`
   display: flex;
-  width: 25%;
 
   @media (max-width: 65em) {
     & input {
       height: auto;
+      width: 100%;
     }
   }
 `;
@@ -127,4 +142,5 @@ export {
   UserSearch,
   UserSearchInput,
   ResetUserButton,
+  HintHeaderFilterSection,
 };

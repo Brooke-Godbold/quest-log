@@ -22,6 +22,10 @@ const AccountSection = styled.div`
   padding: 5rem;
   min-height: 0;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   @media (max-width: 50em) {
     width: 100%;
   }

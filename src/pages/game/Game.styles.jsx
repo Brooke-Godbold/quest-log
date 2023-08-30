@@ -18,6 +18,10 @@ const StyledGame = styled.div`
     grid-template-rows: auto 1fr;
     gap: 0;
   }
+
+  @media (max-width: 40em) {
+    padding: 10rem 1.2rem;
+  }
 `;
 
 export { StyledGame };

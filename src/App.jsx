@@ -19,6 +19,8 @@ import ResetPasswordSection from "./features/account/reset-password-section/Rese
 import SocialFeed from "./pages/social-feed/SocialFeed.page";
 import SocialPost from "./pages/social-post/SocialPost.page";
 import NotFound from "./pages/not-found/NotFound.page";
+import { Toaster } from "react-hot-toast";
+import Error from "./pages/error/Error.page";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,32 +35,85 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <GlobalStyles />
+      <Toaster
+        toastOptions={{
+          style: {
+            boxShadow: "0px 0px 7px 1px rgb(31, 31, 31, 0.2)",
+            backgroundColor: "var(--color-brand-700)",
+            color: "var(--color-brand-300)",
+          },
+          error: {
+            style: {
+              backgroundColor: "var(--color-red-800)",
+              color: "var(--color-red-100)",
+            },
+          },
+        }}
+      />
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Navigate replace to="search" />} />
-            <Route path="search" element={<Search />} />
-            <Route path="game/:id" element={<Game />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="social/:userId" element={<User />} />
-            <Route path="social/feed" element={<SocialFeed />} />
-            <Route path="social/post/:postId" element={<SocialPost />} />
+            <Route
+              path="search"
+              element={<Search />}
+              errorElement={<Error />}
+            />
+            <Route
+              path="game/:id"
+              element={<Game />}
+              errorElement={<Error />}
+            />
+            <Route path="/login" element={<Login />} errorElement={<Error />} />
+            <Route
+              path="social/:userId"
+              element={<User />}
+              errorElement={<Error />}
+            />
+            <Route
+              path="social/feed"
+              element={<SocialFeed />}
+              errorElement={<Error />}
+            />
+            <Route
+              path="social/post/:postId"
+              element={<SocialPost />}
+              errorElement={<Error />}
+            />
             <Route element={<Account />}>
               <Route
                 path="account/profile"
                 element={<AccountProfileDetailsSection />}
+                errorElement={<Error />}
               />
-              <Route path="account/avatar" element={<AccountAvatarSection />} />
-              <Route path="account/hints" element={<AccountHintsSection />} />
+              <Route
+                path="account/avatar"
+                element={<AccountAvatarSection />}
+                errorElement={<Error />}
+              />
+              <Route
+                path="account/hints"
+                element={<AccountHintsSection />}
+                errorElement={<Error />}
+              />
               <Route
                 path="account/reset-password"
                 element={<ResetPasswordSection />}
+                errorElement={<Error />}
               />
             </Route>
           </Route>
-          <Route path="signup" element={<Signup />} />
-          <Route path="confirm-signup" element={<ConfirmSignup />} />
-          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="signup" element={<Signup />} errorElement={<Error />} />
+          <Route
+            path="confirm-signup"
+            element={<ConfirmSignup />}
+            errorElement={<Error />}
+          />
+          <Route
+            path="reset-password"
+            element={<ResetPassword />}
+            errorElement={<Error />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

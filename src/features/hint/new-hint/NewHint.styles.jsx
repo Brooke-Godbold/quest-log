@@ -3,6 +3,14 @@ import { styled } from "styled-components";
 const StyledNewHint = styled.form`
   z-index: 1;
   padding: 4.8rem;
+
+  @media (max-width: 50em) {
+    padding: 2.4rem;
+  }
+
+  @media (max-width: 25em) {
+    padding: 2.4rem 0;
+  }
 `;
 
 const NewHintHeader = styled.div`
@@ -11,7 +19,7 @@ const NewHintHeader = styled.div`
   align-items: center;
   margin-bottom: 1rem;
 
-  @media (max-width: 45em) {
+  @media (max-width: 50em) {
     flex-direction: column;
     align-items: flex-start;
   }

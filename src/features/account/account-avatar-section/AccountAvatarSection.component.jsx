@@ -15,6 +15,8 @@ import { useUser } from "../../auth/useUser";
 import { useProfileByUser } from "../account-layout/useProfileByUser";
 import Spinner from "../../../ui/spinner/Spinner";
 import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 const MAX_FILE_SIZE_IN_BINARY_BYTES = 5242880;
 
@@ -26,9 +28,9 @@ function AccountAvatarSection() {
   } = useForm();
 
   const { user } = useUser();
-  const { profile, isGettingProfile } = useProfileByUser(user ? user.id : null);
+  const { profile, isGettingProfile } = useProfileByUser(user?.id);
 
-  const { updateProfile, isLoading, isError } = useUpdateProfile();
+  const { updateProfile, isLoading, isError } = useUpdateProfile(user?.id);
 
   function onUpload(e) {
     if (!profile || !e.target.files || !e.target.files[0]) return;
@@ -60,20 +62,31 @@ function AccountAvatarSection() {
       oldAvatarUrl: profile.avatarUrl,
     };
 
-    updateProfile(profileData);
+    updateProfile(profileData, {
+      onSuccess: () =>
+        toast((t) => <Notification toast={t} text="Uploaded Avatar!" />),
+      onError: () =>
+        toast.error((t) => (
+          <Notification toast={t} text="Unable to upload Avatar at this time" />
+        )),
+    });
   }
 
   if (isGettingProfile) return <Spinner />;
 
   return (
     <StyledAccountAvatarSection>
-      <Avatar
-        src={
-          profile && profile.avatarUrl
-            ? profile.avatarUrl
-            : `${supabaseUrl}/${supabaseStoragePath}/avatars/andy.jpg`
-        }
-      />
+      {profile ? (
+        <Avatar
+          src={
+            profile.avatarUrl
+              ? profile.avatarUrl
+              : `${supabaseUrl}/${supabaseStoragePath}/avatars/andy.jpg`
+          }
+        />
+      ) : (
+        <Spinner />
+      )}
       <UsernameLabel>
         {profile && profile.username ? profile.username : "Anonymous"}
       </UsernameLabel>

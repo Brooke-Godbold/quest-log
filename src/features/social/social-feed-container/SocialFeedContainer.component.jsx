@@ -22,6 +22,16 @@ import { useAllPosts } from "../useAllPosts";
 import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
 import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
 
+import { BiTime } from "react-icons/bi";
+import {
+  BsPeopleFill,
+  BsTrophyFill,
+  BsStickyFill,
+  BsPersonFillCheck,
+} from "react-icons/bs";
+import { TbWorldSearch } from "react-icons/tb";
+import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+
 function SocialFeedContainer() {
   const { userId, postId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -155,7 +165,19 @@ function SocialFeedContainer() {
           ]);
           break;
 
-        default:
+        case "popular":
+          if (!replies) break;
+          setSortedPosts([
+            ...replies.sort(
+              (postA, postB) =>
+                postB.upvotes.length -
+                postB.downvotes.length -
+                (postA.upvotes.length - postA.downvotes.length)
+            ),
+          ]);
+          break;
+
+        case "recent":
           if (!replies) break;
           setSortedPosts([
             ...replies.sort((postA, postB) =>
@@ -214,45 +236,94 @@ function SocialFeedContainer() {
 
   return (
     <StyledSocialFeedContainer>
-      {!postId && (
-        <SocialFeedButtons>
-          {userId ? (
-            <>
-              <SocialFeedButton onClick={() => setView("posts")}>
-                Posts
-              </SocialFeedButton>
-              <GameSelect
-                value={searchParams.get("game") || -1}
-                onChange={setGameFilter}
-              >
-                <option key={"none"} value={-1}>
-                  None
+      <SocialFeedButtons>
+        {userId ? (
+          <>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "posts"}
+              onClick={() => setView("posts")}
+            >
+              <ResponsiveButtonContent>
+                <p>Posts</p>
+                <BsStickyFill />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+            <GameSelect
+              value={searchParams.get("game") || -1}
+              onChange={setGameFilter}
+            >
+              <option key={"none"} value={-1}>
+                None
+              </option>
+              {gameData?.map((game) => (
+                <option key={game.id} value={game.id}>
+                  {game.name}
                 </option>
-                {gameData?.map((game) => (
-                  <option key={game.id} value={game.id}>
-                    {game.name}
-                  </option>
-                ))}
-              </GameSelect>
-              <SocialFeedButton onClick={() => setView("hints")}>
-                Hints
-              </SocialFeedButton>
-            </>
-          ) : isAuthenticated ? (
-            <>
-              <SocialFeedButton onClick={() => setView("trending")}>
-                Trending
-              </SocialFeedButton>
-              <SocialFeedButton onClick={() => setView("following")}>
-                Following
-              </SocialFeedButton>
-              <SocialFeedButton onClick={() => setView("discover")}>
-                Discover
-              </SocialFeedButton>
-            </>
-          ) : null}
-        </SocialFeedButtons>
-      )}
+              ))}
+            </GameSelect>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "hints"}
+              onClick={() => setView("hints")}
+            >
+              <ResponsiveButtonContent>
+                <p>Hints</p>
+                <BsTrophyFill />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+          </>
+        ) : postId ? (
+          <>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "recent"}
+              onClick={() => setView("recent")}
+            >
+              <ResponsiveButtonContent>
+                <p>Recent</p>
+                <BiTime />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "popular"}
+              onClick={() => setView("popular")}
+            >
+              <ResponsiveButtonContent>
+                <p>Popular</p>
+                <BsPeopleFill />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+          </>
+        ) : isAuthenticated ? (
+          <>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "trending"}
+              onClick={() => setView("trending")}
+            >
+              <ResponsiveButtonContent>
+                <p>Trending</p>
+                <BsPeopleFill />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "following"}
+              onClick={() => setView("following")}
+            >
+              <ResponsiveButtonContent>
+                <p>Following</p>
+                <BsPersonFillCheck />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+            <SocialFeedButton
+              $active={searchParams.get("view") === "discover"}
+              onClick={() => setView("discover")}
+            >
+              <ResponsiveButtonContent>
+                <p>Discover</p>
+                <TbWorldSearch />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+          </>
+        ) : null}
+      </SocialFeedButtons>
       <SocialFeedContent>
         {postId && isLoadingReplies ? (
           <Spinner />

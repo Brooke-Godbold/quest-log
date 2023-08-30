@@ -29,9 +29,10 @@ const PostDetails = styled.div`
   align-items: flex-end;
   margin-top: 2.4rem;
 
-  @media (max-width: 35em) {
+  @media (max-width: 50em) {
     flex-direction: column;
     gap: 1.6rem;
+    align-items: flex-start;
   }
 `;
 
@@ -47,6 +48,15 @@ const PostButtonsContainer = styled.div`
 
   display: flex;
   gap: 1.6rem;
+
+  @media (max-width: 35em) {
+    margin-top: 1.2rem;
+    position: static;
+  }
+
+  @media (max-width: 35em) {
+    justify-content: space-between;
+  }
 `;
 
 const RepliesCount = styled.p`
@@ -65,7 +75,7 @@ const ReplyButton = styled.button`
   color: var(--color-brand-200);
   border-radius: 3px;
   font-size: 1.8rem;
-  padding: 0.6rem 1.8rem;
+  padding: 1.2rem 1.8rem;
 
   transition: all 0.3s;
 
@@ -80,7 +90,7 @@ const DetailLink = styled(NavLink)`
   color: var(--color-brand-200);
   border-radius: 3px;
   font-size: 1.8rem;
-  padding: 0.6rem 1.8rem;
+  padding: 1.2rem 1.8rem;
 
   transition: all 0.3s;
 

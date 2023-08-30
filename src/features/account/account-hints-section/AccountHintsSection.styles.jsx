@@ -5,6 +5,7 @@ const StyledAccountHints = styled.div`
   height: 0;
   min-height: 100%;
   overflow: auto;
+  width: 100%;
 
   ${CommonScrollBar}
 

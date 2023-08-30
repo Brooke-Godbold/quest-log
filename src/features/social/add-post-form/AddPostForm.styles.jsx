@@ -6,7 +6,15 @@ const StyledAddPostForm = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 5.4rem;
-  width: 75rem;
+  width: 70rem;
+
+  @media (max-width: 50em) {
+    width: 40rem;
+  }
+
+  @media (max-width: 30em) {
+    width: 100%;
+  }
 `;
 
 const AddPostHeader = styled.div`
@@ -17,6 +25,17 @@ const AddPostHeader = styled.div`
 
   & h3 {
     font-size: 3.6rem;
+  }
+
+  @media (max-width: 30em) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.4rem;
+
+    & select {
+      width: 100%;
+    }
   }
 `;
 
@@ -52,6 +71,10 @@ const AddPostButtons = styled.div`
   display: flex;
   justify-content: center;
   gap: 12.8rem;
+
+  @media (max-width: 30em) {
+    gap: 1.2rem;
+  }
 `;
 
 const AddPostCancelButton = styled.button`

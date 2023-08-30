@@ -8,6 +8,10 @@ const StyledSocialFeedContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  @media (max-height: 65em) {
+    height: 100%;
+  }
 `;
 
 const SocialFeedContent = styled.div`
@@ -25,6 +29,10 @@ const SocialFeedContent = styled.div`
   overflow: auto;
 
   ${CommonScrollBar}
+
+  @media (max-height: 65em) {
+    overflow: visible;
+  }
 `;
 
 const SocialFeedButtons = styled.div`
@@ -39,6 +47,9 @@ const SocialFeedButtons = styled.div`
 
 const SocialFeedButton = styled.button`
   ${CommonButton}
+
+  background-color: ${(props) =>
+    props.$active ? "var(--color-brand-700)" : "var(--color-brand-600)"};
 
   width: 25%;
 

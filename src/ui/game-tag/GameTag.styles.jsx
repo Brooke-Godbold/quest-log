@@ -3,6 +3,16 @@ import { styled } from "styled-components";
 
 const PostGameTagContainer = styled.div`
   width: 25rem;
+
+  display: flex;
+
+  @media (max-width: 50em) {
+    justify-content: flex-start;
+  }
+
+  @media (max-width: 25em) {
+    width: 100%;
+  }
 `;
 
 const PostGameTag = styled(NavLink)`

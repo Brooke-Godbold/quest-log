@@ -18,7 +18,10 @@ function Game() {
 
   return (
     <StyledGame>
-      <SwitchViewContainer setDetailsActive={setDetailsActive} />
+      <SwitchViewContainer
+        detailsActive={detailsActive}
+        setDetailsActive={setDetailsActive}
+      />
       <GameDetails detailsActive={detailsActive} />
       <HintListSection detailsActive={detailsActive} />
     </StyledGame>

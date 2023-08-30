@@ -18,6 +18,10 @@ const StyledUser = styled.div`
   @media (max-width: 100em) {
     max-width: 100%;
   }
+
+  @media (max-width: 40em) {
+    padding: 1.2rem;
+  }
 `;
 
 export { StyledUser };

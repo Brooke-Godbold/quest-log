@@ -21,6 +21,8 @@ import { useAddProfile } from "./useAddProfile";
 import { FormError } from "../../../ui/form-error/FormError.styles";
 import TextCount from "../../../ui/text-count/TextCount.component";
 import { ProfileDetailsLabel } from "../../account/account-profile-details-section/AccountProfileDetailsSection.styles";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 const USERNAME_MIN_LENGTH = 8;
 const USERNAME_MAX_LENGTH = 20;
@@ -52,7 +54,6 @@ function SignupForm() {
   const { addProfile, isAddingProfile } = useAddProfile();
 
   function onSubmit(data) {
-    console.log(`SUBMIT`, data);
     setEmailInUse(false);
     setEmailCheck(data.email);
   }
@@ -78,8 +79,22 @@ function SignupForm() {
                   userId: user.user.id,
                   username: getValues().username,
                 },
-                { onSuccess: setSignupSuccess(true) }
+                {
+                  onSuccess: () => setSignupSuccess(true),
+                  onError: () =>
+                    toast.error((t) => (
+                      <Notification
+                        toast={t}
+                        text="Unable to Sign Up at this time"
+                      />
+                    )),
+                }
               );
+            },
+            onError: () => {
+              toast.error((t) => (
+                <Notification toast={t} text="Unable to Sign Up at this time" />
+              ));
             },
           }
         );

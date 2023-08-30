@@ -36,11 +36,31 @@ const HeaderLinks = styled.div`
 const HeaderButton = styled.button`
   border: none;
   background-color: transparent;
+
+  transition: all 0.3s;
+  color: var(--color-brand-700);
+
+  &:hover {
+    transform: scale(110%);
+    color: var(--color-brand-200);
+  }
 `;
 
 const HeaderLink = styled(NavLink)`
+  transition: all 0.3s;
+  color: var(--color-brand-700);
+
+  &:hover {
+    transform: scale(110%);
+    color: var(--color-brand-200);
+  }
+
   &.active {
     color: #943b35;
+  }
+
+  &.active:hover {
+    color: var(--color-red-100);
   }
 `;
 
