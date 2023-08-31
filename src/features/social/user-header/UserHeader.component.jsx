@@ -41,6 +41,7 @@ import { useConversations } from "../../../contexts/ConversationsContext";
 import { useMessages } from "../../messages/useMessages";
 import DirectMessage from "../direct-message/DirectMessage.component";
 import { useIsBlocked } from "../../../hooks/useIsBlocked";
+import { useIsFollowing } from "../../../hooks/useIsFollowing";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
@@ -63,6 +64,14 @@ function UserHeader() {
     viewedProfile?.userId,
     user?.id
   );
+
+  const { isFollowing } = useIsFollowing(user?.id, userId);
+  const { isFollowing: isFollowed } = useIsFollowing(userId, user?.id);
+  const mutualFollowers = user && isFollowing && isFollowed;
+
+  const messagingEnabled =
+    viewedProfile?.messaging === 2 ||
+    (mutualFollowers && viewedProfile?.messaging === 1);
 
   function onFollow() {
     if (!userProfile) return;
@@ -190,9 +199,12 @@ function UserHeader() {
                         c.userIdB === viewedProfile.userId
                     )[0] ? (
                       <ActionButton
-                        $interactable={!isBlocked}
+                        $interactable={!isBlocked && messagingEnabled}
                         disabled={
-                          isUpdatingProfile || isBlocked || isLoadingBlocked
+                          isUpdatingProfile ||
+                          isBlocked ||
+                          isLoadingBlocked ||
+                          !messagingEnabled
                         }
                         onClick={onGotoMessages}
                       >
@@ -202,9 +214,12 @@ function UserHeader() {
                       <Modal>
                         <Modal.Open opens="directMessage">
                           <ActionButton
-                            $interactable={!isBlocked}
+                            $interactable={!isBlocked && messagingEnabled}
                             disabled={
-                              isUpdatingProfile || isBlocked || isLoadingBlocked
+                              isUpdatingProfile ||
+                              isBlocked ||
+                              isLoadingBlocked ||
+                              !messagingEnabled
                             }
                           >
                             <BiMessageDetail />

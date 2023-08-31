@@ -16,8 +16,6 @@ function SocialPost() {
   const { user } = useUser();
   const { isBlocked, isLoadingBlocked } = useIsBlocked(post?.userId, user?.id);
 
-  console.log(isBlocked);
-
   const {
     gameData,
     isLoading: isGamesLoading,

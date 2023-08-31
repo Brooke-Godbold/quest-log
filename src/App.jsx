@@ -24,6 +24,7 @@ import Error from "./pages/error/Error.page";
 import Messages from "./pages/messages/Messages.component";
 import ProtectedRoute from "./ui/protected-route/ProtectedRoute.component";
 import { ConversationsProvider } from "./contexts/ConversationsContext";
+import AccountPrivacySection from "./features/account/account-privacy-section/AccountPrivacySection.component";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -113,6 +114,11 @@ function App() {
               <Route
                 path="account/avatar"
                 element={<AccountAvatarSection />}
+                errorElement={<Error />}
+              />
+              <Route
+                path="account/privacy"
+                element={<AccountPrivacySection />}
                 errorElement={<Error />}
               />
               <Route

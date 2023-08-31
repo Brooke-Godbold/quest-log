@@ -18,6 +18,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import TextCount from "../../../ui/text-count/TextCount.component";
 import { toast } from "react-hot-toast";
 import Notification from "../../../ui/notification/Notification.component";
+import { useEffect, useState } from "react";
 
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
@@ -26,10 +27,11 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  const [successfulPost, setSuccessfulPost] = useState(false);
+
   const {
     register,
     handleSubmit,
-    reset,
     watch,
     formState: { errors },
   } = useForm();
@@ -47,19 +49,16 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
 
     addPost(newPost, {
       onSuccess: ({ id }) => {
-        reset();
-        onCloseModal?.();
-
         toast((t) => <Notification toast={t} text="Posted Successfully!" />);
 
         if (postId) {
           searchParams.set("post", postId);
-          navigate(`/social/post/${postId}?post=${id}`, { replace: true });
         } else {
           searchParams.set("post", id);
         }
 
         setSearchParams(searchParams);
+        setSuccessfulPost(true);
       },
       onError: () => {
         toast.error((t) => (
@@ -68,6 +67,12 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
       },
     });
   }
+
+  useEffect(() => {
+    if (successfulPost) {
+      navigate(`/social/post/${postId}?view=recent`, { replace: true });
+    }
+  }, [successfulPost, navigate, postId]);
 
   function onError(e) {
     console.log("ERROR: ", e);

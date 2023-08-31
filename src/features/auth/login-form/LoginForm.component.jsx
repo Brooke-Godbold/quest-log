@@ -97,10 +97,6 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
             />
           </LoginFormInputTable>
 
-          <LoginModalButton onClick={onForgottenPassword}>
-            Forgotten your password?
-          </LoginModalButton>
-
           <LoginFormErrorContainer>
             {errors.email && errors.email.type === "required" && (
               <FormError>Email is required</FormError>
@@ -135,6 +131,10 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               </ResponsiveButtonContent>
             </Button>
           </LoginButtonsContainer>
+
+          <LoginModalButton onClick={onForgottenPassword}>
+            Forgotten your password?
+          </LoginModalButton>
         </>
       )}
     </StyledLoginForm>

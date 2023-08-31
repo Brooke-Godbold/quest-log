@@ -14,7 +14,7 @@ import Spinner from "../../../ui/spinner/Spinner";
 import HintItem from "../../hint/hint-item/HintItem.component";
 import { useUser } from "../../auth/useUser";
 import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { compareDesc } from "date-fns";
 import { useReplyByPostId } from "../useReplyByPostId";
 import { usePostById } from "../usePostById";
@@ -37,7 +37,6 @@ import { useIsBlocked } from "../../../hooks/useIsBlocked";
 function SocialFeedContainer() {
   const { userId, postId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [sortedPosts, setSortedPosts] = useState([]);
 
   const { isAuthenticated, user } = useUser();
 
@@ -69,10 +68,7 @@ function SocialFeedContainer() {
 
   const { profile } = useProfileByUser(user?.id);
 
-  const { isBlocked, isLoadingBlocked } = useIsBlocked(
-    postId ? post?.userId : userId,
-    user?.id
-  );
+  const { isBlocked } = useIsBlocked(postId ? post?.userId : userId, user?.id);
 
   const {
     replies,
@@ -91,113 +87,101 @@ function SocialFeedContainer() {
     setSearchParams(searchParams);
   }
 
-  useEffect(
-    function () {
-      if (!allPosts && !userPosts && !replies) return;
+  const sortedPosts = useMemo(() => {
+    if (!allPosts && !userPosts && !replies) return;
 
-      setSortedPosts([]);
+    switch (searchParams.get("view")) {
+      case "trending":
+        if (!allPosts) break;
+        return [
+          ...allPosts.sort(
+            (postA, postB) =>
+              postB.upvotes.length -
+              postB.downvotes.length -
+              (postA.upvotes.length - postA.downvotes.length)
+          ),
+        ];
 
-      switch (searchParams.get("view")) {
-        case "trending":
-          if (!allPosts) break;
-          setSortedPosts([
-            ...allPosts.sort(
-              (postA, postB) =>
-                postB.upvotes.length -
-                postB.downvotes.length -
-                (postA.upvotes.length - postA.downvotes.length)
-            ),
-          ]);
-          break;
-
-        case "following":
-          if (!profile || !allPosts) break;
-          setSortedPosts([
-            ...allPosts
-              .filter((post) => profile.following.includes(post.userId))
-              .sort((postA, postB) =>
-                compareDesc(
-                  new Date(postA.created_at),
-                  new Date(postB.created_at)
-                )
-              ),
-          ]);
-          break;
-
-        case "discover":
-          if (!profile || !allPosts) break;
-          setSortedPosts([
-            ...allPosts
-              .filter(
-                (post) =>
-                  profile.currentGames.includes(post.gameId) &&
-                  !profile.following.includes(post.userId) &&
-                  post.userId !== user?.id
-              )
-              .sort((postA, postB) =>
-                compareDesc(
-                  new Date(postA.created_at),
-                  new Date(postB.created_at)
-                )
-              ),
-          ]);
-          break;
-
-        case "posts":
-          if (!userPosts) break;
-          setSortedPosts([
-            ...userPosts
-              .sort((postA, postB) =>
-                compareDesc(
-                  new Date(postA.created_at),
-                  new Date(postB.created_at)
-                )
-              )
-              .filter((post) =>
-                searchParams.get("game")
-                  ? post.gameId === Number(searchParams.get("game"))
-                  : post
-              ),
-          ]);
-          break;
-
-        case "hints":
-          if (!hintData) break;
-          setSortedPosts([
-            ...hintData.filter((hint) =>
-              searchParams.get("game")
-                ? hint.gameId === Number(searchParams.get("game"))
-                : hint
-            ),
-          ]);
-          break;
-
-        case "popular":
-          if (!replies) break;
-          setSortedPosts([
-            ...replies.sort(
-              (postA, postB) =>
-                postB.upvotes.length -
-                postB.downvotes.length -
-                (postA.upvotes.length - postA.downvotes.length)
-            ),
-          ]);
-          break;
-
-        case "recent":
-          if (!replies) break;
-          setSortedPosts([
-            ...replies.sort((postA, postB) =>
+      case "following":
+        if (!profile || !allPosts) break;
+        return [
+          ...allPosts
+            .filter((post) => profile.following.includes(post.userId))
+            .sort((postA, postB) =>
               compareDesc(
                 new Date(postA.created_at),
                 new Date(postB.created_at)
               )
             ),
-          ]);
-      }
-    },
-    [allPosts, searchParams, profile, userPosts, replies, hintData, user]
-  );
+        ];
+
+      case "discover":
+        if (!profile || !allPosts) break;
+        return [
+          ...allPosts
+            .filter(
+              (post) =>
+                profile.currentGames.includes(post.gameId) &&
+                !profile.following.includes(post.userId) &&
+                post.userId !== user?.id
+            )
+            .sort((postA, postB) =>
+              compareDesc(
+                new Date(postA.created_at),
+                new Date(postB.created_at)
+              )
+            ),
+        ];
+
+      case "posts":
+        if (!userPosts) break;
+        return [
+          ...userPosts
+            .sort((postA, postB) =>
+              compareDesc(
+                new Date(postA.created_at),
+                new Date(postB.created_at)
+              )
+            )
+            .filter((post) =>
+              searchParams.get("game")
+                ? post.gameId === Number(searchParams.get("game"))
+                : post
+            ),
+        ];
+
+      case "hints":
+        if (!hintData) break;
+        return [
+          ...hintData.filter((hint) =>
+            searchParams.get("game")
+              ? hint.gameId === Number(searchParams.get("game"))
+              : hint
+          ),
+        ];
+
+      case "popular":
+        if (!replies) break;
+        return [
+          ...replies.sort(
+            (postA, postB) =>
+              postB.upvotes.length -
+              postB.downvotes.length -
+              (postA.upvotes.length - postA.downvotes.length)
+          ),
+        ];
+
+      case "recent":
+        if (!replies) break;
+        return [
+          ...replies.sort((postA, postB) =>
+            compareDesc(new Date(postA.created_at), new Date(postB.created_at))
+          ),
+        ];
+    }
+
+    return [];
+  }, [allPosts, searchParams, profile, userPosts, replies, hintData, user]);
 
   useEffect(
     function () {
@@ -243,9 +227,7 @@ function SocialFeedContainer() {
 
   return (
     <>
-      {(postId || userId) && isLoadingBlocked ? (
-        <Spinner />
-      ) : (postId || userId) && isBlocked ? (
+      {(postId || userId) && isBlocked ? (
         <Blocked />
       ) : (
         <StyledSocialFeedContainer>
@@ -338,9 +320,7 @@ function SocialFeedContainer() {
             ) : null}
           </SocialFeedButtons>
           <SocialFeedContent>
-            {(postId || userId) && isLoadingBlocked ? (
-              <Spinner />
-            ) : postId && !isLoadingReplies ? (
+            {postId && !isLoadingReplies ? (
               sortedPosts.map((post) => (
                 <SocialFeedPost
                   id={`post_${post.id}`}

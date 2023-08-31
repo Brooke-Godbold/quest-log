@@ -104,15 +104,17 @@ function SocialFeedPost({
             </ResponsiveButtonContent>
           </ReplyButton>
         ) : (
-          <DetailLink
-            onClick={onDetail}
-            to={`/social/post/${post.id}?view=recent`}
-          >
-            <ResponsiveButtonContent>
-              <p>View</p>
-              <TbMessage2Search />
-            </ResponsiveButtonContent>
-          </DetailLink>
+          !post.postId && (
+            <DetailLink
+              onClick={onDetail}
+              to={`/social/post/${post.id}?view=recent`}
+            >
+              <ResponsiveButtonContent>
+                <p>View</p>
+                <TbMessage2Search />
+              </ResponsiveButtonContent>
+            </DetailLink>
+          )
         )}
       </PostButtonsContainer>
     </StyledSocialFeedPost>
