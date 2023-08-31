@@ -69,50 +69,52 @@ function SocialFeedPost({
           "Pp"
         )}`}</PostCreatedTime>
       </PostDetails>
-      {isAuthenticated && !parentPostId && (
-        <PostButtonsContainer>
-          {replies && replies.length > 0 && (
-            <RepliesCount>{`${replies.length} replies!`}</RepliesCount>
-          )}
-          <Modal>
-            <Modal.Open opens="reply">
-              <ReplyButton>
-                <ResponsiveButtonContent>
-                  <p>Reply</p>
-                  <BsReplyFill />
-                </ResponsiveButtonContent>
-              </ReplyButton>
-            </Modal.Open>
-            <Modal.Window name="reply">
-              <AddPostForm userId={user.id} postId={post.id} />
-            </Modal.Window>
-          </Modal>
-          {isDetail ? (
-            <ReplyButton
-              onClick={() =>
-                navigate(`/social/${post.userId}?view=posts&post=${post.id}`, {
-                  replace: true,
-                })
-              }
-            >
-              <ResponsiveButtonContent>
-                <p>Back</p>
-                <IoArrowBackOutline />
-              </ResponsiveButtonContent>
-            </ReplyButton>
-          ) : (
-            <DetailLink
-              onClick={onDetail}
-              to={`/social/post/${post.id}?view=recent`}
-            >
-              <ResponsiveButtonContent>
-                <p>View</p>
-                <TbMessage2Search />
-              </ResponsiveButtonContent>
-            </DetailLink>
-          )}
-        </PostButtonsContainer>
-      )}
+      <PostButtonsContainer>
+        {isAuthenticated && !parentPostId && (
+          <>
+            {replies && replies.length > 0 && (
+              <RepliesCount>{`${replies.length} replies!`}</RepliesCount>
+            )}
+            <Modal>
+              <Modal.Open opens="reply">
+                <ReplyButton>
+                  <ResponsiveButtonContent>
+                    <p>Reply</p>
+                    <BsReplyFill />
+                  </ResponsiveButtonContent>
+                </ReplyButton>
+              </Modal.Open>
+              <Modal.Window name="reply">
+                <AddPostForm userId={user.id} postId={post.id} />
+              </Modal.Window>
+            </Modal>
+          </>
+        )}
+        {isDetail ? (
+          <ReplyButton
+            onClick={() =>
+              navigate(`/social/${post.userId}?view=posts&post=${post.id}`, {
+                replace: true,
+              })
+            }
+          >
+            <ResponsiveButtonContent>
+              <p>Back</p>
+              <IoArrowBackOutline />
+            </ResponsiveButtonContent>
+          </ReplyButton>
+        ) : (
+          <DetailLink
+            onClick={onDetail}
+            to={`/social/post/${post.id}?view=recent`}
+          >
+            <ResponsiveButtonContent>
+              <p>View</p>
+              <TbMessage2Search />
+            </ResponsiveButtonContent>
+          </DetailLink>
+        )}
+      </PostButtonsContainer>
     </StyledSocialFeedPost>
   );
 }

@@ -263,9 +263,17 @@ const ActionButton = styled.button`
   padding: 0.8rem 1.2rem;
 
   background-color: ${(props) =>
-    props.$active ? "var(--color-brand-700)" : "var(--color-brand-400)"};
+    props.$interactable
+      ? props.$active
+        ? "var(--color-brand-700)"
+        : "var(--color-brand-400)"
+      : "rgba(71, 70, 64, 0.5)"};
   color: ${(props) =>
-    props.$active ? "var(--color-brand-300)" : "var(--color-brand-700)"};
+    props.$interactable
+      ? props.$active
+        ? "var(--color-brand-300)"
+        : "var(--color-brand-700)"
+      : "rgba(146, 141, 126, 0.5)"};
 
   font-size: 2.4rem;
   font-weight: 700;
@@ -274,8 +282,14 @@ const ActionButton = styled.button`
   display: flex;
   align-items: center;
 
+  cursor: ${(props) => !props.$interactable && "auto"};
+
+  &:disabled {
+    cursor: auto;
+  }
+
   &:hover {
-    transform: scale(110%);
+    transform: ${(props) => props.$interactable && "scale(110%)"};
   }
 
   @media (max-width: 35em) {

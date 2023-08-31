@@ -10,7 +10,7 @@ import {
 } from "./MessagesContainer.styles";
 import { useUser } from "../../auth/useUser";
 import { useMessages } from "../useMessages";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUpdateMessage } from "../useUpdateMessage";
 import { useConversations } from "../../../contexts/ConversationsContext";
 
@@ -59,6 +59,12 @@ function MessagesContainer() {
     [conversation, user, updateMessages]
   );
 
+  const BottomScrollElement = () => {
+    const elementRef = useRef();
+    useEffect(() => elementRef.current.scrollIntoView());
+    return <div ref={elementRef} />;
+  };
+
   return (
     <StyledMessagesContainer>
       <ConversationHeader>
@@ -74,6 +80,7 @@ function MessagesContainer() {
               createdAt={c.createdAt}
             />
           ))}
+          <BottomScrollElement />
         </ConversationBox>
         <ConversationBoxShadow />
       </ConversationBoxContainer>

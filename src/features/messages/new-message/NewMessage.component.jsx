@@ -11,6 +11,10 @@ import { fromUnixTime } from "date-fns";
 import { useUser } from "../../auth/useUser";
 import { useUpdateMessage } from "../useUpdateMessage";
 import { useEffect } from "react";
+import { useConversations } from "../../../contexts/ConversationsContext";
+import { useIsBlocked } from "../../../hooks/useIsBlocked";
+import { toast } from "react-hot-toast";
+import Notification from "../../../ui/notification/Notification.component";
 
 function NewMessage({ conversation }) {
   const { register, handleSubmit, reset } = useForm();
@@ -18,7 +22,23 @@ function NewMessage({ conversation }) {
 
   const { updateMessages, isUpdatingMessage } = useUpdateMessage(user?.id);
 
+  const { currentConversation } = useConversations();
+  const { isBlocked, isLoadingBlocked } = useIsBlocked(
+    currentConversation,
+    user?.id
+  );
+
   function onSendMessage(data) {
+    if (isBlocked) {
+      toast.error((t) => (
+        <Notification
+          toast={t}
+          text="You've been blocked from contacting this user"
+        />
+      ));
+      return;
+    }
+
     if (!user) return;
 
     const spaceFilteredContent = data.message
@@ -61,10 +81,10 @@ function NewMessage({ conversation }) {
         <>
           <NewMessageTextArea
             id="message"
-            disabled={isUpdatingMessage}
+            disabled={isUpdatingMessage || isLoadingBlocked}
             {...register("message", { required: true })}
           />
-          <SendMessageButton disabled={isUpdatingMessage}>
+          <SendMessageButton disabled={isUpdatingMessage || isLoadingBlocked}>
             <IoSend />
           </SendMessageButton>
         </>

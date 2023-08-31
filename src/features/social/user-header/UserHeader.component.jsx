@@ -40,37 +40,41 @@ import Notification from "../../../ui/notification/Notification.component";
 import { useConversations } from "../../../contexts/ConversationsContext";
 import { useMessages } from "../../messages/useMessages";
 import DirectMessage from "../direct-message/DirectMessage.component";
+import { useIsBlocked } from "../../../hooks/useIsBlocked";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
 
   const { userId } = useParams();
 
-  const { profile: viewedProfile, isError } = useProfileByUser(userId);
   const { gameData } = useAllGames();
 
+  const { profile: viewedProfile, isError } = useProfileByUser(userId);
   const { profile: userProfile } = useProfileByUser(user?.id);
-
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
     userProfile?.userId
   );
 
   const { conversations } = useMessages(user?.id);
   const { setCurrentConversation } = useConversations();
-
   const navigate = useNavigate();
+
+  const { isBlocked, isLoadingBlocked } = useIsBlocked(
+    viewedProfile?.userId,
+    user?.id
+  );
 
   function onFollow() {
     if (!userProfile) return;
 
-    const newFollowing = userProfile.following.includes(userId)
+    const following = userProfile.following.includes(userId)
       ? userProfile.following.filter((followedUser) => followedUser !== userId)
       : [...userProfile.following, userId];
 
     updateProfile(
       {
         userId: userProfile.userId,
-        data: { following: newFollowing },
+        data: { following },
       },
       {
         onSuccess: () => {
@@ -78,7 +82,7 @@ function UserHeader() {
             <Notification
               toast={t}
               text={
-                newFollowing.includes(viewedProfile.userId)
+                following.includes(viewedProfile.userId)
                   ? `Now following ${viewedProfile.username}!`
                   : `Unfollowed ${viewedProfile.username}`
               }
@@ -89,7 +93,7 @@ function UserHeader() {
           toast.error((t) => (
             <Notification
               toast={t}
-              text={`Unable to follow ${viewedProfile.username}`}
+              text={`Unable to follow ${viewedProfile.username} right now`}
             />
           )),
       }
@@ -99,6 +103,46 @@ function UserHeader() {
   function onGotoMessages() {
     setCurrentConversation(viewedProfile.userId);
     navigate("/messages", { replace: true });
+  }
+
+  function onBlock() {
+    if (!userProfile) return;
+
+    const blocked = userProfile.blocked.includes(userId)
+      ? userProfile.blocked.filter((blockedUser) => blockedUser !== userId)
+      : [...userProfile.blocked, userId];
+
+    const following = blocked.includes(userId)
+      ? userProfile.following.filter((followedUser) => followedUser !== userId)
+      : userProfile.following;
+
+    updateProfile(
+      {
+        userId: userProfile.userId,
+        data: { blocked, following },
+      },
+      {
+        onSuccess: () => {
+          toast((t) => (
+            <Notification
+              toast={t}
+              text={
+                blocked.includes(viewedProfile.userId)
+                  ? `Blocked ${viewedProfile.username}`
+                  : `Unblocked ${viewedProfile.username}`
+              }
+            />
+          ));
+        },
+        onError: () =>
+          toast.error((t) => (
+            <Notification
+              toast={t}
+              text={`Unable to block ${viewedProfile.username} right now`}
+            />
+          )),
+      }
+    );
   }
 
   return (
@@ -118,11 +162,19 @@ function UserHeader() {
                 user.id !== userId &&
                 conversations && (
                   <UserActionsContainer>
-                    <ActionButton>
+                    <ActionButton
+                      $interactable={true}
+                      disabled={isUpdatingProfile || isLoadingBlocked}
+                      onClick={onBlock}
+                      $active={userProfile?.blocked.includes(userId)}
+                    >
                       <ImBlocked />
                     </ActionButton>
                     <ActionButton
-                      disabled={isUpdatingProfile}
+                      $interactable={!isBlocked}
+                      disabled={
+                        isUpdatingProfile || isBlocked || isLoadingBlocked
+                      }
                       onClick={onFollow}
                       $active={userProfile?.following.includes(userId)}
                     >
@@ -137,13 +189,24 @@ function UserHeader() {
                         c.userIdA === viewedProfile.userId ||
                         c.userIdB === viewedProfile.userId
                     )[0] ? (
-                      <ActionButton onClick={onGotoMessages}>
+                      <ActionButton
+                        $interactable={!isBlocked}
+                        disabled={
+                          isUpdatingProfile || isBlocked || isLoadingBlocked
+                        }
+                        onClick={onGotoMessages}
+                      >
                         <BiMessageDetail />
                       </ActionButton>
                     ) : (
                       <Modal>
                         <Modal.Open opens="directMessage">
-                          <ActionButton>
+                          <ActionButton
+                            $interactable={!isBlocked}
+                            disabled={
+                              isUpdatingProfile || isBlocked || isLoadingBlocked
+                            }
+                          >
                             <BiMessageDetail />
                           </ActionButton>
                         </Modal.Open>

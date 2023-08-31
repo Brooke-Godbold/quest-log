@@ -5,11 +5,18 @@ import { useAllGames } from "../../features/account/account-profile-details-sect
 import Spinner from "../../ui/spinner/Spinner";
 import { usePostById } from "../../features/social/usePostById";
 import SocialFeedContainer from "../../features/social/social-feed-container/SocialFeedContainer.component";
+import { useUser } from "../../features/auth/useUser";
+import { useIsBlocked } from "../../hooks/useIsBlocked";
 
 function SocialPost() {
   const { postId } = useParams();
 
   const { post, isGettingPost, isError: isPostError } = usePostById(postId);
+
+  const { user } = useUser();
+  const { isBlocked, isLoadingBlocked } = useIsBlocked(post?.userId, user?.id);
+
+  console.log(isBlocked);
 
   const {
     gameData,
@@ -19,9 +26,13 @@ function SocialPost() {
 
   return (
     <StyledSocialPost>
-      {isGamesLoading || isGamesError || isGettingPost || isPostError ? (
+      {isGamesLoading ||
+      isGamesError ||
+      isGettingPost ||
+      isPostError ||
+      isLoadingBlocked ? (
         <Spinner />
-      ) : (
+      ) : isBlocked ? null : (
         <SocialFeedPost gameData={gameData} post={post} isDetail={true} />
       )}
       <SocialFeedContainer />
