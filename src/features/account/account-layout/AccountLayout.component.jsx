@@ -37,6 +37,12 @@ function AccountLayout({ children }) {
               <AccountSectionNavLink to="account/privacy">
                 Privacy
               </AccountSectionNavLink>
+              <AccountSectionNavLink to="account/users?view=following">
+                Following
+              </AccountSectionNavLink>
+              <AccountSectionNavLink to="account/users?view=blocked">
+                Blocked
+              </AccountSectionNavLink>
             </AccountSectionButtonsContainer>
             <AccountSectionButtonsContainer>
               <AccountSectionNavLink to="account/hints?type=user">

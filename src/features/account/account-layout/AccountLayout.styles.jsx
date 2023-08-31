@@ -15,6 +15,11 @@ const StyledAccountLayout = styled.div`
   @media (max-width: 120em) {
     max-width: 100%;
   }
+
+  @media (max-width: 65em) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const AccountSection = styled.div`
@@ -26,8 +31,13 @@ const AccountSection = styled.div`
   flex-direction: column;
   align-items: center;
 
+  @media (max-width: 70em) {
+    padding: 1.2rem;
+  }
+
   @media (max-width: 50em) {
     width: 100%;
+    height: 100%;
   }
 `;
 
@@ -46,6 +56,10 @@ const AccountGridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 1rem;
+
+  @media (max-width: 65em) {
+    flex: 1;
+  }
 
   @media (max-width: 50em) {
     display: flex;

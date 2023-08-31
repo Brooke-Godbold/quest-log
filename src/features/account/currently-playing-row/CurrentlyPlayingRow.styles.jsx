@@ -4,6 +4,16 @@ const StyledCurrentlyPlayingRow = styled.div`
   display: flex;
   align-items: center;
   gap: 2.4rem;
+
+  @media (max-width: 50em) {
+    width: 100%;
+  }
+
+  @media (max-width: 25em) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
 `;
 
 const CurrentlyPlaying = styled.select`

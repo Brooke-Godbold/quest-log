@@ -41,6 +41,19 @@ export async function getProfileByUserId(userId) {
   return data;
 }
 
+export async function getProfilesByValues({ column, values }) {
+  if (values.length === 0) return null;
+
+  const { data, error } = await supabase
+    .from("profile")
+    .select("*")
+    .contains(column, values);
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function addProfile(profileData) {
   const { data, error } = await supabase
     .from("profile")

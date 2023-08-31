@@ -7,6 +7,19 @@ const StyledAccountProfileDetails = styled.form`
   gap: 3rem;
   margin: 5.4rem 0;
   width: 80%;
+
+  @media (max-width: 60em) {
+    width: 95%;
+  }
+
+  @media (max-width: 50em) {
+    width: 100%;
+  }
+
+  @media (max-width: 35em) {
+    gap: 0;
+    margin-bottom: 0;
+  }
 `;
 
 const ProfileDetailsRow = styled.div`
@@ -38,44 +51,9 @@ const CurrentlyPlayingContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-`;
 
-const CurrentlyPlayingRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2.4rem;
-`;
-
-const CurrentlyPlaying = styled.select`
-  padding: 1rem 2rem;
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-brand-50);
-  color: var(--color-brand-600);
-  width: 100%;
-`;
-
-const CurrentlyPlayingButton = styled.button`
-  background-color: var(--color-brand-300);
-  border: none;
-  border-radius: 50%;
-  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
-  height: 100%;
-  width: auto;
-  padding: 0.75rem;
-  transition: all 0.3s;
-  transform: scale(100%);
-
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background-color: var(--color-brand-400);
-    transform: scale(125%);
-  }
-
-  & svg {
-    transform: scale(150%);
-    color: var(--color-brand-700);
+  @media (max-width: 50em) {
+    width: 80%;
   }
 `;
 
@@ -96,6 +74,10 @@ const AccountSocialMediaContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+
+  @media (max-width: 40em) {
+    width: 100%;
+  }
 `;
 
 const AccountSocialMediaInputRow = styled.div`
@@ -122,6 +104,36 @@ const AccountSocialMediaInputRow = styled.div`
     transform: scale(150%);
     pointer-events: none;
   }
+
+  @media (max-width: 80em) {
+    & label {
+      grid-column: 1 / -1;
+    }
+
+    & input {
+      grid-column: 2 / -1;
+    }
+
+    & svg {
+      bottom: 15px;
+    }
+  }
+
+  @media (max-width: 40em) {
+    & label,
+    & p,
+    & input {
+      grid-column: 1 / -1;
+    }
+
+    & input {
+      width: 100%;
+    }
+
+    & svg {
+      bottom: 15px;
+    }
+  }
 `;
 
 export {
@@ -130,9 +142,6 @@ export {
   ProfileDetailsErrorContainer,
   ProfileDetailsLabel,
   CurrentlyPlayingContainer,
-  CurrentlyPlayingRow,
-  CurrentlyPlaying,
-  CurrentlyPlayingButton,
   AccountProfileBio,
   AccountSocialMediaInputRow,
   AccountSocialMediaContainer,
