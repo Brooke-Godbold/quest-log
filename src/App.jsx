@@ -21,6 +21,9 @@ import SocialPost from "./pages/social-post/SocialPost.page";
 import NotFound from "./pages/not-found/NotFound.page";
 import { Toaster } from "react-hot-toast";
 import Error from "./pages/error/Error.page";
+import Messages from "./pages/messages/Messages.component";
+import ProtectedRoute from "./ui/protected-route/ProtectedRoute.component";
+import { ConversationsProvider } from "./contexts/ConversationsContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,7 +55,13 @@ function App() {
       />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ConversationsProvider>
+                <AppLayout />
+              </ConversationsProvider>
+            }
+          >
             <Route index element={<Navigate replace to="search" />} />
             <Route
               path="search"
@@ -80,7 +89,22 @@ function App() {
               element={<SocialPost />}
               errorElement={<Error />}
             />
-            <Route element={<Account />}>
+            <Route
+              path="messages"
+              element={
+                <ProtectedRoute>
+                  <Messages />
+                </ProtectedRoute>
+              }
+              errorElement={<Error />}
+            />
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Account />
+                </ProtectedRoute>
+              }
+            >
               <Route
                 path="account/profile"
                 element={<AccountProfileDetailsSection />}

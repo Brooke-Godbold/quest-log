@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../ui/spinner/Spinner";
 import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
 import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
@@ -37,6 +37,9 @@ import AddPostForm from "../add-post-form/AddPostForm.component";
 import { useUpdateProfile } from "../../account/useUpdateProfile";
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 import Notification from "../../../ui/notification/Notification.component";
+import { useConversations } from "../../../contexts/ConversationsContext";
+import { useMessages } from "../../messages/useMessages";
+import DirectMessage from "../direct-message/DirectMessage.component";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
@@ -51,6 +54,11 @@ function UserHeader() {
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
     userProfile?.userId
   );
+
+  const { conversations } = useMessages(user?.id);
+  const { setCurrentConversation } = useConversations();
+
+  const navigate = useNavigate();
 
   function onFollow() {
     if (!userProfile) return;
@@ -88,6 +96,11 @@ function UserHeader() {
     );
   }
 
+  function onGotoMessages() {
+    setCurrentConversation(viewedProfile.userId);
+    navigate("/messages", { replace: true });
+  }
+
   return (
     <StyledUserHeader>
       {!viewedProfile ? (
@@ -100,27 +113,50 @@ function UserHeader() {
             <UserMain>
               <UserAvatar src={viewedProfile.avatarUrl} />
               <UserName>{viewedProfile.username}</UserName>
-              {isAuthenticated && user && user.id !== userId && (
-                <UserActionsContainer>
-                  <ActionButton>
-                    <ImBlocked />
-                  </ActionButton>
-                  <ActionButton
-                    disabled={isUpdatingProfile}
-                    onClick={onFollow}
-                    $active={userProfile?.following.includes(userId)}
-                  >
-                    {userProfile?.following.includes(userId) ? (
-                      <HiCheck />
+              {isAuthenticated &&
+                user &&
+                user.id !== userId &&
+                conversations && (
+                  <UserActionsContainer>
+                    <ActionButton>
+                      <ImBlocked />
+                    </ActionButton>
+                    <ActionButton
+                      disabled={isUpdatingProfile}
+                      onClick={onFollow}
+                      $active={userProfile?.following.includes(userId)}
+                    >
+                      {userProfile?.following.includes(userId) ? (
+                        <HiCheck />
+                      ) : (
+                        <HiPlus />
+                      )}
+                    </ActionButton>
+                    {conversations.filter(
+                      (c) =>
+                        c.userIdA === viewedProfile.userId ||
+                        c.userIdB === viewedProfile.userId
+                    )[0] ? (
+                      <ActionButton onClick={onGotoMessages}>
+                        <BiMessageDetail />
+                      </ActionButton>
                     ) : (
-                      <HiPlus />
+                      <Modal>
+                        <Modal.Open opens="directMessage">
+                          <ActionButton>
+                            <BiMessageDetail />
+                          </ActionButton>
+                        </Modal.Open>
+                        <Modal.Window name="directMessage">
+                          <DirectMessage
+                            username={viewedProfile.username}
+                            receiverId={viewedProfile.userId}
+                          />
+                        </Modal.Window>
+                      </Modal>
                     )}
-                  </ActionButton>
-                  <ActionButton>
-                    <BiMessageDetail />
-                  </ActionButton>
-                </UserActionsContainer>
-              )}
+                  </UserActionsContainer>
+                )}
             </UserMain>
             <UserDetailsContainer>
               <UserBio>{viewedProfile.bio}</UserBio>
@@ -158,7 +194,7 @@ function UserHeader() {
               <Spinner />
             ) : (
               <CurrentlyPlayingContainer>
-                {viewedProfile.currentGames && (
+                {viewedProfile.currentGames?.length > 0 && (
                   <>
                     <Heading>Currently Playing</Heading>
                     {viewedProfile.currentGames.map((gameId) => (

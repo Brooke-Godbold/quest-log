@@ -12,9 +12,12 @@ import {
   HeaderSearch,
   HeaderSearchForm,
   StyledHeader,
+  UnreadMessages,
 } from "./Header.styles";
 import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
 import LoginModal from "../login-modal/LoginModal.component";
+import { useMessages } from "../../features/messages/useMessages";
+import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
 
 function Header() {
   const { isGettingUser, isAuthenticated, user } = useUser();
@@ -24,6 +27,9 @@ function Header() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { conversations } = useMessages(user?.id);
+  const unreadMessagesCount = useUnreadMessagesCount(user, conversations);
 
   function onSearch(data) {
     console.log(data);
@@ -70,6 +76,12 @@ function Header() {
             </HeaderLink>
             <HeaderLink disabled={isLoggingOut} to="/account/profile">
               Account
+            </HeaderLink>
+            <HeaderLink disabled={isLoggingOut} to="/messages">
+              Messages
+              {unreadMessagesCount > 0 && (
+                <UnreadMessages>{unreadMessagesCount}</UnreadMessages>
+              )}
             </HeaderLink>
             <HeaderButton onClick={logout} disabled={isLoggingOut}>
               Logout

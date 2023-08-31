@@ -5,10 +5,13 @@ import {
   MobileNavLinkContainer,
   MobileNavigationMenuButton,
   StyledMobileNavigation,
+  UnreadMessages,
 } from "./MobileNavigation.styles";
 import { useUser } from "../../features/auth/useUser";
 import { useState } from "react";
 import { useLogout } from "../../features/auth/useLogout";
+import { useMessages } from "../../features/messages/useMessages";
+import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
 
 function MobileNavigation() {
   const [isMobileNavActive, setIsMobileNavActive] = useState(false);
@@ -21,6 +24,9 @@ function MobileNavigation() {
     logout();
     setIsMobileNavActive(false);
   }
+
+  const { conversations } = useMessages(user?.id);
+  const unreadMessagesCount = useUnreadMessagesCount(user, conversations);
 
   return (
     <StyledMobileNavigation $active={isMobileNavActive}>
@@ -73,6 +79,17 @@ function MobileNavigation() {
             <div>
               {isAuthenticated ? (
                 <>
+                  <MobileNavLink
+                    onClick={() => setIsMobileNavActive(false)}
+                    to="/messages"
+                  >
+                    <>
+                      Messages{" "}
+                      {unreadMessagesCount > 0 && (
+                        <UnreadMessages>{unreadMessagesCount}</UnreadMessages>
+                      )}
+                    </>
+                  </MobileNavLink>
                   <MobileNavLink
                     onClick={() => setIsMobileNavActive(false)}
                     to="/account/profile"

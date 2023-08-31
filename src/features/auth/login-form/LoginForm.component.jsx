@@ -25,6 +25,7 @@ import { MdAppRegistration } from "react-icons/md";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
 import { toast } from "react-hot-toast";
 import Notification from "../../../ui/notification/Notification.component";
+import { useConversations } from "../../../contexts/ConversationsContext";
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -34,12 +35,15 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
 
   const [errors, setErrors] = useState({});
 
+  const { setCurrentConversation } = useConversations();
+
   function onSubmit(data) {
     setErrors({});
 
     login(data, {
       onSuccess: () => {
         onCloseModal?.();
+        setCurrentConversation(null);
       },
       onError: () =>
         toast.error((t) => (

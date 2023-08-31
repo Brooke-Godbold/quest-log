@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
 import {
   AccountGridContainer,
   AccountSection,
@@ -10,23 +9,13 @@ import {
   StyledAccountLayout,
 } from "./AccountLayout.styles";
 import { useUser } from "../../auth/useUser";
-import { useNavigate } from "react-router-dom";
 import Spinner from "../../../ui/spinner/Spinner";
 import { useProfileByUser } from "./useProfileByUser";
 
 function AccountLayout({ children }) {
-  const { isGettingUser, isAuthenticated, user } = useUser();
-  const navigate = useNavigate();
+  const { user } = useUser();
 
-  const { isGettingProfile } = useProfileByUser(user ? user.id : null);
-
-  useEffect(
-    function () {
-      if (!isAuthenticated && !isGettingUser)
-        navigate("/search", { replace: true });
-    },
-    [isAuthenticated, navigate, isGettingUser]
-  );
+  const { isGettingProfile } = useProfileByUser(user?.id);
 
   return (
     <StyledAccountLayout>

@@ -78,6 +78,7 @@ const GlobalStyles = createGlobalStyle`
 
 html {
   font-size: 62.5%;
+  height: 100%;
 }
 
 body {
@@ -87,6 +88,7 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   font-size: 1.6rem;
+  height: 100%;
 }
 
 input,
@@ -206,6 +208,26 @@ const CommonScrollBar = css`
   }
 `;
 
+const CommonPage = css`
+  margin: 0 auto;
+  height: 100%;
+  max-width: 50%;
+  padding: 5rem;
+  background-color: var(--color-brand-200);
+
+  @media (max-width: 150em) {
+    max-width: 75%;
+  }
+
+  @media (max-width: 100em) {
+    max-width: 100%;
+  }
+
+  @media (max-width: 40em) {
+    padding: 10rem 1.2rem;
+  }
+`;
+
 export default GlobalStyles;
 
-export { CommonButton, CommonInput, CommonScrollBar };
+export { CommonButton, CommonInput, CommonScrollBar, CommonPage };

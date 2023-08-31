@@ -60,6 +60,10 @@ const MobileNavLinkContainer = styled.div`
 
 const MobileNavLink = styled(NavLink)`
   font-size: 2.4rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const MobileMenuButton = styled.button`
@@ -69,10 +73,24 @@ const MobileMenuButton = styled.button`
   font-size: 2.4rem;
 `;
 
+const UnreadMessages = styled.span`
+  width: 3rem;
+  height: 3rem;
+
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-red-600);
+
+  border: solid 2px var(--color-red-600);
+  border-radius: 50%;
+`;
+
 export {
   StyledMobileNavigation,
   MobileNavigationMenuButton,
   MobileNavLinkContainer,
   MobileNavLink,
   MobileMenuButton,
+  UnreadMessages,
 };

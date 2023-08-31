@@ -47,6 +47,8 @@ const HeaderButton = styled.button`
 `;
 
 const HeaderLink = styled(NavLink)`
+  position: relative;
+
   transition: all 0.3s;
   color: var(--color-brand-700);
 
@@ -77,6 +79,23 @@ const HeaderSearch = styled.input`
   font-size: 1.6rem;
 `;
 
+const UnreadMessages = styled.p`
+  position: absolute;
+  right: -2.5rem;
+  top: -1.5rem;
+
+  width: 3rem;
+  height: 3rem;
+
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-red-600);
+
+  border: solid 2px var(--color-red-600);
+  border-radius: 50%;
+`;
+
 export {
   StyledHeader,
   HeaderLinks,
@@ -85,4 +104,5 @@ export {
   HeaderSearch,
   HeaderLogoImage,
   HeaderSearchForm,
+  UnreadMessages,
 };
