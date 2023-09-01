@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
@@ -19,9 +19,12 @@ import {
   AddPostHeader,
   AddPostTextArea,
   AddPostTextSection,
+  ImageUploadInput,
   StyledAddPostForm,
 } from "./AddPostForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
+import { MAX_FILE_SIZE_IN_BINARY_BYTES } from "../../../data/consts";
+import { useLocations } from "../../../contexts/LocationsContext";
 
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
@@ -29,13 +32,16 @@ const MIN_LENGTH = 25;
 function AddPostForm({
   gameData,
   currentGames,
-  postId,
+  parentPostId,
   quoteId,
   userId,
   onCloseModal,
 }) {
+  const { postId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const { setPreviousLocation } = useLocations();
 
   const [successfulPost, setSuccessfulPost] = useState(false);
 
@@ -43,6 +49,7 @@ function AddPostForm({
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm();
   const watchPostContent = watch("postContent", "");
@@ -50,22 +57,57 @@ function AddPostForm({
   const { addPost, isLoading } = useAddPost();
 
   function onPost(data) {
+    const spaceFilteredContent = data.postContent
+      .replace(/(\r\n|\n|\r|\s)/gm, "", "")
+      .replace(" ", "")
+      .trim();
+    if (spaceFilteredContent.length < 5) {
+      setError("postContent", {
+        type: "required",
+      });
+      return;
+    }
+
+    const uploadedFile = data.image?.[0];
+
+    if (uploadedFile) {
+      if (
+        uploadedFile.type !== "image/jpeg" &&
+        uploadedFile.type !== "image/png"
+      ) {
+        setError("image", {
+          type: "custom",
+          message: "Images must be PNG or JPEG!",
+        });
+        return;
+      }
+
+      if (uploadedFile.size > MAX_FILE_SIZE_IN_BINARY_BYTES) {
+        setError("image", {
+          type: "custom",
+          message: "Images must be below 5MB!",
+        });
+        return;
+      }
+    }
+
     const newPost = {
-      description: data.postContent,
-      userId,
-      ...(currentGames && { gameId: data.gameId }),
-      ...(postId && { postId }),
-      ...(quoteId && { quoteId }),
+      ...(data.image?.[0] && { image: data.image[0] }),
+      data: {
+        description: data.postContent.trim(),
+        userId,
+        ...(currentGames && { gameId: data.gameId }),
+        ...(parentPostId && { postId: parentPostId }),
+        ...(quoteId && { quoteId }),
+      },
     };
 
     addPost(newPost, {
       onSuccess: ({ id }) => {
         toast((t) => <Notification toast={t} text="Posted Successfully!" />);
 
-        onCloseModal?.();
-
-        if (postId) {
-          searchParams.set("post", postId);
+        if (parentPostId) {
+          searchParams.set("post", parentPostId);
         } else {
           searchParams.set("post", id);
         }
@@ -82,10 +124,23 @@ function AddPostForm({
   }
 
   useEffect(() => {
-    if (successfulPost || !quoteId) {
-      navigate(`/social/post/${postId}?view=recent`, { replace: true });
+    if (!successfulPost) return;
+
+    if (!quoteId && !postId && parentPostId) {
+      setPreviousLocation();
+      navigate(`/social/post/${parentPostId}?view=recent`, { replace: true });
+    } else {
+      onCloseModal?.();
     }
-  }, [successfulPost, navigate, postId, quoteId]);
+  }, [
+    successfulPost,
+    navigate,
+    parentPostId,
+    quoteId,
+    onCloseModal,
+    postId,
+    setPreviousLocation,
+  ]);
 
   function onError(e) {
     console.log("ERROR: ", e);
@@ -135,6 +190,12 @@ function AddPostForm({
           maxLength={MAX_LENGTH}
         />
       </AddPostTextSection>
+      <ImageUploadInput
+        {...register("image")}
+        type="file"
+        id="image"
+        disabled={isLoading}
+      />
       {errors && (
         <AddPostErrorContainer>
           {(errors.postContent?.type === "minLength" ||
@@ -147,6 +208,7 @@ function AddPostForm({
           {errors.gameId?.type === "validate" && (
             <FormError>Make sure you select a game for this post!</FormError>
           )}
+          {errors.image && <FormError>Error uploading image!</FormError>}
         </AddPostErrorContainer>
       )}
       <AddPostButtons>
@@ -164,7 +226,7 @@ function AddPostForm({
 AddPostForm.propTypes = {
   gameData: PropTypes.array,
   currentGames: PropTypes.array,
-  postId: PropTypes.number,
+  parentPostId: PropTypes.number,
   quoteId: PropTypes.number,
   onCloseModal: PropTypes.func,
   userId: PropTypes.string.isRequired,

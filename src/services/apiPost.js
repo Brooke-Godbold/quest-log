@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseStoragePath, supabaseUrl } from "./supabase";
 
 export async function getAllPosts() {
   const { data, error } = await supabase.from("post").select("*");
@@ -53,9 +53,31 @@ export async function getReplyByPostId(postId) {
 }
 
 export async function addPost(postData) {
+  let newPostData = postData;
+
+  if (postData.image) {
+    const imageName = `${Math.random()}`.replaceAll(".", "");
+
+    const { error: storageError } = await supabase.storage
+      .from("images")
+      .upload(imageName, postData.image);
+
+    if (storageError) {
+      console.error(storageError);
+      throw new Error("Could not upload Avatar");
+    } else {
+      const imageUrl = `${supabaseUrl}/${supabaseStoragePath}/images/${imageName}`;
+
+      newPostData = {
+        ...newPostData,
+        data: { ...newPostData.data, imageUrl },
+      };
+    }
+  }
+
   const { data, error } = await supabase
     .from("post")
-    .insert(postData)
+    .insert(newPostData.data)
     .single()
     .select();
 

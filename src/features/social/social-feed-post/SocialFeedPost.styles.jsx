@@ -35,6 +35,7 @@ const StyledSocialFeedPost = styled.div`
 
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
 
   padding: 2.4rem;
   position: relative;
@@ -50,15 +51,13 @@ const StyledSocialFeedPost = styled.div`
   }
 `;
 
-const PostContent = styled.p`
-  margin-top: 2.4rem;
-`;
+const PostContent = styled.p``;
 
 const PostDetails = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 2.4rem;
+  margin-top: 1.2rem;
 
   @media (max-width: 50em) {
     flex-direction: column;

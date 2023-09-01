@@ -20,8 +20,7 @@ import {
   UsernameLabel,
 } from "./AccountAvatarSection.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-
-const MAX_FILE_SIZE_IN_BINARY_BYTES = 5242880;
+import { MAX_FILE_SIZE_IN_BINARY_BYTES } from "../../../data/consts";
 
 function AccountAvatarSection() {
   const {

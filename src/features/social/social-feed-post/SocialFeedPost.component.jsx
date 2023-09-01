@@ -33,6 +33,7 @@ import {
   StyledSocialFeedPost,
 } from "./SocialFeedPost.styles";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+import ZoomableImage from "../../../ui/zoomable-image/ZoomableImage.component";
 
 function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
   const { isAuthenticated, user } = useUser();
@@ -63,6 +64,7 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
         </QuoteBlock>
       )}
       <PostContent>{post.description}</PostContent>
+      {post.imageUrl && <ZoomableImage imageUrl={post.imageUrl} />}
       <PostDetails>
         {post.gameId && (
           <GameTag to={`/game/${post.gameId}`}>
@@ -101,7 +103,7 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
               <Modal.Window name="reply">
                 <AddPostForm
                   userId={user.id}
-                  postId={(!post.postId && post.id) || post.postId}
+                  parentPostId={(!post.postId && post.id) || post.postId}
                   quoteId={(post.postId && post.id) || null}
                 />
               </Modal.Window>

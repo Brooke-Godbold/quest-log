@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { CommonButton, CommonScrollBar } from "../../../styles/GlobalStyles";
+import {
+  CommonButton,
+  CommonInput,
+  CommonScrollBar,
+} from "../../../styles/GlobalStyles";
 
 const StyledAddPostForm = styled.form`
   display: flex;
@@ -94,6 +98,21 @@ const AddPostErrorContainer = styled.div`
   gap: 0.8rem;
 `;
 
+const ImageUploadInput = styled.input`
+  ${CommonInput}
+
+  padding: 2rem;
+
+  &::file-selector-button {
+    display: none;
+  }
+
+  @media (max-width: 45em) {
+    padding: 1.4rem;
+    width: 100%;
+  }
+`;
+
 export {
   StyledAddPostForm,
   AddPostHeader,
@@ -103,4 +122,5 @@ export {
   AddPostGame,
   AddPostErrorContainer,
   AddPostTextSection,
+  ImageUploadInput,
 };
