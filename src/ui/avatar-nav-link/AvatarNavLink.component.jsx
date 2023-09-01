@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
-import { useProfileByUser } from "../../features/account/account-layout/useProfileByUser";
+
+import { useProfileByUser } from "../../query/profile/useProfileByUser";
+
 import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
+
 import Spinner from "../spinner/Spinner";
+
 import {
   StyledAvatarNavLink,
   UserAvatar,

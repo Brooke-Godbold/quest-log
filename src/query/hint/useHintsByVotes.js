@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getHintsByListContainsValue } from "../../../services/apiHints";
+import { getHintsByListContainsValue } from "../../services/apiHints";
 
 export function useHintsByVotes(data) {
   const {

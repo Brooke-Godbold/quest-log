@@ -1,10 +1,15 @@
-import { useUser } from "../../auth/useUser";
-import { useProfileByUser } from "../account-layout/useProfileByUser";
+import { toast } from "react-hot-toast";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
+
+import Notification from "../../../ui/notification/Notification.component";
+
 import {
   ProfileDetailsLabel,
   ProfileDetailsRow,
 } from "../account-profile-details-section/AccountProfileDetailsSection.styles";
-import { useUpdateProfile } from "../useUpdateProfile";
 import {
   PrivacySelect,
   StyledAccountPrivacySection,
@@ -17,7 +22,22 @@ function AccountPrivacySection() {
   const { updateProfile, isLoading: isUpdating } = useUpdateProfile(user?.id);
 
   function onSetMessaging(e) {
-    updateProfile({ userId: user.id, data: { messaging: e.target.value } });
+    updateProfile(
+      { userId: user.id, data: { messaging: e.target.value } },
+      {
+        onSuccess: () =>
+          toast((t) => (
+            <Notification toast={t} text="Updated Privacy Settings!" />
+          )),
+        onError: () =>
+          toast.error((t) => (
+            <Notification
+              toast={t}
+              text="Unable to update Privacy Settings right now"
+            />
+          )),
+      }
+    );
   }
 
   return (

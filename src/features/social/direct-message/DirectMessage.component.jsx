@@ -1,5 +1,18 @@
 import PropTypes from "prop-types";
+
 import { useForm } from "react-hook-form";
+import { fromUnixTime } from "date-fns";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+import { useConversations } from "../../../contexts/ConversationsContext";
+
+import { useAddMessage } from "../../../query/message/useAddMessage";
+import { useUser } from "../../../query/auth/useUser";
+
+import Button from "../../../ui/button/Button.component";
+import Notification from "../../../ui/notification/Notification.component";
+
 import {
   AddPostButtons,
   AddPostCancelButton,
@@ -8,14 +21,6 @@ import {
   AddPostTextSection,
   StyledAddPostForm,
 } from "../add-post-form/AddPostForm.styles";
-import Button from "../../../ui/button/Button.component";
-import { fromUnixTime } from "date-fns";
-import { useAddMessage } from "../../messages/useAddMessage";
-import { useUser } from "../../auth/useUser";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
-import { useConversations } from "../../../contexts/ConversationsContext";
-import { useNavigate } from "react-router-dom";
 
 function DirectMessage({ onCloseModal, username, receiverId }) {
   const { register, handleSubmit, reset } = useForm();

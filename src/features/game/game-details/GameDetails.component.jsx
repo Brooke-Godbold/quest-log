@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 
 import { useParams } from "react-router-dom";
 
-import { useGame } from "./useGame";
+import { useGame } from "../../../query/game/useGame";
 
 import Spinner from "../../../ui/spinner/Spinner";
+import Button from "../../../ui/button/Button.component";
+
 import {
   GameDetailsDescription,
   GameDetailsImage,
@@ -14,7 +16,6 @@ import {
   GameDetailsTitle,
   StyledGameDetails,
 } from "./GameDetails.styles";
-import Button from "../../../ui/button/Button.component";
 
 function GameDetails({ detailsActive }) {
   const { id } = useParams();

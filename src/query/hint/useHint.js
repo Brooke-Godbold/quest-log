@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getHints } from "../../../services/apiHints";
+import { getHints } from "../../services/apiHints";
 
 export function useHint(data) {
   const {

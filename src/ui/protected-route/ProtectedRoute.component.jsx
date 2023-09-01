@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 
 import { Navigate } from "react-router-dom";
-import { useUser } from "../../features/auth/useUser";
+
+import { useUser } from "../../query/auth/useUser";
+
 import Spinner from "../spinner/Spinner";
 
 function ProtectedRoute({ children }) {

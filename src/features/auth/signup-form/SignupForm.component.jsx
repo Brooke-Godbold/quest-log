@@ -1,5 +1,17 @@
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useProfile } from "../../../query/profile/useProfile";
+import { useSignup } from "../../../query/auth/useSignup";
+import { useAddProfile } from "../../../query/profile/useAddProfile";
+
 import Button from "../../../ui/button/Button.component";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import Notification from "../../../ui/notification/Notification.component";
+
 import {
   LoginFormErrorContainer,
   LoginFormInput,
@@ -12,17 +24,8 @@ import {
   SignupSuccessText,
   StyledSignupForm,
 } from "./SIgnupForm.styles";
-import { useEffect, useState } from "react";
-import { useUser } from "../useUser";
-import { useNavigate } from "react-router-dom";
-import { useProfile } from "./useProfile";
-import { useSignup } from "./useSignup";
-import { useAddProfile } from "./useAddProfile";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import TextCount from "../../../ui/text-count/TextCount.component";
 import { ProfileDetailsLabel } from "../../account/account-profile-details-section/AccountProfileDetailsSection.styles";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
 
 const USERNAME_MIN_LENGTH = 8;
 const USERNAME_MAX_LENGTH = 20;

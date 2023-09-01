@@ -3,8 +3,17 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+
+import { useLogin } from "../../../query/auth/useLogin";
+import { useConversations } from "../../../contexts/ConversationsContext";
+
+import { AiOutlineLogin } from "react-icons/ai";
+import { MdAppRegistration } from "react-icons/md";
 
 import Button from "../../../ui/button/Button.component";
+import Spinner from "../../../ui/spinner/Spinner";
+import Notification from "../../../ui/notification/Notification.component";
 
 import {
   LoginButtonsContainer,
@@ -16,16 +25,7 @@ import {
   StyledLoginForm,
 } from "./LoginForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-
-import { useLogin } from "./useLogin";
-import Spinner from "../../../ui/spinner/Spinner";
-
-import { AiOutlineLogin } from "react-icons/ai";
-import { MdAppRegistration } from "react-icons/md";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
-import { useConversations } from "../../../contexts/ConversationsContext";
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();

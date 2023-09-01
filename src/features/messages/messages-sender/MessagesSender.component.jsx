@@ -1,14 +1,17 @@
 import PropTypes from "prop-types";
+
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useConversations } from "../../../contexts/ConversationsContext";
+
+import { BsEnvelopeOpen, BsEnvelopePlusFill } from "react-icons/bs";
+
+import Spinner from "../../../ui/spinner/Spinner";
+
 import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
 import {
   SenderMessageDetails,
   StyledMessagesSender,
 } from "./MessagesSender.styles";
-
-import { BsEnvelopeOpen, BsEnvelopePlusFill } from "react-icons/bs";
-import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
-import Spinner from "../../../ui/spinner/Spinner";
-import { useConversations } from "../../../contexts/ConversationsContext";
 
 function MessagesSender({ senderId, messageCount, isUnread }) {
   const { profile } = useProfileByUser(senderId);

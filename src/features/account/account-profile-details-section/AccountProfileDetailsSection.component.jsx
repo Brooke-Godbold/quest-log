@@ -1,8 +1,21 @@
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
+import { useAllGames } from "../../../query/game/useAllGames";
+
+import { FaTwitch } from "react-icons/fa";
+import { GrYoutube } from "react-icons/gr";
+import { RiKickFill } from "react-icons/ri";
+
 import Spinner from "../../../ui/spinner/Spinner";
-import { LoginFormInput } from "../../auth/login-form/LoginForm.styles";
-import { useUser } from "../../auth/useUser";
-import { useProfileByUser } from "../account-layout/useProfileByUser";
+import CurrentlyPlayingRow from "../currently-playing-row/CurrentlyPlayingRow.component";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import Notification from "../../../ui/notification/Notification.component";
+
 import {
   AccountProfileBio,
   AccountSocialMediaContainer,
@@ -13,19 +26,10 @@ import {
   ProfileDetailsRow,
   StyledAccountProfileDetails,
 } from "./AccountProfileDetailsSection.styles";
+import { LoginFormInput } from "../../auth/login-form/LoginForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { useUpdateProfile } from "../useUpdateProfile";
-import { useAllGames } from "./useAllGames";
-import { useEffect, useState } from "react";
-import CurrentlyPlayingRow from "../currently-playing-row/CurrentlyPlayingRow.component";
-import TextCount from "../../../ui/text-count/TextCount.component";
-import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 
-import { FaTwitch } from "react-icons/fa";
-import { GrYoutube } from "react-icons/gr";
-import { RiKickFill } from "react-icons/ri";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
+import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 
 const USERNAME_MIN_LENGTH = 8;
 const USERNAME_MAX_LENGTH = 20;

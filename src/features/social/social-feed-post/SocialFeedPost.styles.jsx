@@ -1,6 +1,33 @@
 import { styled } from "styled-components";
 import { NavLink } from "react-router-dom";
 
+const QuoteBlock = styled.button`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  width: 50%;
+  margin: 2.4rem 1.2rem 1.2rem 1.2rem;
+  padding: 1.2rem;
+  border-radius: 5px;
+  border: none;
+
+  font-size: 1.4rem;
+  font-style: italic;
+
+  color: var(--color-brand-300);
+  background-color: var(--color-brand-600);
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 35em) {
+    width: 90%;
+    margin: 2.4rem 0rem 0rem 0rem;
+  }
+`;
+
 const StyledSocialFeedPost = styled.div`
   background-color: var(--color-brand-500);
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
@@ -16,6 +43,10 @@ const StyledSocialFeedPost = styled.div`
 
   &:hover {
     background-color: var(--color-brand-400);
+
+    & ${QuoteBlock} {
+      background-color: var(--color-brand-500);
+    }
   }
 `;
 
@@ -48,14 +79,24 @@ const PostButtonsContainer = styled.div`
 
   display: flex;
   gap: 1.6rem;
+  align-items: center;
+
+  & svg:first-child {
+    transform: scale(225%);
+    margin-right: 2.4rem;
+
+    border: 1px solid var(--color-brand-600);
+    border-radius: 50%;
+  }
 
   @media (max-width: 35em) {
     margin-top: 1.2rem;
     position: static;
-  }
-
-  @media (max-width: 35em) {
     justify-content: space-between;
+
+    & svg:first-child {
+      display: none;
+    }
   }
 `;
 
@@ -66,6 +107,11 @@ const RepliesCount = styled.p`
   font-size: 1.8rem;
   font-weight: 700;
   border-radius: 3px;
+
+  @media (max-width: 35em) {
+    font-size: 1.2rem;
+    padding: 0.6rem 1.4rem;
+  }
 `;
 
 const ReplyButton = styled.button`
@@ -108,4 +154,5 @@ export {
   PostButtonsContainer,
   DetailLink,
   RepliesCount,
+  QuoteBlock,
 };

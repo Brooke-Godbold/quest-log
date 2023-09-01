@@ -1,14 +1,17 @@
 import { useSearchParams } from "react-router-dom";
+
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useUser } from "../../../query/auth/useUser";
+import { useProfilesByValues } from "../../../query/profile/useProfilesByValues";
+
+import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
+
 import {
   AccountUserItem,
   AccountUserList,
   AccountUsersHeading,
   StyledAccountUserSection,
 } from "./AccountUserSection.styles";
-import { useProfileByUser } from "../account-layout/useProfileByUser";
-import { useUser } from "../../auth/useUser";
-import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
-import { useProfilesByValues } from "./useProfilesByValues";
 
 function AccountUserSection() {
   const [searchParams] = useSearchParams();

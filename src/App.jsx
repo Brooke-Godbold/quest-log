@@ -1,4 +1,8 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
@@ -19,15 +23,34 @@ import ResetPasswordSection from "./features/account/reset-password-section/Rese
 import SocialFeed from "./pages/social-feed/SocialFeed.page";
 import SocialPost from "./pages/social-post/SocialPost.page";
 import NotFound from "./pages/not-found/NotFound.page";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import Error from "./pages/error/Error.page";
 import Messages from "./pages/messages/Messages.component";
 import ProtectedRoute from "./ui/protected-route/ProtectedRoute.component";
 import { ConversationsProvider } from "./contexts/ConversationsContext";
 import AccountPrivacySection from "./features/account/account-privacy-section/AccountPrivacySection.component";
 import AccountUserSection from "./features/account/account-user-section/AccountUserSection.component";
+import Notification from "./ui/notification/Notification.component";
+import { LocationsProvider } from "./contexts/LocationsContext";
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      if (query.meta.errorMessage) {
+        toast.error((t) => (
+          <Notification toast={t} text={query.meta.errorMessage} />
+        ));
+      } else {
+        toast.error((t) => (
+          <Notification
+            toast={t}
+            text={`Oops! That wasn't supposed to happen: ${error.message}`}
+          />
+        ));
+      }
+    },
+  }),
+
   defaultOptions: {
     queries: {
       staleTime: 60 * 1000,
@@ -59,9 +82,11 @@ function App() {
         <Routes>
           <Route
             element={
-              <ConversationsProvider>
-                <AppLayout />
-              </ConversationsProvider>
+              <LocationsProvider>
+                <ConversationsProvider>
+                  <AppLayout />
+                </ConversationsProvider>
+              </LocationsProvider>
             }
           >
             <Route index element={<Navigate replace to="search" />} />

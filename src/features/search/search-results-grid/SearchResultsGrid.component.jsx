@@ -1,16 +1,16 @@
 import PropTypes from "prop-types";
 
+import SearchResultItem from "../search-result-item/SearchResultItem.component";
+import Spinner from "../../../ui/spinner/Spinner";
+
 import {
   NoResults,
   SearchResultsDivider,
   StyledSearchResultsGrid,
 } from "./SearchResultsGrid.styles";
 
-import SearchResultItem from "../search-result-item/SearchResultItem.component";
-import Spinner from "../../../ui/spinner/Spinner";
-
-import { useSearchGames } from "./useSearchGames";
-import { useProfilesByUsername } from "./useProfilesByUsername";
+import { useSearchGames } from "../../../query/game/useSearchGames";
+import { useProfilesByUsername } from "../../../query/profile/useProfilesByUsername";
 
 function SearchResultsGrid({ searchQuery }) {
   const {

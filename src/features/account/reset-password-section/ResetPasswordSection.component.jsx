@@ -1,4 +1,10 @@
 import { useForm } from "react-hook-form";
+
+import { useUpdatePassword } from "../../../query/auth/useUpdatePassword";
+
+import Button from "../../../ui/button/Button.component";
+import TextCount from "../../../ui/text-count/TextCount.component";
+
 import { LoginFormInput } from "../../auth/login-form/LoginForm.styles";
 import {
   ProfileDetailsErrorContainer,
@@ -7,16 +13,11 @@ import {
   StyledAccountProfileDetails,
 } from "../account-profile-details-section/AccountProfileDetailsSection.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { useUpdatePassword } from "./useUpdatePassword";
-import Button from "../../../ui/button/Button.component";
 import {
   ResetPasswordButtonContainer,
   ResetPasswordSuccessContainer,
 } from "./ResetPasswordSection.styles";
 import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
-import TextCount from "../../../ui/text-count/TextCount.component";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -34,19 +35,7 @@ function ResetPasswordSection() {
   const { updatePassword, isLoading, isError, isSuccess } = useUpdatePassword();
 
   function onChangePassword(data) {
-    updatePassword(data.password, {
-      onSuccess: () =>
-        toast((t) => (
-          <Notification toast={t} text="Successfully updated Password!" />
-        )),
-      onError: () =>
-        toast.error((t) => (
-          <Notification
-            toast={t}
-            text="Unable to update Password at this time"
-          />
-        )),
-    });
+    updatePassword(data.password);
     reset();
   }
 

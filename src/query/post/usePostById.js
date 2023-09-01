@@ -9,7 +9,6 @@ export function usePostById(id) {
   } = useQuery({
     queryKey: ["post", id],
     queryFn: () => getPostById(id),
-    retry: false,
   });
 
   return { isGettingPost, post, isError };

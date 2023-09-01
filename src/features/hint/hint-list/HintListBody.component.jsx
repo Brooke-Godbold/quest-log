@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { add, compareAsc, compareDesc } from "date-fns";
+
+import { useHint } from "../../../query/hint/useHint";
+import { useUser } from "../../../query/auth/useUser";
+import { useProfilesByUsername } from "../../../query/profile/useProfilesByUsername";
 
 import Spinner from "../../../ui/spinner/Spinner";
 import HintItem from "../hint-item/HintItem.component";
-import { HintList, HintListContainer, NoHints } from "./HintList.styles";
 
-import { useHint } from "./useHint";
-import { add, compareAsc, compareDesc } from "date-fns";
-import { useUser } from "../../auth/useUser";
-import { useProfilesByUsername } from "../../search/search-results-grid/useProfilesByUsername";
+import { HintList, HintListContainer, NoHints } from "./HintList.styles";
 
 function HintListBody() {
   const { user } = useUser();

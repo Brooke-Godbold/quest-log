@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteHint as deleteHintApi } from "../../../services/apiHints";
+import { deleteHint as deleteHintApi } from "../../services/apiHints";
 
 export function useDeleteHint() {
   const queryClient = useQueryClient();

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProfilesByValues } from "../../../services/apiProfile";
+import { getProfilesByValues } from "../../services/apiProfile";
 
 export function useProfilesByValues(queryData) {
   const {

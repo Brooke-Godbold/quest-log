@@ -1,6 +1,16 @@
 import PropTypes from "prop-types";
 
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
+
+import { useAddPost } from "../../../query/post/useAddPost";
+
 import Button from "../../../ui/button/Button.component";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import Notification from "../../../ui/notification/Notification.component";
+
 import {
   AddPostButtons,
   AddPostCancelButton,
@@ -11,19 +21,19 @@ import {
   AddPostTextSection,
   StyledAddPostForm,
 } from "./AddPostForm.styles";
-import { useForm } from "react-hook-form";
-import { useAddPost } from "./useAddPost";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import TextCount from "../../../ui/text-count/TextCount.component";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
-import { useEffect, useState } from "react";
 
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
 
-function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
+function AddPostForm({
+  gameData,
+  currentGames,
+  postId,
+  quoteId,
+  userId,
+  onCloseModal,
+}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -45,11 +55,14 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
       userId,
       ...(currentGames && { gameId: data.gameId }),
       ...(postId && { postId }),
+      ...(quoteId && { quoteId }),
     };
 
     addPost(newPost, {
       onSuccess: ({ id }) => {
         toast((t) => <Notification toast={t} text="Posted Successfully!" />);
+
+        onCloseModal?.();
 
         if (postId) {
           searchParams.set("post", postId);
@@ -69,10 +82,10 @@ function AddPostForm({ gameData, currentGames, postId, userId, onCloseModal }) {
   }
 
   useEffect(() => {
-    if (successfulPost) {
+    if (successfulPost || !quoteId) {
       navigate(`/social/post/${postId}?view=recent`, { replace: true });
     }
-  }, [successfulPost, navigate, postId]);
+  }, [successfulPost, navigate, postId, quoteId]);
 
   function onError(e) {
     console.log("ERROR: ", e);
@@ -152,6 +165,7 @@ AddPostForm.propTypes = {
   gameData: PropTypes.array,
   currentGames: PropTypes.array,
   postId: PropTypes.number,
+  quoteId: PropTypes.number,
   onCloseModal: PropTypes.func,
   userId: PropTypes.string.isRequired,
 };

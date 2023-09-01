@@ -1,4 +1,10 @@
 import PropTypes from "prop-types";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+
+import Spinner from "../../../ui/spinner/Spinner";
+
 import {
   AccountGridContainer,
   AccountSection,
@@ -8,9 +14,6 @@ import {
   AccountSectionNavLink,
   StyledAccountLayout,
 } from "./AccountLayout.styles";
-import { useUser } from "../../auth/useUser";
-import Spinner from "../../../ui/spinner/Spinner";
-import { useProfileByUser } from "./useProfileByUser";
 
 function AccountLayout({ children }) {
   const { user } = useUser();

@@ -2,15 +2,16 @@ import PropTypes from "prop-types";
 
 import { TbArrowBigUp, TbArrowBigDown } from "react-icons/tb";
 
+import { useUpdatePost } from "../../query/post/useUpdatePost";
+import { useUser } from "../../query/auth/useUser";
+import { useUpdateHint } from "../../query/hint/useUpdateHint";
+
 import {
   StyledVotes,
   VoteButton,
   VoteContainer,
   VoteCount,
 } from "./Votes.styles";
-import { useUpdatePost } from "../../features/social/useUpdatePost";
-import { useUser } from "../../features/auth/useUser";
-import { useUpdateHint } from "../../features/hint/hint-item/useUpdateHint";
 
 function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
   const { isUpdatingPost } = useUpdatePost();

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllGames } from "../../../services/apiGames";
+import { getAllGames } from "../../services/apiGames";
 
 export function useAllGames() {
   const {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addHint as addHintApi } from "../../../services/apiHints";
+import { addHint as addHintApi } from "../../services/apiHints";
 
 export function useAddHint() {
   const queryClient = useQueryClient();

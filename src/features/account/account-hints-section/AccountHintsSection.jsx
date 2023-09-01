@@ -1,13 +1,16 @@
+import { useSearchParams } from "react-router-dom";
+
+import { useHint } from "../../../query/hint/useHint";
+import { useUser } from "../../../query/auth/useUser";
+import { useHintsByVotes } from "../../../query/hint/useHintsByVotes";
+
+import Spinner from "../../../ui/spinner/Spinner";
 import HintItem from "../../hint/hint-item/HintItem.component";
+
 import {
   AccountHintsList,
   StyledAccountHints,
 } from "./AccountHintsSection.styles";
-import { useHint } from "../../hint/hint-list/useHint";
-import Spinner from "../../../ui/spinner/Spinner";
-import { useUser } from "../../auth/useUser";
-import { useSearchParams } from "react-router-dom";
-import { useHintsByVotes } from "./useHintsByVotes";
 
 function AccountHintsSection() {
   const [searchParams] = useSearchParams();

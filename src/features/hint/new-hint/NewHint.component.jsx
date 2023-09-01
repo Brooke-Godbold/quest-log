@@ -1,5 +1,16 @@
 import PropTypes from "prop-types";
+
 import { useParams } from "react-router-dom";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+
+import { useAddHint } from "../../../query/hint/useAddHint";
+
+import TagButton from "../tag-button/TagButton.component";
+import Button from "../../../ui/button/Button.component";
+import TextCount from "../../../ui/text-count/TextCount.component";
+import Notification from "../../../ui/notification/Notification.component";
 
 import {
   NewHintBody,
@@ -9,16 +20,9 @@ import {
   StyledNewHint,
 } from "./NewHint.styles";
 import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
-import { useAddHint } from "./useAddHint";
-import TagButton from "../tag-button/TagButton.component";
-import { useRef } from "react";
-import Button from "../../../ui/button/Button.component";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { useForm } from "react-hook-form";
-import TextCount from "../../../ui/text-count/TextCount.component";
+
 import { TAGS } from "../../../data/consts";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
 
 const MIN_LENGTH = 25;
 const MAX_LENGTH = 450;

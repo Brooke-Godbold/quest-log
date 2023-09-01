@@ -1,4 +1,19 @@
 import PropTypes from "prop-types";
+
+import { useParams } from "react-router-dom";
+
+import { HiTrash } from "react-icons/hi";
+
+import Modal from "../../../ui/modal/Modal.component";
+import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
+import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
+import Votes from "../../../ui/votes/Votes.component";
+import GameTag from "../../../ui/game-tag/GameTag.component";
+
+import { useDeleteHint } from "../../../query/hint/useDeleteHint";
+import { useUpdateHint } from "../../../query/hint/useUpdateHint";
+import { useAllGames } from "../../../query/game/useAllGames";
+
 import {
   HintActionsContainer,
   HintDeleteButton,
@@ -8,18 +23,7 @@ import {
   NavLinkContainer,
   StyledHintItem,
 } from "./HintItem.styles";
-
-import { HiTrash } from "react-icons/hi";
-import Modal from "../../../ui/modal/Modal.component";
-import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
 import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
-import { useDeleteHint } from "./useDeleteHint";
-import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
-import Votes from "../../../ui/votes/Votes.component";
-import { useUpdateHint } from "./useUpdateHint";
-import GameTag from "../../../ui/game-tag/GameTag.component";
-import { useParams } from "react-router-dom";
-import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
 
 function HintItem({ hint, id, user }) {
   const { userId } = useParams();

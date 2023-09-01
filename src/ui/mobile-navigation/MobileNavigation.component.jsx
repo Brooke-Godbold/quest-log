@@ -1,4 +1,12 @@
+import { useState } from "react";
+
 import { HiMenu } from "react-icons/hi";
+
+import { useUser } from "../../query/auth/useUser";
+import { useLogout } from "../../query/auth/useLogout";
+import { useMessages } from "../../query/message/useMessages";
+import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
+
 import {
   MobileMenuButton,
   MobileNavLink,
@@ -7,11 +15,6 @@ import {
   StyledMobileNavigation,
   UnreadMessages,
 } from "./MobileNavigation.styles";
-import { useUser } from "../../features/auth/useUser";
-import { useState } from "react";
-import { useLogout } from "../../features/auth/useLogout";
-import { useMessages } from "../../features/messages/useMessages";
-import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
 
 function MobileNavigation() {
   const [isMobileNavActive, setIsMobileNavActive] = useState(false);

@@ -1,10 +1,14 @@
-import { useUser } from "../../auth/useUser";
-import MessagesSender from "../messages-sender/MessagesSender.component";
-import { useMessages } from "../useMessages";
-import { StyledMessagesList } from "./MessagesList.styles";
 import { useEffect, useState } from "react";
 import { compareDesc } from "date-fns";
+
 import { useConversations } from "../../../contexts/ConversationsContext";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useMessages } from "../../../query/message/useMessages";
+
+import MessagesSender from "../messages-sender/MessagesSender.component";
+
+import { StyledMessagesList } from "./MessagesList.styles";
 
 function MessagesList() {
   const { user } = useUser();

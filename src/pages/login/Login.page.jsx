@@ -1,7 +1,10 @@
-import { StyledLogin } from "./Login.styles";
-import LoginContainer from "../../features/auth/login-container/LoginContainer.component";
-import { useUser } from "../../features/auth/useUser";
 import { useNavigate } from "react-router-dom";
+
+import { useUser } from "../../query/auth/useUser";
+
+import LoginContainer from "../../features/auth/login-container/LoginContainer.component";
+
+import { StyledLogin } from "./Login.styles";
 
 function Login() {
   const { isAuthenticated, user } = useUser();

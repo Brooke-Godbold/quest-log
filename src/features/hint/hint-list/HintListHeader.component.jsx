@@ -1,7 +1,17 @@
-import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
+import { useSearchParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useMediaQuery } from "@uidotdev/usehooks";
+
+import { HiX } from "react-icons/hi";
+
+import { useUser } from "../../../query/auth/useUser";
+
 import Button from "../../../ui/button/Button.component";
 import ToggleButton from "../../../ui/toggle-button/ToggleButton.component";
 import NewHint from "../new-hint/NewHint.component";
+import Modal from "../../../ui/modal/Modal.component";
+
+import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
 import {
   ButtonContainer,
   HintHeaderFilterSection,
@@ -10,14 +20,9 @@ import {
   UserSearch,
   UserSearchInput,
 } from "./HintList.styles";
-import { useSearchParams } from "react-router-dom";
-import { useUser } from "../../auth/useUser";
-import { useForm } from "react-hook-form";
-import { HiX } from "react-icons/hi";
-import Modal from "../../../ui/modal/Modal.component";
 import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
+
 import { TAGS } from "../../../data/consts";
-import { useMediaQuery } from "@uidotdev/usehooks";
 
 function HintListHeader() {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,6 +1,15 @@
+import { useEffect, useRef, useState } from "react";
+
+import { useConversations } from "../../../contexts/ConversationsContext";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useMessages } from "../../../query/message/useMessages";
+import { useUpdateMessage } from "../../../query/message/useUpdateMessage";
+
 import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
 import MessageItem from "../message-item/MessageItem.component";
 import NewMessage from "../new-message/NewMessage.component";
+
 import {
   ConversationBox,
   ConversationBoxContainer,
@@ -8,11 +17,6 @@ import {
   ConversationHeader,
   StyledMessagesContainer,
 } from "./MessagesContainer.styles";
-import { useUser } from "../../auth/useUser";
-import { useMessages } from "../useMessages";
-import { useEffect, useRef, useState } from "react";
-import { useUpdateMessage } from "../useUpdateMessage";
-import { useConversations } from "../../../contexts/ConversationsContext";
 
 function MessagesContainer() {
   const { user } = useUser();

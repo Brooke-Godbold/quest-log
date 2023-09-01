@@ -1,4 +1,11 @@
 import PropTypes from "prop-types";
+
+import { useForm } from "react-hook-form";
+
+import { useResetPasswordRequest } from "../../../query/auth/useResetPasswordRequest";
+
+import Button from "../../../ui/button/Button.component";
+
 import {
   EmailInputRow,
   PasswordResetResultContainer,
@@ -9,9 +16,6 @@ import {
   LoginHeading,
   LoginModalButton,
 } from "../login-form/LoginForm.styles";
-import { useForm } from "react-hook-form";
-import Button from "../../../ui/button/Button.component";
-import { useResetPasswordRequest } from "./useResetPasswordRequest";
 import { FormError } from "../../../ui/form-error/FormError.styles";
 import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
 

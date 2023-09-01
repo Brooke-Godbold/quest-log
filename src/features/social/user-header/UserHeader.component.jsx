@@ -1,9 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Spinner from "../../../ui/spinner/Spinner";
-import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
-import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
-
 import { toast } from "react-hot-toast";
+
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useAllGames } from "../../../query/game/useAllGames";
+import { useUser } from "../../../query/auth/useUser";
+import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
+import { useConversations } from "../../../contexts/ConversationsContext";
+import { useMessages } from "../../../query/message/useMessages";
+import { useIsBlocked } from "../../../hooks/useIsBlocked";
+import { useIsFollowing } from "../../../hooks/useIsFollowing";
 
 import { HiPlus } from "react-icons/hi";
 import { HiCheck } from "react-icons/hi";
@@ -12,6 +17,12 @@ import { GrYoutube } from "react-icons/gr";
 import { RiKickFill } from "react-icons/ri";
 import { ImBlocked } from "react-icons/im";
 import { BiMessageDetail } from "react-icons/bi";
+
+import Spinner from "../../../ui/spinner/Spinner";
+import Modal from "../../../ui/modal/Modal.component";
+import AddPostForm from "../add-post-form/AddPostForm.component";
+import Notification from "../../../ui/notification/Notification.component";
+import DirectMessage from "../direct-message/DirectMessage.component";
 
 import {
   AddNewPostButton,
@@ -31,17 +42,8 @@ import {
   UserName,
   UserProfile,
 } from "./UserHeader.styles";
-import { useUser } from "../../auth/useUser";
-import Modal from "../../../ui/modal/Modal.component";
-import AddPostForm from "../add-post-form/AddPostForm.component";
-import { useUpdateProfile } from "../../account/useUpdateProfile";
+
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
-import Notification from "../../../ui/notification/Notification.component";
-import { useConversations } from "../../../contexts/ConversationsContext";
-import { useMessages } from "../../messages/useMessages";
-import DirectMessage from "../direct-message/DirectMessage.component";
-import { useIsBlocked } from "../../../hooks/useIsBlocked";
-import { useIsFollowing } from "../../../hooks/useIsFollowing";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();

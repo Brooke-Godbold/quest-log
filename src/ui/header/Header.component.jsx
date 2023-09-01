@@ -1,8 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { useLogout } from "../../features/auth/useLogout";
-import { useUser } from "../../features/auth/useUser";
+import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
+
+import { useLogout } from "../../query/auth/useLogout";
+import { useUser } from "../../query/auth/useUser";
+import { useMessages } from "../../query/message/useMessages";
+import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
+
+import LoginModal from "../login-modal/LoginModal.component";
 
 import {
   HeaderButton,
@@ -14,10 +20,6 @@ import {
   StyledHeader,
   UnreadMessages,
 } from "./Header.styles";
-import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
-import LoginModal from "../login-modal/LoginModal.component";
-import { useMessages } from "../../features/messages/useMessages";
-import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
 
 function Header() {
   const { isGettingUser, isAuthenticated, user } = useUser();

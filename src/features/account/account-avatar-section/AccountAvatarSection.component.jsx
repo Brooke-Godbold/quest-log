@@ -1,6 +1,16 @@
 import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+
+import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
+
+import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
+import { useUser } from "../../../query/auth/useUser";
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+
+import Spinner from "../../../ui/spinner/Spinner";
+import Notification from "../../../ui/notification/Notification.component";
 
 import {
   Avatar,
@@ -10,13 +20,6 @@ import {
   UsernameLabel,
 } from "./AccountAvatarSection.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { useUpdateProfile } from "../useUpdateProfile";
-import { useUser } from "../../auth/useUser";
-import { useProfileByUser } from "../account-layout/useProfileByUser";
-import Spinner from "../../../ui/spinner/Spinner";
-import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
 
 const MAX_FILE_SIZE_IN_BINARY_BYTES = 5242880;
 

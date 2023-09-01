@@ -33,6 +33,9 @@ export async function getPostById(id) {
 
   if (error) throw new Error(error.message);
 
+  console.log("ID: ", id);
+  console.log("DATA: ", data);
+
   return data;
 }
 

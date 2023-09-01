@@ -1,20 +1,25 @@
 import PropTypes from "prop-types";
+
 import { useForm } from "react-hook-form";
+import { fromUnixTime } from "date-fns";
+import { toast } from "react-hot-toast";
+
+import { useEffect } from "react";
+
+import { useUser } from "../../../query/auth/useUser";
+import { useUpdateMessage } from "../../../query/message/useUpdateMessage";
+import { useConversations } from "../../../contexts/ConversationsContext";
+import { useIsBlocked } from "../../../hooks/useIsBlocked";
+
+import { IoSend } from "react-icons/io5";
+
+import Notification from "../../../ui/notification/Notification.component";
+
 import {
   NewMessageTextArea,
   SendMessageButton,
   StyledNewMessage,
 } from "./NewMessage.styles";
-
-import { IoSend } from "react-icons/io5";
-import { fromUnixTime } from "date-fns";
-import { useUser } from "../../auth/useUser";
-import { useUpdateMessage } from "../useUpdateMessage";
-import { useEffect } from "react";
-import { useConversations } from "../../../contexts/ConversationsContext";
-import { useIsBlocked } from "../../../hooks/useIsBlocked";
-import { toast } from "react-hot-toast";
-import Notification from "../../../ui/notification/Notification.component";
 
 function NewMessage({ conversation }) {
   const { register, handleSubmit, reset } = useForm();

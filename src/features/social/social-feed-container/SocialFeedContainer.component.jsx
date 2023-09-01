@@ -1,26 +1,16 @@
-import { useParams } from "react-router-dom";
-
-import SocialFeedPost from "../social-feed-post/SocialFeedPost.component";
-import {
-  SocialFeedButton,
-  SocialFeedButtons,
-  SocialFeedContent,
-  StyledSocialFeedContainer,
-} from "./SocialFeedContainer.styles";
-import { useSearchParams } from "react-router-dom";
-import { usePostByUser } from "../usePostByUser";
-import { useHint } from "../../hint/hint-list/useHint";
-import Spinner from "../../../ui/spinner/Spinner";
-import HintItem from "../../hint/hint-item/HintItem.component";
-import { useUser } from "../../auth/useUser";
-import { useAllGames } from "../../account/account-profile-details-section/useAllGames";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { compareDesc } from "date-fns";
-import { useReplyByPostId } from "../useReplyByPostId";
-import { usePostById } from "../usePostById";
-import { useAllPosts } from "../useAllPosts";
-import { useProfileByUser } from "../../account/account-layout/useProfileByUser";
-import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
+
+import { usePostByUser } from "../../../query/post/usePostByUser";
+import { useHint } from "../../../query/hint/useHint";
+import { useUser } from "../../../query/auth/useUser";
+import { useAllGames } from "../../../query/game/useAllGames";
+import { useReplyByPostId } from "../../../query/post/useReplyByPostId";
+import { usePostById } from "../../../query/post/usePostById";
+import { useAllPosts } from "../../../query/post/useAllPosts";
+import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useIsBlocked } from "../../../hooks/useIsBlocked";
 
 import { BiTime } from "react-icons/bi";
 import {
@@ -30,9 +20,20 @@ import {
   BsPersonFillCheck,
 } from "react-icons/bs";
 import { TbWorldSearch } from "react-icons/tb";
-import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+
+import SocialFeedPost from "../social-feed-post/SocialFeedPost.component";
+import Spinner from "../../../ui/spinner/Spinner";
+import HintItem from "../../hint/hint-item/HintItem.component";
 import Blocked from "../blocked/Blocked.component";
-import { useIsBlocked } from "../../../hooks/useIsBlocked";
+
+import {
+  SocialFeedButton,
+  SocialFeedButtons,
+  SocialFeedContent,
+  StyledSocialFeedContainer,
+} from "./SocialFeedContainer.styles";
+import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
+import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
 
 function SocialFeedContainer() {
   const { userId, postId } = useParams();
@@ -328,6 +329,10 @@ function SocialFeedContainer() {
                   post={post}
                   gameData={gameData}
                   parentPostId={post.postId}
+                  quotedPost={
+                    post.quoteId &&
+                    sortedPosts.filter((reply) => reply.id === post.quoteId)[0]
+                  }
                 />
               ))
             ) : searchParams.get("view") === "hints" ? (

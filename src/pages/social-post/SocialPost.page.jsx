@@ -1,12 +1,15 @@
 import { useParams } from "react-router-dom";
-import SocialFeedPost from "../../features/social/social-feed-post/SocialFeedPost.component";
-import { StyledSocialPost } from "./SocialPost.styles";
-import { useAllGames } from "../../features/account/account-profile-details-section/useAllGames";
-import Spinner from "../../ui/spinner/Spinner";
-import { usePostById } from "../../features/social/usePostById";
-import SocialFeedContainer from "../../features/social/social-feed-container/SocialFeedContainer.component";
-import { useUser } from "../../features/auth/useUser";
+
+import { useAllGames } from "../../query/game/useAllGames";
+import { usePostById } from "../../query/post/usePostById";
+import { useUser } from "../../query/auth/useUser";
 import { useIsBlocked } from "../../hooks/useIsBlocked";
+
+import SocialFeedPost from "../../features/social/social-feed-post/SocialFeedPost.component";
+import SocialFeedContainer from "../../features/social/social-feed-container/SocialFeedContainer.component";
+import Spinner from "../../ui/spinner/Spinner";
+
+import { StyledSocialPost } from "./SocialPost.styles";
 
 function SocialPost() {
   const { postId } = useParams();

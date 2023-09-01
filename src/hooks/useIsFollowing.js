@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useProfileByUser } from "../features/account/account-layout/useProfileByUser";
+
+import { useProfileByUser } from "../query/profile/useProfileByUser";
 
 export function useIsFollowing(userIdA, userIdB) {
   const [isFollowing, setIsFollowing] = useState(false);
