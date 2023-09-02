@@ -13,6 +13,8 @@ const GlobalStyles = createGlobalStyle`
   --color-brand-700: #5e5445;
   --color-brand-800: #171511;
 
+  --color-brand-700-transparent: rgba(94, 84, 69, 0.5);
+
   /* Brown */
   --color-brown-500: #502419;
   --color-brown-600: #401d14;
@@ -66,6 +68,8 @@ const GlobalStyles = createGlobalStyle`
   /* For dark mode */
   --image-grayscale: 0;
   --image-opacity: 100%;
+
+  --brand-image-url: "https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/brand/logo.png"
 }
 
 *,
@@ -149,6 +153,10 @@ img {
 div,
 p {
   cursor: default;
+}
+
+select {
+  cursor: pointer;
 }
 `;
 

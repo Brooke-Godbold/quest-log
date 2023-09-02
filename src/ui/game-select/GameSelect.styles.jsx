@@ -12,8 +12,14 @@ const GameSelect = styled.select`
 
   border-radius: 9px;
 
+  transition: all 0.3s;
+
   & option {
     text-align: center;
+  }
+
+  &:hover {
+    background-color: var(--color-brand-800);
   }
 
   @media (max-width: 120em) {

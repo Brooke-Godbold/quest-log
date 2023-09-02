@@ -15,7 +15,15 @@ const StyledSocialFeedContainer = styled.div`
 `;
 
 const SocialFeedContent = styled.div`
+  background: url("https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/brand/logo.png")
+    var(--color-brand-700-transparent);
+  background-blend-mode: multiply;
+  background-origin: border-box;
+  background-position: center;
+  background-repeat: no-repeat;
+
   background-color: var(--color-brand-700);
+
   padding: 1.6rem;
   border-radius: 7px;
 
@@ -57,6 +65,10 @@ const SocialFeedButton = styled.button`
   border-top-right-radius: 9px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+
+  & div {
+    cursor: pointer;
+  }
 `;
 
 export {

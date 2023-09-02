@@ -85,12 +85,12 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
         )}`}</PostCreatedTime>
       </PostDetails>
       <PostButtonsContainer>
+        {replies && replies.length > 20 && <AiFillFire />}
+        {replies && replies.length > 0 && (
+          <RepliesCount>{`${replies.length} replies!`}</RepliesCount>
+        )}
         {isAuthenticated && (
           <>
-            {replies && replies.length > 20 && <AiFillFire />}
-            {replies && replies.length > 0 && (
-              <RepliesCount>{`${replies.length} replies!`}</RepliesCount>
-            )}
             <Modal>
               <Modal.Open opens="reply">
                 <ReplyButton>

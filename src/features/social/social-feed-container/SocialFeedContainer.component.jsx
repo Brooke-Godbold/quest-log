@@ -256,7 +256,7 @@ function SocialFeedContainer() {
                   onChange={setGameFilter}
                 >
                   <option key={"none"} value={-1}>
-                    None
+                    All
                   </option>
                   {gameData?.map((game) => (
                     <option key={game.id} value={game.id}>

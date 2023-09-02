@@ -20,12 +20,10 @@ import { BiMessageDetail } from "react-icons/bi";
 
 import Spinner from "../../../ui/spinner/Spinner";
 import Modal from "../../../ui/modal/Modal.component";
-import AddPostForm from "../add-post-form/AddPostForm.component";
 import Notification from "../../../ui/notification/Notification.component";
 import DirectMessage from "../direct-message/DirectMessage.component";
 
 import {
-  AddNewPostButton,
   CurrentlyPlaying,
   CurrentlyPlayingContainer,
   ActionButton,
@@ -45,6 +43,7 @@ import {
 } from "./UserHeader.styles";
 
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
+import AddPostButton from "../add-post-button/AddPostButton.component";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
@@ -294,24 +293,7 @@ function UserHeader() {
               </CurrentlyPlayingContainer>
             )}
           </UserProfile>
-          {isAuthenticated &&
-            user &&
-            user.id === userId &&
-            gameData &&
-            viewedProfile && (
-              <Modal>
-                <Modal.Open opens="addPost">
-                  <AddNewPostButton>Add New Post</AddNewPostButton>
-                </Modal.Open>
-                <Modal.Window name="addPost">
-                  <AddPostForm
-                    gameData={gameData}
-                    currentGames={viewedProfile.currentGames}
-                    userId={user.id}
-                  />
-                </Modal.Window>
-              </Modal>
-            )}
+          <AddPostButton />
         </>
       )}
     </StyledUserHeader>

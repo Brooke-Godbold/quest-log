@@ -10,6 +10,8 @@ const StyledMessagesContainer = styled.div`
 `;
 
 const ConversationHeader = styled.div`
+  display: flex;
+
   width: 100%;
   height: 15%;
   background-color: var(--color-brand-400);
