@@ -6,6 +6,7 @@ import { useUser } from "../../../query/auth/useUser";
 import { useProfileByUser } from "../../../query/profile/useProfileByUser";
 import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
 import { useAllGames } from "../../../query/game/useAllGames";
+import { useSearchGames } from "../../../query/game/useSearchGames";
 
 import { FaTwitch } from "react-icons/fa";
 import { GrYoutube } from "react-icons/gr";
@@ -26,8 +27,8 @@ import {
   ProfileDetailsRow,
   StyledAccountProfileDetails,
 } from "./AccountProfileDetailsSection.styles";
-import { LoginFormInput } from "../../auth/login-form/LoginForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
+import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
 
@@ -45,6 +46,9 @@ function AccountProfileDetailsSection() {
   const [availableGames, setAvailableGames] = useState([]);
   const [currentlyPlaying, setCurrentlyPlaying] = useState([]);
 
+  const [gameQuery, setGameQuery] = useState(null);
+  const { gameData: gameDataList } = useSearchGames(gameQuery);
+
   const {
     updateProfile,
     isLoading: isUpdatingProfile,
@@ -58,8 +62,9 @@ function AccountProfileDetailsSection() {
     handleSubmit: handleSubmitProfile,
     watch,
     formState: { errors },
+    setValue,
   } = useForm({ mode: "onBlur" });
-  const watchUsername = watch("username", "");
+  const watchDisplayName = watch("displayName", "");
   const watchBio = watch("bio", "");
 
   const {
@@ -69,7 +74,7 @@ function AccountProfileDetailsSection() {
 
   function onSubmitProfile(data) {
     const newProfileData = {
-      username: data.username,
+      displayName: data.displayName,
       bio: data.bio,
       twitch: data.twitch?.length > 0 ? data.twitch : null,
       youtube: data.twitch?.length > 0 ? data.youtube : null,
@@ -78,7 +83,7 @@ function AccountProfileDetailsSection() {
 
     if (
       !profile ||
-      (newProfileData.username === profile.username &&
+      (newProfileData.displayName === profile.displayName &&
         newProfileData.bio === profile.bio &&
         newProfileData.twitch === profile.twitch &&
         newProfileData.youtube === profile.youtube &&
@@ -91,10 +96,12 @@ function AccountProfileDetailsSection() {
       {
         onSuccess: () =>
           toast((t) => <Notification toast={t} text="Updated Profile!" />),
-        onError: () =>
+        onError: () => {
           toast.error((t) => (
             <Notification toast={t} text="Unable to update Profile right now" />
-          )),
+          ));
+          setValue("displayName", profile.displayName);
+        },
       }
     );
   }
@@ -112,6 +119,12 @@ function AccountProfileDetailsSection() {
         return gameData.filter((game) => game.name === data[key])[0].id;
       })
       .filter((game) => game);
+
+    if (
+      profile.currentGames.every((item) => currentGames.includes(item)) &&
+      currentGames.every((item) => profile.currentGames.includes(item))
+    )
+      return;
 
     updateProfile(
       {
@@ -133,15 +146,20 @@ function AccountProfileDetailsSection() {
 
   useEffect(
     function () {
-      if (!gameData) return;
+      if (!gameDataList) return;
 
-      const games = gameData.reduce((acc, cur) => [...acc, cur.name], []);
+      if (gameQuery?.length < 3) {
+        setAvailableGames([]);
+        return;
+      }
+
+      const games = gameDataList.reduce((acc, cur) => [...acc, cur.name], []);
 
       setAvailableGames(games);
 
       if (currentlyPlaying?.length === 0) addNewCurrentlyPlaying();
     },
-    [gameData, currentlyPlaying]
+    [gameDataList, currentlyPlaying, gameQuery]
   );
 
   useEffect(
@@ -186,21 +204,21 @@ function AccountProfileDetailsSection() {
         onBlur={handleSubmitProfile(onSubmitProfile, onProfileError)}
       >
         <ProfileDetailsRow>
-          <ProfileDetailsLabel>Username</ProfileDetailsLabel>
-          <LoginFormInput
-            id="username"
+          <ProfileDetailsLabel>Display Name</ProfileDetailsLabel>
+          <FormInput
+            id="displayName"
             type="text"
-            {...registerProfile("username", {
+            {...registerProfile("displayName", {
               required: true,
               minLength: USERNAME_MIN_LENGTH,
               maxLength: USERNAME_MAX_LENGTH,
               validate: (value) => !value.includes(" "),
             })}
-            defaultValue={profile.username}
+            defaultValue={profile.displayName}
             disabled={isLoading}
-          ></LoginFormInput>
+          ></FormInput>
           <TextCount
-            value={watchUsername}
+            value={watchDisplayName}
             minLength={USERNAME_MIN_LENGTH}
             maxLength={USERNAME_MAX_LENGTH}
           />
@@ -249,6 +267,12 @@ function AccountProfileDetailsSection() {
           <ProfileDetailsRow>
             <ProfileDetailsLabel>Currently Playing</ProfileDetailsLabel>
             <CurrentlyPlayingContainer>
+              <FormInput
+                list="games"
+                id="currentlyPlaying"
+                onChange={(e) => setGameQuery(e.target.value)}
+                placeholder="playing something new?"
+              />
               {currentlyPlaying.length > 0
                 ? currentlyPlaying.map((gameId, index) => (
                     <CurrentlyPlayingRow
@@ -281,7 +305,7 @@ function AccountProfileDetailsSection() {
             <AccountSocialMediaInputRow>
               <label>Twitch</label>
               <p>{`${twitchUrl}`}</p>
-              <LoginFormInput
+              <FormInput
                 id="twitch"
                 type="text"
                 {...registerProfile("twitch", {
@@ -290,14 +314,14 @@ function AccountProfileDetailsSection() {
                 defaultValue={profile.twitch || ""}
                 disabled={isLoading}
                 placeholder="myTwitchUser"
-              ></LoginFormInput>
+              ></FormInput>
               <FaTwitch />
             </AccountSocialMediaInputRow>
 
             <AccountSocialMediaInputRow>
               <label>YouTube</label>
               <p>{`${youtubeUrl}`}</p>
-              <LoginFormInput
+              <FormInput
                 id="youtube"
                 type="text"
                 {...registerProfile("youtube", {
@@ -306,14 +330,14 @@ function AccountProfileDetailsSection() {
                 defaultValue={profile.youtube || ""}
                 disabled={isLoading}
                 placeholder="myYoutubeChannel"
-              ></LoginFormInput>
+              ></FormInput>
               <GrYoutube />
             </AccountSocialMediaInputRow>
 
             <AccountSocialMediaInputRow>
               <label>Kick</label>
               <p>{`${kickUrl}`}</p>
-              <LoginFormInput
+              <FormInput
                 id="kick"
                 type="text"
                 {...registerProfile("kick", {
@@ -322,7 +346,7 @@ function AccountProfileDetailsSection() {
                 defaultValue={profile.kick || ""}
                 disabled={isLoading}
                 placeholder="myKickUser"
-              ></LoginFormInput>
+              ></FormInput>
               <RiKickFill />
             </AccountSocialMediaInputRow>
           </AccountSocialMediaContainer>

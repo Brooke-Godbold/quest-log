@@ -20,9 +20,16 @@ import {
   SendMessageButton,
   StyledNewMessage,
 } from "./NewMessage.styles";
+import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
 
 function NewMessage({ conversation }) {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setFocus,
+    formState: { isDirty },
+  } = useForm();
   const { user } = useUser();
 
   const { updateMessages, isUpdatingMessage } = useUpdateMessage(user?.id);
@@ -46,10 +53,7 @@ function NewMessage({ conversation }) {
 
     if (!user) return;
 
-    const spaceFilteredContent = data.message
-      .replace(/(\r\n|\n|\r|\s)/gm, "", "")
-      .replace(" ", "");
-    if (spaceFilteredContent.length === 0) {
+    if (filterWhiteSpace(data.message).length === 0) {
       reset();
       return;
     }
@@ -79,6 +83,10 @@ function NewMessage({ conversation }) {
     },
     [conversation, reset]
   );
+
+  useEffect(() => {
+    if (!isDirty) setFocus("message");
+  }, [isDirty, setFocus]);
 
   return (
     <StyledNewMessage onSubmit={handleSubmit(onSendMessage)}>

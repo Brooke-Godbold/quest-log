@@ -2,12 +2,16 @@ import { NavLink } from "react-router-dom";
 import { styled } from "styled-components";
 
 const StyledAvatarNavLink = styled(NavLink)`
-  display: flex;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: 1.2rem;
+
   margin-bottom: 1rem;
   align-self: flex-start;
 
   & img,
+  & h5,
   & h4 {
     transition: all 0.3s;
   }
@@ -18,6 +22,7 @@ const StyledAvatarNavLink = styled(NavLink)`
       box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
     }
 
+    & h5,
     & h4 {
       transform: scale(110%);
     }
@@ -25,6 +30,8 @@ const StyledAvatarNavLink = styled(NavLink)`
 `;
 
 const UserAvatar = styled.img`
+  grid-row: 1 / -1;
+
   height: 6.5rem;
   aspect-ratio: 1 / 1;
   object-fit: cover;
@@ -34,7 +41,12 @@ const UserAvatar = styled.img`
 
 const UserName = styled.h4`
   margin-top: 0.5rem;
-  align-self: flex-start;
+  align-self: start;
 `;
 
-export { StyledAvatarNavLink, UserAvatar, UserName };
+const DisplayName = styled.h5`
+  font-size: 1.2rem;
+  align-self: start;
+`;
+
+export { StyledAvatarNavLink, UserAvatar, UserName, DisplayName };

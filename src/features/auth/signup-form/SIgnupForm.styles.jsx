@@ -73,6 +73,13 @@ const SignupSuccessContainer = styled.div`
 
 const SignupSuccessText = styled.p``;
 
+const CurrentlyPlayingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+`;
+
 export {
   StyledSignupForm,
   SignupHeading,
@@ -80,4 +87,5 @@ export {
   SignupSuccessText,
   SignUpGridItem,
   SignUpGridContainer,
+  CurrentlyPlayingContainer,
 };

@@ -41,6 +41,7 @@ import {
   UserMain,
   UserName,
   UserProfile,
+  DisplayName,
 } from "./UserHeader.styles";
 
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
@@ -167,7 +168,10 @@ function UserHeader() {
           <UserProfile>
             <UserMain>
               <UserAvatar src={viewedProfile.avatarUrl} />
-              <UserName>{viewedProfile.username}</UserName>
+              <UserName>{viewedProfile.displayName}</UserName>
+              {viewedProfile.username !== viewedProfile.displayName && (
+                <DisplayName>{`#${viewedProfile.username}`}</DisplayName>
+              )}
               {isAuthenticated &&
                 user &&
                 user.id !== userId &&

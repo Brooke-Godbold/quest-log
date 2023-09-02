@@ -5,7 +5,6 @@ import { useUpdatePassword } from "../../../query/auth/useUpdatePassword";
 import Button from "../../../ui/button/Button.component";
 import TextCount from "../../../ui/text-count/TextCount.component";
 
-import { LoginFormInput } from "../../auth/login-form/LoginForm.styles";
 import {
   ProfileDetailsErrorContainer,
   ProfileDetailsLabel,
@@ -18,6 +17,7 @@ import {
   ResetPasswordSuccessContainer,
 } from "./ResetPasswordSection.styles";
 import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
+import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -43,7 +43,7 @@ function ResetPasswordSection() {
     <StyledAccountProfileDetails onSubmit={handleSubmit(onChangePassword)}>
       <ProfileDetailsRow>
         <ProfileDetailsLabel>New Password</ProfileDetailsLabel>
-        <LoginFormInput
+        <FormInput
           type="password"
           id="password"
           {...register("password", {
@@ -52,7 +52,7 @@ function ResetPasswordSection() {
             validate: (value) => !value.includes(" "),
           })}
           disabled={isLoading}
-        ></LoginFormInput>
+        />
         <TextCount value={watchPassword} minLength={PASSWORD_MIN_LENGTH} />
         <ProfileDetailsErrorContainer>
           {errors.password ? (
@@ -69,7 +69,7 @@ function ResetPasswordSection() {
 
       <ProfileDetailsRow>
         <ProfileDetailsLabel>Confirm New Password</ProfileDetailsLabel>
-        <LoginFormInput
+        <FormInput
           type="password"
           id="passwordConfirm"
           {...register("passwordConfirm", {
@@ -77,7 +77,7 @@ function ResetPasswordSection() {
             validate: (value) => value === getValues().password,
           })}
           disabled={isLoading}
-        ></LoginFormInput>
+        />
         <ProfileDetailsErrorContainer>
           {errors.passwordConfirm && (
             <FormError>Passwords must match</FormError>

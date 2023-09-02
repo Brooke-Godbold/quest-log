@@ -11,13 +11,10 @@ import {
   PasswordResetResultContainer,
   StyledResetPasswordRequestForm,
 } from "./ResetPasswordRequestForm.styles";
-import {
-  LoginFormInput,
-  LoginHeading,
-  LoginModalButton,
-} from "../login-form/LoginForm.styles";
+import { LoginHeading, LoginModalButton } from "../login-form/LoginForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
 import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
+import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 
 function ResetPasswordRequestForm({ setIsResetPassword }) {
   const { register, handleSubmit, reset } = useForm();
@@ -41,7 +38,7 @@ function ResetPasswordRequestForm({ setIsResetPassword }) {
       <LoginHeading>Password Reset</LoginHeading>
       <EmailInputRow>
         <label>Email</label>
-        <LoginFormInput {...register("email", { required: true })} />
+        <FormInput {...register("email", { required: true })} />
       </EmailInputRow>
       <PasswordResetResultContainer>
         {isError && <FormError>Oops! Something went wrong!</FormError>}

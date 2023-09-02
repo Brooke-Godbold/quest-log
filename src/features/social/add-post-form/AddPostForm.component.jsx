@@ -23,8 +23,9 @@ import {
   StyledAddPostForm,
 } from "./AddPostForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { MAX_FILE_SIZE_IN_BINARY_BYTES } from "../../../data/consts";
 import { useLocations } from "../../../contexts/LocationsContext";
+import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
+import { validateFile } from "../../../utils/validateFile";
 
 const MAX_LENGTH = 450;
 const MIN_LENGTH = 25;
@@ -43,7 +44,7 @@ function AddPostForm({
 
   const { setPreviousLocation } = useLocations();
 
-  const [successfulPost, setSuccessfulPost] = useState(false);
+  const [newPostId, setNewPostId] = useState(null);
 
   const {
     register,
@@ -56,12 +57,10 @@ function AddPostForm({
 
   const { addPost, isLoading } = useAddPost();
 
+  const redirectToDetailView = !quoteId && !postId && parentPostId;
+
   function onPost(data) {
-    const spaceFilteredContent = data.postContent
-      .replace(/(\r\n|\n|\r|\s)/gm, "", "")
-      .replace(" ", "")
-      .trim();
-    if (spaceFilteredContent.length < 5) {
+    if (filterWhiteSpace(data.postContent.trim()).length < 5) {
       setError("postContent", {
         type: "required",
       });
@@ -70,26 +69,7 @@ function AddPostForm({
 
     const uploadedFile = data.image?.[0];
 
-    if (uploadedFile) {
-      if (
-        uploadedFile.type !== "image/jpeg" &&
-        uploadedFile.type !== "image/png"
-      ) {
-        setError("image", {
-          type: "custom",
-          message: "Images must be PNG or JPEG!",
-        });
-        return;
-      }
-
-      if (uploadedFile.size > MAX_FILE_SIZE_IN_BINARY_BYTES) {
-        setError("image", {
-          type: "custom",
-          message: "Images must be below 5MB!",
-        });
-        return;
-      }
-    }
+    if (!validateFile(uploadedFile, setError)) return;
 
     const newPost = {
       ...(data.image?.[0] && { image: data.image[0] }),
@@ -105,15 +85,7 @@ function AddPostForm({
     addPost(newPost, {
       onSuccess: ({ id }) => {
         toast((t) => <Notification toast={t} text="Posted Successfully!" />);
-
-        if (parentPostId) {
-          searchParams.set("post", parentPostId);
-        } else {
-          searchParams.set("post", id);
-        }
-
-        setSearchParams(searchParams);
-        setSuccessfulPost(true);
+        setNewPostId(id);
       },
       onError: () => {
         toast.error((t) => (
@@ -124,22 +96,30 @@ function AddPostForm({
   }
 
   useEffect(() => {
-    if (!successfulPost) return;
+    if (!newPostId) return;
 
-    if (!quoteId && !postId && parentPostId) {
+    if (parentPostId) {
+      searchParams.set("post", parentPostId);
+    } else {
+      searchParams.set("post", newPostId);
+    }
+    setSearchParams(searchParams);
+
+    if (redirectToDetailView) {
       setPreviousLocation();
       navigate(`/social/post/${parentPostId}?view=recent`, { replace: true });
     } else {
       onCloseModal?.();
     }
   }, [
-    successfulPost,
+    newPostId,
     navigate,
-    parentPostId,
-    quoteId,
     onCloseModal,
-    postId,
     setPreviousLocation,
+    redirectToDetailView,
+    parentPostId,
+    searchParams,
+    setSearchParams,
   ]);
 
   function onError(e) {

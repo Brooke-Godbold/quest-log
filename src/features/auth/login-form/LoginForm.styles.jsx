@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import { CommonInput } from "../../../styles/GlobalStyles";
 
 const StyledLoginForm = styled.form`
   display: flex;
@@ -39,20 +38,6 @@ const LoginFormInputTable = styled.div`
   @media (max-width: 35em) {
     width: 100%;
     align-items: center;
-  }
-`;
-
-const LoginFormInput = styled.input`
-  ${CommonInput}
-
-  padding: 1rem 2rem;
-  width: 100%;
-
-  border: ${(props) =>
-    props.$error ? "3px solid var(--color-red-600)" : "none"};
-
-  @media (max-width: 35em) {
-    width: 80%;
   }
 `;
 
@@ -96,7 +81,6 @@ export {
   StyledLoginForm,
   LoginFormInputTable,
   LoginHeading,
-  LoginFormInput,
   LoginFormErrorContainer,
   LoginButtonsContainer,
   LoginModalButton,

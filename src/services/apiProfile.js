@@ -77,7 +77,7 @@ export async function updateProfile(profileData) {
 
     if (storageError) {
       console.error(storageError);
-      throw new Error("Could not upload Avatar");
+      throw new Error(storageError);
     } else {
       const avatarPath = `${supabaseUrl}/${supabaseStoragePath}/avatars/${avatarName}`;
 

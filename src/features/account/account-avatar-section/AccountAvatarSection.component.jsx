@@ -20,7 +20,7 @@ import {
   UsernameLabel,
 } from "./AccountAvatarSection.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
-import { MAX_FILE_SIZE_IN_BINARY_BYTES } from "../../../data/consts";
+import { validateFile } from "../../../utils/validateFile";
 
 function AccountAvatarSection() {
   const {
@@ -39,24 +39,7 @@ function AccountAvatarSection() {
 
     const uploadedFile = e.target.files[0];
 
-    if (
-      uploadedFile.type !== "image/jpeg" &&
-      uploadedFile.type !== "image/png"
-    ) {
-      setError("avatar", {
-        type: "custom",
-        message: "Avatars must be PNG or JPEG!",
-      });
-      return;
-    }
-
-    if (uploadedFile.size > MAX_FILE_SIZE_IN_BINARY_BYTES) {
-      setError("avatar", {
-        type: "custom",
-        message: "Avatars must be below 5MB!",
-      });
-      return;
-    }
+    if (!validateFile(uploadedFile, setError)) return;
 
     const profileData = {
       userId: profile.userId,

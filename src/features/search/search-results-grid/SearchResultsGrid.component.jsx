@@ -44,7 +44,8 @@ function SearchResultsGrid({ searchQuery }) {
                 key={profile.userId}
                 to={`/social/${profile.userId}?view=posts`}
                 imageUrl={profile.avatarUrl}
-                title={profile.username}
+                title={profile.displayName}
+                year={profile.username}
                 summary={profile.bio}
               />
             ))}

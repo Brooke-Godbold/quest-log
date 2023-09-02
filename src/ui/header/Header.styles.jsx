@@ -58,11 +58,13 @@ const HeaderLink = styled(NavLink)`
   }
 
   &.active {
-    color: #943b35;
+    color: ${(props) =>
+      props.$active ? "#943b35" : "color: var(--color-brand-700)"};
   }
 
   &.active:hover {
-    color: var(--color-red-100);
+    color: ${(props) =>
+      props.$active ? "var(--color-red-100)" : "color: var(--color-brand-200)"};
   }
 `;
 

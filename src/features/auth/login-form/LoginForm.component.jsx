@@ -18,7 +18,6 @@ import Notification from "../../../ui/notification/Notification.component";
 import {
   LoginButtonsContainer,
   LoginFormErrorContainer,
-  LoginFormInput,
   LoginFormInputTable,
   LoginHeading,
   LoginModalButton,
@@ -26,6 +25,7 @@ import {
 } from "./LoginForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -75,7 +75,7 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
           <LoginHeading>Login</LoginHeading>
           <LoginFormInputTable $rows={2}>
             <label>Email</label>
-            <LoginFormInput
+            <FormInput
               type="email"
               id="email"
               placeholder="john.smith@gmail.com"
@@ -88,7 +88,7 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
             />
 
             <label>Password</label>
-            <LoginFormInput
+            <FormInput
               type="password"
               id="password"
               disabled={isLoggingIn}

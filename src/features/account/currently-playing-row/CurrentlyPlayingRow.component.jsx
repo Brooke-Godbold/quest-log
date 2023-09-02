@@ -45,24 +45,24 @@ function CurrentlyPlayingRow({
         {availableGames
           .filter(
             (availableGame) =>
-              !currentlyPlaying.includes(
-                gameData.filter((data) => data.name === availableGame)[0].id
+              !currentlyPlaying?.includes(
+                gameData.filter((data) => data.name === availableGame)[0]?.id
               )
           )
-          .map((game) => (
-            <option key={game} value={game}>
-              {game}
+          .map((gameName) => (
+            <option key={gameName} value={gameName}>
+              {gameName}
             </option>
           ))}
       </CurrentlyPlaying>
 
-      {currentlyPlaying.length <= 2 && !currentlyPlaying.includes(null) && (
+      {currentlyPlaying?.length <= 2 && !currentlyPlaying.includes(null) && (
         <CurrentlyPlayingButton onClick={addNewCurrentlyPlaying}>
           <HiPlus />
         </CurrentlyPlayingButton>
       )}
 
-      {currentlyPlaying.length > 1 && (
+      {currentlyPlaying?.length > 1 && (
         <CurrentlyPlayingButton
           onClick={(e) => removeCurrentlyPlaying(e, gameId)}
         >
@@ -78,10 +78,10 @@ CurrentlyPlayingRow.propTypes = {
   gameData: PropTypes.array.isRequired,
   rowIndex: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  currentlyPlaying: PropTypes.array.isRequired,
+  currentlyPlaying: PropTypes.array,
   register: PropTypes.func.isRequired,
-  addNewCurrentlyPlaying: PropTypes.func.isRequired,
-  removeCurrentlyPlaying: PropTypes.func.isRequired,
+  addNewCurrentlyPlaying: PropTypes.func,
+  removeCurrentlyPlaying: PropTypes.func,
   availableGames: PropTypes.array.isRequired,
 };
 

@@ -7,16 +7,15 @@ import { useUser } from "../../../query/auth/useUser";
 import { useProfile } from "../../../query/profile/useProfile";
 import { useSignup } from "../../../query/auth/useSignup";
 import { useAddProfile } from "../../../query/profile/useAddProfile";
+import { useProfilesByUsername } from "../../../query/profile/useProfilesByUsername";
 
 import Button from "../../../ui/button/Button.component";
 import TextCount from "../../../ui/text-count/TextCount.component";
 import Notification from "../../../ui/notification/Notification.component";
 
+import { LoginFormErrorContainer } from "../login-form/LoginForm.styles";
 import {
-  LoginFormErrorContainer,
-  LoginFormInput,
-} from "../login-form/LoginForm.styles";
-import {
+  CurrentlyPlayingContainer,
   SignUpGridContainer,
   SignUpGridItem,
   SignupHeading,
@@ -26,6 +25,10 @@ import {
 } from "./SIgnupForm.styles";
 import { FormError } from "../../../ui/form-error/FormError.styles";
 import { ProfileDetailsLabel } from "../../account/account-profile-details-section/AccountProfileDetailsSection.styles";
+import { FormInput } from "../../../ui/FormInput/FormInput.styles";
+import { useAllGames } from "../../../query/game/useAllGames";
+import Spinner from "../../../ui/spinner/Spinner";
+import { CurrentlyPlaying } from "../../account/currently-playing-row/CurrentlyPlayingRow.styles";
 
 const USERNAME_MIN_LENGTH = 8;
 const USERNAME_MAX_LENGTH = 20;
@@ -42,23 +45,70 @@ function SignupForm() {
     handleSubmit,
     getValues,
     watch,
+    setError,
+    setValue,
     formState: { errors },
   } = useForm();
   const watchUsername = watch("username", "");
   const watchPassword = watch("password", "");
 
   const [emailCheck, setEmailCheck] = useState("");
-  const [emailInUse, setEmailInUse] = useState(false);
+  const [usernameCheck, setUsernameCheck] = useState("");
+
+  const { gameData, isLoading: isLoadingGames } = useAllGames();
+  const [gameQuery, setGameQuery] = useState("");
+  const [availableGames, setAvailableGames] = useState([]);
 
   const [signupSuccess, setSignupSuccess] = useState(false);
 
-  const { isGettingProfile, profile } = useProfile(emailCheck);
+  const { isGettingProfile: isCheckingEmail, profile: emailCheckProfiles } =
+    useProfile(emailCheck);
+  const {
+    isGettingProfile: isCheckingUsername,
+    profile: usernameCheckProfiles,
+  } = useProfilesByUsername(usernameCheck);
+
   const { signup, isSigningUp } = useSignup();
   const { addProfile, isAddingProfile } = useAddProfile();
 
+  const isLoading =
+    isCheckingEmail ||
+    isCheckingUsername ||
+    isSigningUp ||
+    isAddingProfile ||
+    isLoadingGames;
+
+  useEffect(() => {
+    if (!gameData) return;
+
+    if (gameQuery.length < 3) setAvailableGames([]);
+    else {
+      const available = gameData.filter((game) =>
+        game.name.toLowerCase().includes(gameQuery.toLowerCase())
+      );
+      setAvailableGames(available);
+    }
+  }, [gameQuery, gameData]);
+
+  useEffect(() => {
+    const availableIds = availableGames.reduce(
+      (acc, cur) => [...acc, cur.id],
+      []
+    );
+
+    setValue(
+      "currentlyPlaying",
+      availableIds.includes(Number(getValues().currentlyPlaying))
+        ? getValues().currentlyPlaying
+        : availableIds.length > 0
+        ? availableIds[0]
+        : "placeholder"
+    );
+  }, [availableGames, getValues, setValue]);
+
   function onSubmit(data) {
-    setEmailInUse(false);
     setEmailCheck(data.email);
+    setUsernameCheck(data.username);
   }
 
   function onError(e) {
@@ -67,10 +117,12 @@ function SignupForm() {
 
   useEffect(
     function () {
-      if (!profile) return;
+      if (!emailCheckProfiles || !usernameCheckProfiles) return;
 
-      if (profile.length) {
-        setEmailInUse(true);
+      if (emailCheckProfiles.length > 0) {
+        setError("email", { type: "inUse" });
+      } else if (usernameCheckProfiles.length > 0) {
+        setError("username", { type: "inUse" });
       } else {
         signup(
           { email: getValues().email, password: getValues().password },
@@ -81,16 +133,20 @@ function SignupForm() {
                   email: getValues().email,
                   userId: user.user.id,
                   username: getValues().username,
+                  displayName: getValues().username,
+                  currentGames: [getValues().currentlyPlaying],
                 },
                 {
                   onSuccess: () => setSignupSuccess(true),
-                  onError: () =>
+                  onError: (error) => {
+                    console.log(error);
                     toast.error((t) => (
                       <Notification
                         toast={t}
                         text="Unable to Sign Up at this time"
                       />
-                    )),
+                    ));
+                  },
                 }
               );
             },
@@ -103,8 +159,17 @@ function SignupForm() {
         );
       }
     },
-    [profile, signup, addProfile, getValues]
+    [
+      emailCheckProfiles,
+      setError,
+      usernameCheckProfiles,
+      signup,
+      addProfile,
+      getValues,
+    ]
   );
+
+  if (!gameData) return <Spinner />;
 
   return (
     <>
@@ -121,11 +186,11 @@ function SignupForm() {
           <SignUpGridContainer>
             <SignUpGridItem>
               <ProfileDetailsLabel>Email</ProfileDetailsLabel>
-              <LoginFormInput
+              <FormInput
                 type="email"
                 id="email"
                 placeholder="john.smith@gmail.com"
-                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                disabled={isLoading}
                 aria-invalid={errors.email ? "true" : "false"}
                 {...register("email", {
                   required: true,
@@ -137,11 +202,11 @@ function SignupForm() {
 
             <SignUpGridItem>
               <ProfileDetailsLabel>Username</ProfileDetailsLabel>
-              <LoginFormInput
+              <FormInput
                 type="text"
                 id="username"
                 placeholder="John_Smith"
-                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                disabled={isLoading}
                 aria-invalid={errors.username ? "true" : "false"}
                 {...register("username", {
                   required: true,
@@ -160,10 +225,10 @@ function SignupForm() {
 
             <SignUpGridItem>
               <ProfileDetailsLabel>Password</ProfileDetailsLabel>
-              <LoginFormInput
+              <FormInput
                 type="password"
                 id="password"
-                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                disabled={isLoading}
                 aria-invalid={errors.password ? "true" : "false"}
                 {...register("password", {
                   required: true,
@@ -180,10 +245,10 @@ function SignupForm() {
 
             <SignUpGridItem>
               <ProfileDetailsLabel>Confirm Password</ProfileDetailsLabel>
-              <LoginFormInput
+              <FormInput
                 type="password"
                 id="passwordConfirm"
-                disabled={isGettingProfile || isSigningUp || isAddingProfile}
+                disabled={isLoading}
                 aria-invalid={errors.passwordConfirm ? "true" : "false"}
                 {...register("passwordConfirm", {
                   required: true,
@@ -192,12 +257,43 @@ function SignupForm() {
                 $error={errors.passwordConfirm}
               />
             </SignUpGridItem>
+
+            <SignUpGridItem>
+              <ProfileDetailsLabel>Currently Playing</ProfileDetailsLabel>
+              <CurrentlyPlayingContainer>
+                <FormInput
+                  list="games"
+                  id="currentlyPlayingSearch"
+                  onChange={(e) => setGameQuery(e.target.value)}
+                  placeholder="playing something new?"
+                />
+
+                <CurrentlyPlaying
+                  disabled={isLoading}
+                  id="currentlyPlaying"
+                  {...register("currentlyPlaying", {
+                    validate: (value) => value !== "placeholder",
+                  })}
+                >
+                  <option key="placeholder" value="placeholder">
+                    Please Select...
+                  </option>
+                  {availableGames.map((game) => (
+                    <option key={game.id} value={game.id}>
+                      {game.name}
+                    </option>
+                  ))}
+                </CurrentlyPlaying>
+              </CurrentlyPlayingContainer>
+            </SignUpGridItem>
           </SignUpGridContainer>
 
           <LoginFormErrorContainer>
             {errors.email ? (
               errors.email.type === "required" ? (
                 <FormError>Email is required</FormError>
+              ) : errors.email.type === "inUse" ? (
+                <FormError>This email has already been registered</FormError>
               ) : (
                 <FormError>This is not a valid email address</FormError>
               )
@@ -212,6 +308,8 @@ function SignupForm() {
                 <FormError>
                   Usernames cannot be more than 20 characters
                 </FormError>
+              ) : errors.username.type === "inUse" ? (
+                <FormError>This username is already in use</FormError>
               ) : (
                 <FormError>Usernames must not contain spaces</FormError>
               )
@@ -231,15 +329,12 @@ function SignupForm() {
               <FormError>Passwords must match</FormError>
             )}
 
-            {emailInUse && (
-              <FormError>This email has already been registered</FormError>
+            {errors.currentlyPlaying && (
+              <FormError>Select what you&apos;re playing currently!</FormError>
             )}
           </LoginFormErrorContainer>
 
-          <Button
-            disabled={isGettingProfile || isSigningUp || isAddingProfile}
-            isLight={false}
-          >
+          <Button disabled={isLoading} isLight={false}>
             Sign Up
           </Button>
         </StyledSignupForm>

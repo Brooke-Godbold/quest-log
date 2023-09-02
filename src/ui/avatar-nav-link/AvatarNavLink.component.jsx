@@ -7,6 +7,7 @@ import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
 import Spinner from "../spinner/Spinner";
 
 import {
+  DisplayName,
   StyledAvatarNavLink,
   UserAvatar,
   UserName,
@@ -38,7 +39,10 @@ function AvatarNavLink({ userId, gameId, view = "posts" }) {
       ) : (
         <>
           <UserAvatar src={profile.avatarUrl} />
-          <UserName>{profile.username}</UserName>
+          <UserName>{profile.displayName}</UserName>
+          {profile.displayName !== profile.username && (
+            <DisplayName>{`#${profile.username}`}</DisplayName>
+          )}
         </>
       )}
     </StyledAvatarNavLink>

@@ -18,6 +18,11 @@ const QuoteBlock = styled.button`
   color: var(--color-brand-300);
   background-color: var(--color-brand-600);
 
+  & p,
+  & h3 {
+    cursor: pointer;
+  }
+
   &:focus {
     outline: none;
   }

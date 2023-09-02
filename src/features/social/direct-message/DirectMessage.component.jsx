@@ -21,6 +21,7 @@ import {
   AddPostTextSection,
   StyledAddPostForm,
 } from "../add-post-form/AddPostForm.styles";
+import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
 
 function DirectMessage({ onCloseModal, username, receiverId }) {
   const { register, handleSubmit, reset } = useForm();
@@ -34,10 +35,7 @@ function DirectMessage({ onCloseModal, username, receiverId }) {
   const navigate = useNavigate();
 
   function onSend(data) {
-    const spaceFilteredContent = data.message
-      .replace(/(\r\n|\n|\r|\s)/gm, "", "")
-      .replace(" ", "");
-    if (spaceFilteredContent.length === 0) {
+    if (filterWhiteSpace(data.message).length === 0) {
       reset();
       return;
     }

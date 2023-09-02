@@ -129,6 +129,12 @@ const UserName = styled.h1`
   }
 `;
 
+const DisplayName = styled.h3`
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 0.8rem;
+`;
+
 const Heading = styled.h3``;
 
 const UserDetailsContainer = styled.div`
@@ -339,4 +345,5 @@ export {
   SocialMediaContainer,
   SocialMediaButton,
   UserActionsContainer,
+  DisplayName,
 };

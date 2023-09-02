@@ -59,7 +59,7 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
       <AvatarNavLink userId={post.userId} />
       {quotedPost && (
         <QuoteBlock onClick={handleClickQuote}>
-          <h3>{quotedUser?.username}</h3>
+          <h3>{quotedUser?.displayName}</h3>
           <p>{`" ${quotedPost.description} "`}</p>
         </QuoteBlock>
       )}

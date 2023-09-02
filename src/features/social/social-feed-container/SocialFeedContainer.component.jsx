@@ -211,13 +211,20 @@ function SocialFeedContainer() {
 
         currentPost.scrollIntoView({
           behavior: "smooth",
-          block: "nearest",
-          inline: "nearest",
+          block: "center",
+          inline: "center",
         });
       }, 150);
     },
     [searchParams]
   );
+
+  useEffect(() => {
+    if (!searchParams.get("view")) {
+      searchParams.set("view", "trending");
+      setSearchParams(searchParams);
+    }
+  }, [searchParams, setSearchParams]);
 
   function setGameFilter(e) {
     e.target.value >= 0

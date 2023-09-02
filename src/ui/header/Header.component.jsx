@@ -56,30 +56,43 @@ function Header() {
             />
           </HeaderSearchForm>
         )}
-        <HeaderLink disabled={isLoggingOut} to="/social/feed?view=trending">
+        <HeaderLink
+          $active={location.search.includes("trending")}
+          disabled={isLoggingOut}
+          to="/social/feed?view=trending"
+        >
           Trending
         </HeaderLink>
         {isAuthenticated ? (
           <>
             <HeaderLink
-              disabled={isLoggingOut}
+              $active={location.search.includes("following")}
               to="/social/feed?view=following"
             >
               Following
             </HeaderLink>
-            <HeaderLink disabled={isLoggingOut} to="/social/feed?view=discover">
+            <HeaderLink
+              $active={location.search.includes("discover")}
+              disabled={isLoggingOut}
+              to="/social/feed?view=discover"
+            >
               Discover
             </HeaderLink>
             <HeaderLink
+              $active={true}
               disabled={isLoggingOut}
               to={`/social/${user.id}?view=posts`}
             >
               My Feed
             </HeaderLink>
-            <HeaderLink disabled={isLoggingOut} to="/account/profile">
+            <HeaderLink
+              $active={true}
+              disabled={isLoggingOut}
+              to="/account/profile"
+            >
               Account
             </HeaderLink>
-            <HeaderLink disabled={isLoggingOut} to="/messages">
+            <HeaderLink $active={true} disabled={isLoggingOut} to="/messages">
               Messages
               {unreadMessagesCount > 0 && (
                 <UnreadMessages>{unreadMessagesCount}</UnreadMessages>

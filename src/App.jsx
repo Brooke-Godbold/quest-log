@@ -89,7 +89,7 @@ function App() {
               </LocationsProvider>
             }
           >
-            <Route index element={<Navigate replace to="search" />} />
+            <Route index element={<Navigate replace to="social/feed" />} />
             <Route
               path="search"
               element={<Search />}
