@@ -32,7 +32,7 @@ const AccountSection = styled.div`
   align-items: center;
 
   @media (max-width: 70em) {
-    padding: 1.2rem;
+    padding: 2.4rem;
   }
 
   @media (max-width: 50em) {
@@ -47,7 +47,7 @@ const AccountSectionHeading = styled.h1`
   padding: 7.4rem 0;
 
   @media (max-width: 45em) {
-    padding: 5rem 0;
+    padding: 12.5rem 0 0 0;
   }
 `;
 
@@ -63,6 +63,10 @@ const AccountGridContainer = styled.div`
 
   @media (max-width: 50em) {
     display: flex;
+  }
+
+  @media (max-width: 35em) {
+    padding: 0.5rem;
   }
 `;
 

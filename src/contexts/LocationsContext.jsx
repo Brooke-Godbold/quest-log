@@ -33,7 +33,9 @@ function LocationsProvider({ children }) {
       payload: {
         previousLocation: `${location.pathname}?view=${searchParams.get(
           "view"
-        )}${searchParams.get("game") && `&game=${searchParams.get("game")}`}`,
+        )}${
+          searchParams.get("game") ? `&game=${searchParams.get("game")}` : ""
+        }`,
       },
     });
   }

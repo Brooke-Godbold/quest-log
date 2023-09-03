@@ -20,7 +20,7 @@ const StyledSocialPost = styled.div`
   }
 
   @media (max-width: 40em) {
-    padding: 10rem 1.2rem;
+    padding: 15rem 1.2rem;
   }
 `;
 

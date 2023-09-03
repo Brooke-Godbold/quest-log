@@ -43,6 +43,10 @@ const UserProfile = styled.div`
     flex-direction: column;
     height: 40rem;
   }
+
+  @media (max-width: 20em) {
+    padding: 1.2rem;
+  }
 `;
 
 const UserMain = styled.div`
@@ -54,6 +58,10 @@ const UserMain = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 75em) {
+    max-width: 30rem;
+  }
 
   @media (max-width: 50em) {
     position: static;
@@ -119,8 +127,15 @@ const UserName = styled.h1`
   font-size: 5.4rem;
   text-align: center;
 
+  width: 100%;
+  word-break: break-all;
+
+  @media (max-width: 75em) {
+    line-height: 5rem;
+  }
+
   @media (max-width: 50em) {
-    font-size: 3.6rem;
+    font-size: 3.2rem;
     line-height: 3.2rem;
   }
 

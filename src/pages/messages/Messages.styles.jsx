@@ -26,6 +26,11 @@ const MessagesHeading = styled.h1`
   @media (max-width: 55em) {
     margin-bottom: 2.4rem;
   }
+
+  @media (max-width: 100em) {
+    margin-bottom: 0;
+    margin-top: 3.2rem;
+  }
 `;
 
 export { StyledMessages, MessagesHeading };

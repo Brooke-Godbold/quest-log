@@ -14,13 +14,17 @@ const StyledGame = styled.div`
     max-width: 100%;
   }
 
+  @media (max-width: 100em) {
+    padding: 15rem 5rem 5rem 5rem;
+  }
+
   @media (max-width: 75em) {
     grid-template-rows: auto 1fr;
     gap: 0;
   }
 
   @media (max-width: 40em) {
-    padding: 10rem 1.2rem;
+    padding: 15rem 1.2rem 1.2rem 1.2rem;
   }
 `;
 

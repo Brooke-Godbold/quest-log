@@ -34,6 +34,8 @@ import {
 } from "./SocialFeedContainer.styles";
 import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+import { useSearch } from "../../../hooks/useSearch";
+import SearchResultItem from "../../search/search-result-item/SearchResultItem.component";
 
 function SocialFeedContainer() {
   const { userId, postId } = useParams();
@@ -64,6 +66,8 @@ function SocialFeedContainer() {
     by: "userId",
     id: userId,
   });
+
+  const { searchResults } = useSearch(searchParams.get("search"));
 
   const { post, isGettingPost, isError: isPostIdError } = usePostById(postId);
 
@@ -187,9 +191,11 @@ function SocialFeedContainer() {
   useEffect(
     function () {
       if (
-        !isAuthenticated &&
-        (searchParams.get("view") === "following" ||
-          searchParams.get("view") === "discover")
+        (!searchParams.get("search") &&
+          !isAuthenticated &&
+          (searchParams.get("view") === "following" ||
+            searchParams.get("view") === "discover")) ||
+        (!searchParams.get("search") && !searchParams.get("view"))
       ) {
         searchParams.set("view", "trending");
         setSearchParams(searchParams);
@@ -218,13 +224,6 @@ function SocialFeedContainer() {
     },
     [searchParams]
   );
-
-  useEffect(() => {
-    if (!searchParams.get("view")) {
-      searchParams.set("view", "trending");
-      setSearchParams(searchParams);
-    }
-  }, [searchParams, setSearchParams]);
 
   function setGameFilter(e) {
     e.target.value >= 0
@@ -328,7 +327,39 @@ function SocialFeedContainer() {
             ) : null}
           </SocialFeedButtons>
           <SocialFeedContent>
-            {postId && !isLoadingReplies ? (
+            {searchParams.get("search") && searchResults ? (
+              <>
+                {searchResults.gameResults?.map((game) => (
+                  <SearchResultItem
+                    key={game.name}
+                    gameData={game}
+                    description={game.description}
+                  />
+                ))}
+                {searchResults.profileResults?.map((profile) => (
+                  <SearchResultItem
+                    key={profile.userId}
+                    userId={profile.userId}
+                    description={profile.bio}
+                  />
+                ))}
+                {searchResults.postResults?.map((post) => (
+                  <SocialFeedPost
+                    id={`post_${post.id}`}
+                    key={post.id}
+                    post={post}
+                    gameData={gameData}
+                    parentPostId={post.postId}
+                    quotedPost={
+                      post.quoteId &&
+                      sortedPosts?.filter(
+                        (reply) => reply.id === post.quoteId
+                      )[0]
+                    }
+                  />
+                ))}
+              </>
+            ) : postId && !isLoadingReplies ? (
               sortedPosts.map((post) => (
                 <SocialFeedPost
                   id={`post_${post.id}`}

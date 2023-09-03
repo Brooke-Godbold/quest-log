@@ -14,6 +14,10 @@ const StyledNewMessage = styled.form`
 
   display: flex;
 
+  @media (max-width: 55em) {
+    padding: 1.2rem;
+  }
+
   @media (max-width: 40em) {
     height: 20%;
   }

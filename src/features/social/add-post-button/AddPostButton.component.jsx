@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import { useParams } from "react-router-dom";
 import { useUser } from "../../../query/auth/useUser";
 import { useAllGames } from "../../../query/game/useAllGames";
@@ -6,9 +8,7 @@ import { useProfileByUser } from "../../../query/profile/useProfileByUser";
 import Modal from "../../../ui/modal/Modal.component";
 import AddPostForm from "../add-post-form/AddPostForm.component";
 
-import { AddNewPostButton } from "../user-header/UserHeader.styles";
-
-function AddPostButton() {
+function AddPostButton({ styledPostButton, onOpenCallback }) {
   const { userId } = useParams();
 
   const { isAuthenticated, user } = useUser();
@@ -24,8 +24,8 @@ function AddPostButton() {
         profile &&
         (!userId || userId === user.id) && (
           <Modal>
-            <Modal.Open opens="addPost">
-              <AddNewPostButton>Add New Post</AddNewPostButton>
+            <Modal.Open onOpenCallback={onOpenCallback} opens="addPost">
+              {styledPostButton}
             </Modal.Open>
             <Modal.Window name="addPost">
               <AddPostForm
@@ -39,5 +39,10 @@ function AddPostButton() {
     </>
   );
 }
+
+AddPostButton.propTypes = {
+  styledPostButton: PropTypes.node.isRequired,
+  onOpenCallback: PropTypes.func,
+};
 
 export default AddPostButton;

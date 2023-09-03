@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { NavLink } from "react-router-dom";
+import { CommonItem } from "../../../styles/GlobalStyles";
 
 const QuoteBlock = styled.button`
   display: flex;
@@ -34,22 +35,9 @@ const QuoteBlock = styled.button`
 `;
 
 const StyledSocialFeedPost = styled.div`
-  background-color: var(--color-brand-500);
-  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
-  border-radius: 5px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-
-  padding: 2.4rem;
-  position: relative;
-
-  transition: all 0.3s;
+  ${CommonItem}
 
   &:hover {
-    background-color: var(--color-brand-400);
-
     & ${QuoteBlock} {
       background-color: var(--color-brand-500);
     }

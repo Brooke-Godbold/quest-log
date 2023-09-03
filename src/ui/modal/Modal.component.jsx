@@ -26,10 +26,15 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function Open({ children, opens: opensWindowName }) {
+function Open({ children, opens: opensWindowName, onOpenCallback }) {
   const { open } = useContext(ModalContext);
 
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
+  function openModal() {
+    open(opensWindowName);
+    onOpenCallback?.();
+  }
+
+  return cloneElement(children, { onClick: () => openModal() });
 }
 
 function Window({ children, name, onCloseCallback }) {
@@ -59,6 +64,7 @@ Window.propTypes = {
   children: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   onCloseCallback: PropTypes.func,
+  onOpenCallback: PropTypes.func,
 };
 
 Modal.Open = Open;

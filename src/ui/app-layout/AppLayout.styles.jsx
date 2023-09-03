@@ -1,6 +1,8 @@
 import { styled } from "styled-components";
 
 const StyledAppLayout = styled.div`
+  position: relative;
+
   height: 100vh;
   width: 100%;
   display: flex;

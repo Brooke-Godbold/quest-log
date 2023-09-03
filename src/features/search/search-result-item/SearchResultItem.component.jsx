@@ -1,47 +1,24 @@
 import PropTypes from "prop-types";
+
 import {
-  StyledSearchResultItem,
-  SearchResultItemInformation,
-  SearchResultItemName,
-  SearchResultItemReleaseYear,
   SearchResultItemDescription,
-  SearchResultItemImage,
+  StyledSearchResultItem,
 } from "./SearchResultItem.styles";
-import { useNavigate } from "react-router-dom";
+import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
 
-const MAX_SUMMARY = 200;
-
-function SearchResultItem({ to, imageUrl, title, year, summary }) {
-  const navigate = useNavigate();
-
-  function handleClick() {
-    navigate(to);
-  }
-
+function SearchResultItem({ userId, gameData, description }) {
   return (
-    <StyledSearchResultItem onClick={handleClick}>
-      <SearchResultItemImage src={imageUrl} />
-      <SearchResultItemInformation>
-        <SearchResultItemName>{title}</SearchResultItemName>
-        {year && (
-          <SearchResultItemReleaseYear>{year}</SearchResultItemReleaseYear>
-        )}
-        <SearchResultItemDescription>
-          {summary.length > MAX_SUMMARY
-            ? `${summary.substring(0, MAX_SUMMARY)}...`
-            : summary}
-        </SearchResultItemDescription>
-      </SearchResultItemInformation>
+    <StyledSearchResultItem>
+      <AvatarNavLink userId={userId} gameData={gameData} />
+      <SearchResultItemDescription>{description}</SearchResultItemDescription>
     </StyledSearchResultItem>
   );
 }
 
 SearchResultItem.propTypes = {
-  to: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  summary: PropTypes.string.isRequired,
-  year: PropTypes.string,
+  userId: PropTypes.string,
+  gameData: PropTypes.object,
+  description: PropTypes.string,
 };
 
 export default SearchResultItem;

@@ -40,6 +40,7 @@ import {
   UserName,
   UserProfile,
   DisplayName,
+  AddNewPostButton,
 } from "./UserHeader.styles";
 
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
@@ -293,7 +294,9 @@ function UserHeader() {
               </CurrentlyPlayingContainer>
             )}
           </UserProfile>
-          <AddPostButton />
+          <AddPostButton
+            styledPostButton={<AddNewPostButton>Add New Post</AddNewPostButton>}
+          />
         </>
       )}
     </StyledUserHeader>

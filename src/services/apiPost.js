@@ -49,6 +49,19 @@ export async function getReplyByPostId(postId) {
   return data;
 }
 
+export async function getPostsByContent(content) {
+  if (!content) return null;
+
+  const { data, error } = await supabase
+    .from("post")
+    .select("*")
+    .ilike("description", `%${content}%`);
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function addPost(postData) {
   let newPostData = postData;
 

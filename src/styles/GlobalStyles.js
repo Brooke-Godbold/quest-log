@@ -236,6 +236,29 @@ const CommonPage = css`
   }
 `;
 
+const CommonItem = css`
+  background-color: var(--color-brand-500);
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  padding: 2.4rem;
+  position: relative;
+
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: var(--color-brand-400);
+  }
+
+  @media (max-width: 20em) {
+    padding: 1.2rem;
+  }
+`;
+
 export default GlobalStyles;
 
-export { CommonButton, CommonInput, CommonScrollBar, CommonPage };
+export { CommonButton, CommonInput, CommonScrollBar, CommonPage, CommonItem };

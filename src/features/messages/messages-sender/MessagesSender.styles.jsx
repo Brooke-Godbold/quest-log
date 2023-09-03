@@ -59,6 +59,22 @@ const SenderMessageDetails = styled.div`
     transform: scale(150%);
     pointer-events: none;
   }
+
+  @media (max-width: 55em) {
+    right: 1rem;
+    bottom: 1rem;
+    gap: 0.8rem;
+
+    & p {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    & svg {
+      transform: scale(100%);
+      pointer-events: none;
+    }
+  }
 `;
 
 export { StyledMessagesSender, SenderMessageDetails };

@@ -3,9 +3,10 @@ import { styled } from "styled-components";
 
 const StyledAvatarNavLink = styled(NavLink)`
   display: grid;
-  grid-template-columns: 1fr max-content;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: max-content auto;
+  grid-template-rows: max-content auto;
   column-gap: 1.2rem;
+  max-width: 100%;
 
   margin-bottom: 1rem;
   align-self: flex-start;
@@ -42,11 +43,23 @@ const UserAvatar = styled.img`
 const UserName = styled.h4`
   margin-top: 0.5rem;
   align-self: start;
+
+  word-break: break-all;
+
+  max-width: 100%;
+
+  @media (max-width: 20em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const DisplayName = styled.h5`
   font-size: 1.2rem;
   align-self: start;
+
+  word-break: break-all;
+
+  max-width: 100%;
 `;
 
 export { StyledAvatarNavLink, UserAvatar, UserName, DisplayName };

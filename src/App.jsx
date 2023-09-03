@@ -6,7 +6,6 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import Search from "./pages/search/Search.page";
 import GlobalStyles from "./styles/GlobalStyles";
 import Game from "./pages/game/Game.page";
 import AppLayout from "./ui/app-layout/AppLayout.component";
@@ -90,11 +89,6 @@ function App() {
             }
           >
             <Route index element={<Navigate replace to="social/feed" />} />
-            <Route
-              path="search"
-              element={<Search />}
-              errorElement={<Error />}
-            />
             <Route
               path="game/:id"
               element={<Game />}

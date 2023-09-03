@@ -13,7 +13,7 @@ import {
   UserName,
 } from "./AvatarNavLink.styles";
 
-function AvatarNavLink({ userId, gameId, view = "posts" }) {
+function AvatarNavLink({ userId, gameId, view = "posts", gameData }) {
   const {
     profile,
     isGettingProfile,
@@ -23,36 +23,48 @@ function AvatarNavLink({ userId, gameId, view = "posts" }) {
   return (
     <StyledAvatarNavLink
       to={
-        userId &&
-        `/social/${userId}?view=${view}${gameId ? `&game=${gameId}` : ""}`
+        userId
+          ? `/social/${userId}?view=${view}${gameId ? `&game=${gameId}` : ""}`
+          : gameData
+          ? `/game/${gameData.id}`
+          : ""
       }
     >
-      {isGettingProfile ? (
-        <Spinner />
-      ) : !profile || isProfileError ? (
+      {userId ? (
+        isGettingProfile ? (
+          <Spinner />
+        ) : !profile || isProfileError ? (
+          <>
+            <UserAvatar
+              src={`${supabaseUrl}/${supabaseStoragePath}/avatars/andy.jpg`}
+            />
+            <UserName>Anonymous</UserName>
+          </>
+        ) : (
+          <>
+            <UserAvatar src={profile.avatarUrl} />
+            <UserName>{profile.displayName}</UserName>
+            {profile.displayName !== profile.username && (
+              <DisplayName>{`#${profile.username}`}</DisplayName>
+            )}
+          </>
+        )
+      ) : gameData ? (
         <>
-          <UserAvatar
-            src={`${supabaseUrl}/${supabaseStoragePath}/avatars/andy.jpg`}
-          />
-          <UserName>Anonymous</UserName>
+          <UserAvatar src={gameData.imageUrl} />
+          <UserName>{gameData.name}</UserName>
+          <DisplayName>{gameData.year}</DisplayName>
         </>
-      ) : (
-        <>
-          <UserAvatar src={profile.avatarUrl} />
-          <UserName>{profile.displayName}</UserName>
-          {profile.displayName !== profile.username && (
-            <DisplayName>{`#${profile.username}`}</DisplayName>
-          )}
-        </>
-      )}
+      ) : null}
     </StyledAvatarNavLink>
   );
 }
 
 AvatarNavLink.propTypes = {
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.string,
   gameId: PropTypes.number,
   view: PropTypes.string,
+  gameData: PropTypes.object,
 };
 
 export default AvatarNavLink;

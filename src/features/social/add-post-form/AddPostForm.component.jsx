@@ -69,7 +69,7 @@ function AddPostForm({
 
     const uploadedFile = data.image?.[0];
 
-    if (!validateFile(uploadedFile, setError)) return;
+    if (uploadedFile && !validateFile(uploadedFile, setError)) return;
 
     const newPost = {
       ...(data.image?.[0] && { image: data.image[0] }),

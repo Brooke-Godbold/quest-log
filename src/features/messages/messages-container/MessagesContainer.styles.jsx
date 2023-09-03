@@ -19,6 +19,10 @@ const ConversationHeader = styled.div`
 
   padding: 2.4rem;
 
+  @media (max-width: 55em) {
+    padding: 0.5rem;
+  }
+
   @media (max-width: 40em) {
     height: 20%;
   }
