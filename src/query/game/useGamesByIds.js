@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { getGame } from "../../services/apiGames";
+import { getGamesByIds } from "../../services/apiGames";
 
-export function useGame(id) {
+export function useGamesByIds(ids) {
   const {
     isLoading,
     isFetching,
     data: gameData,
     isError,
   } = useQuery({
-    queryKey: ["games", id],
-    queryFn: () => getGame(id),
+    queryKey: [`currently_playing_${ids}`],
+    queryFn: () => getGamesByIds(ids),
   });
 
   return { isLoading, isFetching, gameData, isError };

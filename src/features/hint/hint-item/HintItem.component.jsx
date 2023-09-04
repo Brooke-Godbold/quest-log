@@ -101,7 +101,6 @@ HintItem.propTypes = {
   hint: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   setCurrentHint: PropTypes.func,
-  isNewHint: PropTypes.bool.isRequired,
   user: PropTypes.object,
 };
 

@@ -94,7 +94,6 @@ function App() {
               element={<Game />}
               errorElement={<Error />}
             />
-            <Route path="/login" element={<Login />} errorElement={<Error />} />
             <Route
               path="social/:userId"
               element={<User />}
@@ -159,6 +158,7 @@ function App() {
             </Route>
           </Route>
           <Route path="signup" element={<Signup />} errorElement={<Error />} />
+          <Route path="login" element={<Login />} errorElement={<Error />} />
           <Route
             path="confirm-signup"
             element={<ConfirmSignup />}

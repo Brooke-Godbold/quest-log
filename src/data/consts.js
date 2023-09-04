@@ -18,3 +18,7 @@ export const POST_MIN_LENGTH = 25;
 
 export const anonymousImageUrl =
   "https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/avatars/anonymous.jpg";
+export const brandDarkUrl =
+  "https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/brand/brand_dark.png";
+export const brandMediumUrl =
+  "https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/brand/brand_medium.png";

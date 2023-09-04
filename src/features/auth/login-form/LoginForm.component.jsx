@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
 import { useLogin } from "../../../query/auth/useLogin";
-import { useConversations } from "../../../contexts/ConversationsContext";
 
 import { AiOutlineLogin } from "react-icons/ai";
 import { MdAppRegistration } from "react-icons/md";
@@ -35,15 +34,12 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
 
   const [errors, setErrors] = useState({});
 
-  const { setCurrentConversation } = useConversations();
-
   function onSubmit(data) {
     setErrors({});
 
     login(data, {
       onSuccess: () => {
         onCloseModal?.();
-        setCurrentConversation(null);
       },
       onError: () =>
         toast.error((t) => (

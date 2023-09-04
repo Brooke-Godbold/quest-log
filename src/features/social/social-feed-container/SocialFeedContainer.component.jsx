@@ -89,6 +89,7 @@ function SocialFeedContainer() {
 
   function setView(view) {
     searchParams.set("view", view);
+    searchParams.delete("search");
     setSearchParams(searchParams);
   }
 
@@ -195,8 +196,10 @@ function SocialFeedContainer() {
           !isAuthenticated &&
           (searchParams.get("view") === "following" ||
             searchParams.get("view") === "discover")) ||
-        (!searchParams.get("search") && !searchParams.get("view"))
+        (!searchParams.get("search") && !searchParams.get("view")) ||
+        (searchParams.get("search") && searchParams.get("view"))
       ) {
+        searchParams.delete("search");
         searchParams.set("view", "trending");
         setSearchParams(searchParams);
       }

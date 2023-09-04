@@ -24,7 +24,7 @@ const StyledGame = styled.div`
   }
 
   @media (max-width: 40em) {
-    padding: 15rem 1.2rem 1.2rem 1.2rem;
+    padding: 20rem 1.2rem 1.2rem 1.2rem;
   }
 `;
 

@@ -47,7 +47,18 @@ const NavigationHeader = styled.div`
   grid-template-rows: repeat(2, 1fr);
   column-gap: 2.4rem;
 
+  position: relative;
+  z-index: 1000;
+
   align-items: center;
+
+  @media (max-width: 20em) {
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: auto auto 1fr;
+
+    column-gap: 1.8rem;
+    row-gap: 1.2rem;
+  }
 `;
 
 const ActionButton = css`
@@ -125,6 +136,12 @@ const NavigationMenuButton = styled.button`
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 20em) {
+    grid-row: 1 / 2;
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
 `;
 
 const NavigationMenuImage = styled.img`
@@ -180,6 +197,113 @@ const NavigationButton = styled.button`
   border-bottom-left-radius: 0;
 `;
 
+const NavigationGamesContainer = styled.div`
+  display: flex;
+  gap: 2.4rem;
+
+  margin-left: 2.4rem;
+  width: max-content;
+
+  transition: all 0.3s;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  & a:focus {
+    outline: none;
+  }
+
+  & a:nth-child(1) {
+    transition: all 0.3s;
+    opacity: ${(props) => (props.$active ? "1" : "0")};
+    transform: ${(props) =>
+      props.$active ? "translate(200%, 0)" : "translate(0, 0)"};
+
+    &:hover {
+      transform: ${(props) =>
+        props.$active ? "translate(200%, 0) scale(110%)" : "translate(0, 0)"};
+    }
+
+    &:active {
+      transform: ${(props) =>
+        props.$active ? "translate(200%, 0) scale(120%)" : "translate(0, 0)"};
+    }
+  }
+
+  & a:nth-child(2) {
+    transition: all 0.3s;
+    transform: ${(props) =>
+      props.$active ? "translate(200%, 0)" : "translate(-125%, 0)"};
+    opacity: ${(props) => (props.$active ? "1" : "0")};
+
+    &:hover {
+      transform: ${(props) =>
+        props.$active
+          ? "translate(200%, 0) scale(110%)"
+          : "translate(-125%, 0)"};
+    }
+
+    &:active {
+      transform: ${(props) =>
+        props.$active
+          ? "translate(200%, 0) scale(120%)"
+          : "translate(-125%, 0)"};
+    }
+  }
+
+  & a:nth-child(3) {
+    transition: all 0.3s;
+    transform: ${(props) =>
+      props.$active ? "translate(200%, 0)" : "translate(-250%, 0)"};
+    opacity: ${(props) => (props.$active ? "1" : "0")};
+
+    &:hover {
+      transform: ${(props) =>
+        props.$active
+          ? "translate(200%, 0) scale(110%)"
+          : "translate(-250%, 0)"};
+    }
+
+    &:active {
+      transform: ${(props) =>
+        props.$active
+          ? "translate(200%, 0) scale(120%)"
+          : "translate(-250%, 0)"};
+    }
+  }
+
+  @media (max-width: 40em) {
+    flex-direction: column;
+
+    width: max-content;
+    margin-bottom: 2.4rem;
+
+    top: 90%;
+
+    transform: ${(props) =>
+      props.$active ? "translate(240%, 0)" : "translate(0, 0)"};
+
+    & a:nth-child(-n + 3) {
+      transform: translate(0);
+
+      &:hover {
+        transform: scale(110%);
+      }
+
+      &:active {
+        transform: scale(120%);
+      }
+    }
+  }
+`;
+
+const NavigationGamesLink = styled(NavLink)`
+  border: none;
+  background-color: transparent;
+
+  transition: all 0.3s;
+`;
+
 export {
   StyledNavigation,
   NavigationMenuButton,
@@ -193,4 +317,6 @@ export {
   HeaderActionButton,
   HeaderActionLink,
   UnreadMessages,
+  NavigationGamesContainer,
+  NavigationGamesLink,
 };

@@ -15,7 +15,7 @@ const StyledSignupForm = styled.form`
   }
 
   @media (max-width: 65em) {
-    gap: 2.4rem;
+    gap: 4.8rem;
   }
 
   @media (max-width: 30em) {
@@ -44,12 +44,15 @@ const SignUpGridContainer = styled.div`
   @media (max-width: 65em) {
     width: 100%;
   }
+
+  @media (max-height: 55em) {
+    gap: 1.2rem;
+  }
 `;
 
 const SignUpGridItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: repeat(2, 1fr);
   align-items: center;
   column-gap: 4.8rem;
 
@@ -57,7 +60,11 @@ const SignUpGridItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1.8rem;
+
+    & p {
+      margin-right: 3.8rem;
+    }
   }
 `;
 
@@ -76,8 +83,13 @@ const SignupSuccessText = styled.p``;
 const CurrentlyPlayingContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1.2rem;
   width: 100%;
+
+  @media (max-width: 35em) {
+    width: 80%;
+  }
 `;
 
 export {

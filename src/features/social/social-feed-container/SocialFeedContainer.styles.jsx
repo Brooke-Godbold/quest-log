@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { CommonButton, CommonScrollBar } from "../../../styles/GlobalStyles";
+import { brandDarkUrl } from "../../../data/consts";
 
 const StyledSocialFeedContainer = styled.div`
   flex: auto;
@@ -15,13 +16,6 @@ const StyledSocialFeedContainer = styled.div`
 `;
 
 const SocialFeedContent = styled.div`
-  background: url("https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/brand/logo.png")
-    var(--color-brand-700-transparent);
-  background-blend-mode: multiply;
-  background-origin: border-box;
-  background-position: center;
-  background-repeat: no-repeat;
-
   background-color: var(--color-brand-700);
 
   padding: 1.6rem;
@@ -71,9 +65,32 @@ const SocialFeedButton = styled.button`
   }
 `;
 
+const SocialFeedEmpty = styled.div`
+  background: url(${brandDarkUrl});
+  background-blend-mode: multiply;
+  background-origin: border-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 25%;
+
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-weight: 700;
+  font-size: 7.4rem;
+  color: var(--color-brand-600);
+
+  padding: 20rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export {
   StyledSocialFeedContainer,
   SocialFeedContent,
   SocialFeedButtons,
   SocialFeedButton,
+  SocialFeedEmpty,
 };

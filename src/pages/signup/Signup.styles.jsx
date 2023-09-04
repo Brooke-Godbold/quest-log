@@ -7,6 +7,11 @@ const StyledSignup = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 5.4rem 0;
+
+  @media (max-height: 60em) {
+    height: 100%;
+  }
 `;
 
 export { StyledSignup };
