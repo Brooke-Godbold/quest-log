@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { useEffect } from "react";
 
 import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
 
@@ -14,25 +15,26 @@ import Notification from "../../../ui/notification/Notification.component";
 
 import {
   Avatar,
-  AvatarErrorContainer,
   AvatarUploadInput,
   StyledAccountAvatarSection,
   UsernameLabel,
 } from "./AccountAvatarSection.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
+
 import { validateFile } from "../../../utils/validateFile";
+import { onErrorToast } from "../../../utils/onErrorToast";
 
 function AccountAvatarSection() {
   const {
     register,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
   const { user } = useUser();
   const { profile, isGettingProfile } = useProfileByUser(user?.id);
 
-  const { updateProfile, isLoading, isError } = useUpdateProfile(user?.id);
+  const { updateProfile, isLoading } = useUpdateProfile(user?.id);
 
   function onUpload(e) {
     if (!profile || !e.target.files || !e.target.files[0]) return;
@@ -48,14 +50,19 @@ function AccountAvatarSection() {
     };
 
     updateProfile(profileData, {
-      onSuccess: () =>
-        toast((t) => <Notification toast={t} text="Uploaded Avatar!" />),
+      onSuccess: () => toast(() => <Notification text="Uploaded Avatar!" />),
       onError: () =>
-        toast.error((t) => (
-          <Notification toast={t} text="Unable to upload Avatar at this time" />
+        toast.error(() => (
+          <Notification text="Unable to upload Avatar at this time" />
         )),
     });
   }
+
+  useEffect(() => {
+    if (errors.image) {
+      onErrorToast(errors, clearErrors);
+    }
+  }, [errors, clearErrors]);
 
   if (isGettingProfile) return <Spinner />;
 
@@ -82,11 +89,6 @@ function AccountAvatarSection() {
         disabled={isLoading}
         onChange={onUpload}
       />
-      {((errors && errors.avatar) || isError) && (
-        <AvatarErrorContainer>
-          <FormError>Error Uploading Avatar</FormError>
-        </AvatarErrorContainer>
-      )}
     </StyledAccountAvatarSection>
   );
 }

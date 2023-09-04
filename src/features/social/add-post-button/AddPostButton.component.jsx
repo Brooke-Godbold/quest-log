@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 
-import { useParams } from "react-router-dom";
 import { useUser } from "../../../query/auth/useUser";
 import { useAllGames } from "../../../query/game/useAllGames";
 import { useProfileByUser } from "../../../query/profile/useProfileByUser";
@@ -8,9 +7,7 @@ import { useProfileByUser } from "../../../query/profile/useProfileByUser";
 import Modal from "../../../ui/modal/Modal.component";
 import AddPostForm from "../add-post-form/AddPostForm.component";
 
-function AddPostButton({ styledPostButton, onOpenCallback }) {
-  const { userId } = useParams();
-
+function AddPostButton({ styledPostButton, onOpenCallback, isActive = true }) {
   const { isAuthenticated, user } = useUser();
   const { profile } = useProfileByUser(user?.id);
 
@@ -18,24 +15,20 @@ function AddPostButton({ styledPostButton, onOpenCallback }) {
 
   return (
     <>
-      {isAuthenticated &&
-        user &&
-        gameData &&
-        profile &&
-        (!userId || userId === user.id) && (
-          <Modal>
-            <Modal.Open onOpenCallback={onOpenCallback} opens="addPost">
-              {styledPostButton}
-            </Modal.Open>
-            <Modal.Window name="addPost">
-              <AddPostForm
-                gameData={gameData}
-                currentGames={profile.currentGames}
-                userId={user.id}
-              />
-            </Modal.Window>
-          </Modal>
-        )}
+      {isAuthenticated && user && gameData && profile && isActive && (
+        <Modal>
+          <Modal.Open onOpenCallback={onOpenCallback} opens="addPost">
+            {styledPostButton}
+          </Modal.Open>
+          <Modal.Window name="addPost">
+            <AddPostForm
+              gameData={gameData}
+              currentGames={profile.currentGames}
+              userId={user.id}
+            />
+          </Modal.Window>
+        </Modal>
+      )}
     </>
   );
 }
@@ -43,6 +36,7 @@ function AddPostButton({ styledPostButton, onOpenCallback }) {
 AddPostButton.propTypes = {
   styledPostButton: PropTypes.node.isRequired,
   onOpenCallback: PropTypes.func,
+  isActive: PropTypes.bool,
 };
 
 export default AddPostButton;

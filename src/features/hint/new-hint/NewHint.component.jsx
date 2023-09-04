@@ -20,12 +20,9 @@ import {
   StyledNewHint,
 } from "./NewHint.styles";
 import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
 
-import { TAGS } from "../../../data/consts";
-
-const MIN_LENGTH = 25;
-const MAX_LENGTH = 450;
+import { HINT_MAX_LENGTH, HINT_MIN_LENGTH, TAGS } from "../../../data/consts";
+import { onErrorToast } from "../../../utils/onErrorToast";
 
 function NewHint({ onCloseModal, user: { id: userId } }) {
   const { id: gameId } = useParams();
@@ -33,20 +30,15 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
 
   const newHintTags = useRef([]);
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    clearErrors,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, clearErrors, watch } = useForm();
 
   const watchContent = watch("content");
 
   function onNewHint(data) {
     if (newHintTags.current.length === 0) {
-      setError("tags", { type: "minLength" });
+      toast.error(() => (
+        <Notification text="Your hint must have at least 1 tag!" />
+      ));
       return;
     }
 
@@ -59,15 +51,17 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
       },
       {
         onSuccess: () => {
-          toast((t) => <Notification toast={t} text="Added a new Hint!" />);
+          toast(() => <Notification text="Added a new Hint!" />);
           onCloseModal?.();
         },
         onError: () =>
-          toast.error((t) => (
-            <Notification toast={t} text="Unable to add your Hint" />
-          )),
+          toast.error(() => <Notification text="Unable to add your Hint" />),
       }
     );
+  }
+
+  function onError(e) {
+    onErrorToast(e);
   }
 
   function handleCancel(e) {
@@ -86,7 +80,7 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
   }
 
   return (
-    <StyledNewHint onSubmit={handleSubmit(onNewHint)}>
+    <StyledNewHint onSubmit={handleSubmit(onNewHint, onError)}>
       <NewHintHeader>
         <NewHintButtonsContainer>
           <Button isLight={true} onClick={handleCancel}>
@@ -105,28 +99,25 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
       <NewHintBody>
         <NewHintTextArea
           {...register("content", {
-            required: true,
-            minLength: MIN_LENGTH,
-            maxLength: MAX_LENGTH,
+            required: {
+              value: true,
+              message: `Your hint must be at least ${HINT_MIN_LENGTH} characters!`,
+            },
+            minLength: {
+              value: HINT_MIN_LENGTH,
+              message: `Your hint must be at least ${HINT_MIN_LENGTH} characters!`,
+            },
+            maxLength: {
+              value: HINT_MAX_LENGTH,
+              message: `Your hint cannot be more than ${HINT_MAX_LENGTH} characters!`,
+            },
           })}
         />
         <TextCount
           value={watchContent}
-          minLength={MIN_LENGTH}
-          maxLength={MAX_LENGTH}
+          minLength={HINT_MIN_LENGTH}
+          maxLength={HINT_MAX_LENGTH}
         />
-        <div>
-          {(errors.content?.type === "required" ||
-            errors.content?.type === "minLength") && (
-            <FormError>{`Your hint must be at least ${MIN_LENGTH} characters!`}</FormError>
-          )}
-          {errors.content?.type === "maxLength" && (
-            <FormError>{`Your hint cannot be more than ${MAX_LENGTH} characters!`}</FormError>
-          )}
-          {errors.tags?.type === "minLength" && (
-            <FormError>{`Your hint must have at least 1 tag!`}</FormError>
-          )}
-        </div>
       </NewHintBody>
     </StyledNewHint>
   );

@@ -22,19 +22,22 @@ import {
   AccountSocialMediaContainer,
   AccountSocialMediaInputRow,
   CurrentlyPlayingContainer,
-  ProfileDetailsErrorContainer,
   ProfileDetailsLabel,
   ProfileDetailsRow,
   StyledAccountProfileDetails,
 } from "./AccountProfileDetailsSection.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
 import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 
-import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
+import {
+  BIO_MAX_LENGTH,
+  USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
+  kickUrl,
+  twitchUrl,
+  youtubeUrl,
+} from "../../../data/consts";
 
-const USERNAME_MIN_LENGTH = 8;
-const USERNAME_MAX_LENGTH = 20;
-const BIO_MAX_LENGTH = 450;
+import { onErrorToast } from "../../../utils/onErrorToast";
 
 function AccountProfileDetailsSection() {
   const { user, isGettingUser } = useUser();
@@ -49,11 +52,9 @@ function AccountProfileDetailsSection() {
   const [gameQuery, setGameQuery] = useState(null);
   const { gameData: gameDataList } = useSearchGames(gameQuery);
 
-  const {
-    updateProfile,
-    isLoading: isUpdatingProfile,
-    isError,
-  } = useUpdateProfile(user ? user.id : null);
+  const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
+    user ? user.id : null
+  );
 
   const isLoading = isFetchingProfile || isGettingProfile || isUpdatingProfile;
 
@@ -61,15 +62,16 @@ function AccountProfileDetailsSection() {
     register: registerProfile,
     handleSubmit: handleSubmitProfile,
     watch,
-    formState: { errors },
-    setValue,
-  } = useForm({ mode: "onBlur" });
-  const watchDisplayName = watch("displayName", "");
-  const watchBio = watch("bio", "");
+    clearErrors,
+    reset: resetProfile,
+  } = useForm({ mode: "onBlur", resetOptions: { keepDefaultValues: true } });
+  const watchDisplayName = watch("displayName", profile?.displayName);
+  const watchBio = watch("bio", profile?.bio);
 
   const {
     register: registerCurrentPlaying,
     handleSubmit: handleSubmitCurrentlyPlaying,
+    reset: resetCurrentlyPlaying,
   } = useForm({ mode: "onChange" });
 
   function onSubmitProfile(data) {
@@ -94,20 +96,15 @@ function AccountProfileDetailsSection() {
     updateProfile(
       { userId: user.id, data: newProfileData },
       {
-        onSuccess: () =>
-          toast((t) => <Notification toast={t} text="Updated Profile!" />),
+        onSuccess: () => toast(() => <Notification text="Updated Profile!" />),
         onError: () => {
-          toast.error((t) => (
-            <Notification toast={t} text="Unable to update Profile right now" />
+          toast.error(() => (
+            <Notification text="Unable to update Profile right now" />
           ));
-          setValue("displayName", profile.displayName);
+          resetProfile();
         },
       }
     );
-  }
-
-  function onProfileError(e) {
-    console.log("ERROR: ", e);
   }
 
   function onSubmitCurrentlyPlaying(data) {
@@ -134,12 +131,13 @@ function AccountProfileDetailsSection() {
         },
       },
       {
-        onSuccess: () =>
-          toast((t) => <Notification toast={t} text="Updated Profile!" />),
-        onError: () =>
-          toast.error((t) => (
-            <Notification toast={t} text="Unable to update Profile right now" />
-          )),
+        onSuccess: () => toast(() => <Notification text="Updated Profile!" />),
+        onError: () => {
+          toast.error(() => (
+            <Notification text="Unable to update Profile right now" />
+          ));
+          resetCurrentlyPlaying();
+        },
       }
     );
   }
@@ -201,7 +199,9 @@ function AccountProfileDetailsSection() {
   return (
     <>
       <StyledAccountProfileDetails
-        onBlur={handleSubmitProfile(onSubmitProfile, onProfileError)}
+        onBlur={handleSubmitProfile(onSubmitProfile, (e) =>
+          onErrorToast(e, clearErrors, resetProfile)
+        )}
       >
         <ProfileDetailsRow>
           <ProfileDetailsLabel>Display Name</ProfileDetailsLabel>
@@ -209,10 +209,20 @@ function AccountProfileDetailsSection() {
             id="displayName"
             type="text"
             {...registerProfile("displayName", {
-              required: true,
-              minLength: USERNAME_MIN_LENGTH,
-              maxLength: USERNAME_MAX_LENGTH,
-              validate: (value) => !value.includes(" "),
+              required: {
+                value: true,
+                message: "Display name cannot be empty!",
+              },
+              minLength: {
+                value: USERNAME_MIN_LENGTH,
+                message: `Username must be at least ${USERNAME_MIN_LENGTH} characters!`,
+              },
+              maxLength: {
+                value: USERNAME_MAX_LENGTH,
+                message: `Username cannot be longer than ${USERNAME_MAX_LENGTH} characters!`,
+              },
+              validate: (value) =>
+                !value.includes(" ") || "Username cannot include white space!",
             })}
             defaultValue={profile.displayName}
             disabled={isLoading}
@@ -222,22 +232,6 @@ function AccountProfileDetailsSection() {
             minLength={USERNAME_MIN_LENGTH}
             maxLength={USERNAME_MAX_LENGTH}
           />
-          <ProfileDetailsErrorContainer>
-            {errors.username ? (
-              errors.username.type === "required" ? (
-                <FormError>Username is required</FormError>
-              ) : errors.username.type === "minLength" ? (
-                <FormError>Usernames must be at least 8 characters</FormError>
-              ) : errors.username.type === "maxLength" ? (
-                <FormError>
-                  Usernames cannot be more than 20 characters
-                </FormError>
-              ) : (
-                <FormError>Usernames must not contain spaces</FormError>
-              )
-            ) : null}
-            {isError && <FormError>Unable to update Username</FormError>}
-          </ProfileDetailsErrorContainer>
         </ProfileDetailsRow>
 
         <ProfileDetailsRow>
@@ -246,17 +240,15 @@ function AccountProfileDetailsSection() {
             id="bio"
             type="text"
             {...registerProfile("bio", {
-              maxLength: BIO_MAX_LENGTH,
+              maxLength: {
+                value: BIO_MAX_LENGTH,
+                message: `Bio cannot be longer than ${BIO_MAX_LENGTH} characters!`,
+              },
             })}
-            defaultValue={profile?.bio || ""}
+            defaultValue={profile?.bio}
             disabled={isLoading}
           />
           <TextCount value={watchBio} maxLength={BIO_MAX_LENGTH} />
-          <ProfileDetailsErrorContainer>
-            {errors.bio && (
-              <FormError>Bio cannot be more than 450 characters!</FormError>
-            )}
-          </ProfileDetailsErrorContainer>
         </ProfileDetailsRow>
       </StyledAccountProfileDetails>
 
@@ -297,7 +289,9 @@ function AccountProfileDetailsSection() {
       </StyledAccountProfileDetails>
 
       <StyledAccountProfileDetails
-        onBlur={handleSubmitProfile(onSubmitProfile, onProfileError)}
+        onBlur={handleSubmitProfile(onSubmitProfile, (e) =>
+          onErrorToast(e, clearErrors, resetProfile)
+        )}
       >
         <ProfileDetailsRow>
           <ProfileDetailsLabel>Social Media</ProfileDetailsLabel>
@@ -309,9 +303,11 @@ function AccountProfileDetailsSection() {
                 id="twitch"
                 type="text"
                 {...registerProfile("twitch", {
-                  validate: (value) => !value.includes(" "),
+                  validate: (value) =>
+                    !value.includes(" ") ||
+                    "Twitch channel cannot include white space!",
                 })}
-                defaultValue={profile.twitch || ""}
+                defaultValue={profile.twitch}
                 disabled={isLoading}
                 placeholder="myTwitchUser"
               ></FormInput>
@@ -325,9 +321,11 @@ function AccountProfileDetailsSection() {
                 id="youtube"
                 type="text"
                 {...registerProfile("youtube", {
-                  validate: (value) => !value.includes(" "),
+                  validate: (value) =>
+                    !value.includes(" ") ||
+                    "YouTube channel cannot include white space!",
                 })}
-                defaultValue={profile.youtube || ""}
+                defaultValue={profile.youtube}
                 disabled={isLoading}
                 placeholder="myYoutubeChannel"
               ></FormInput>
@@ -341,9 +339,11 @@ function AccountProfileDetailsSection() {
                 id="kick"
                 type="text"
                 {...registerProfile("kick", {
-                  validate: (value) => !value.includes(" "),
+                  validate: (value) =>
+                    !value.includes(" ") ||
+                    "Kick channel cannot include white space!",
                 })}
-                defaultValue={profile.kick || ""}
+                defaultValue={profile.kick}
                 disabled={isLoading}
                 placeholder="myKickUser"
               ></FormInput>

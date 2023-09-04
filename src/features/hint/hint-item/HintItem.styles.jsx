@@ -9,7 +9,7 @@ const StyledHintItem = styled.div`
 
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 5px;
-  padding: 1.5rem 2.5rem;
+  padding: 1.8rem 1.8rem;
   background-color: var(--color-brand-500);
 
   transition: all 0.3s;

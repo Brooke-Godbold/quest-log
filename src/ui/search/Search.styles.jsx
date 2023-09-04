@@ -41,7 +41,7 @@ const SearchInput = styled.input`
   ${CommonInput}
 
   position: absolute;
-  right: 10%;
+  right: 5%;
 
   width: 100%;
   height: 100%;

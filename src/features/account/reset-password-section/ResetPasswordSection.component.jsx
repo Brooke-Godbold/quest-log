@@ -6,65 +6,54 @@ import Button from "../../../ui/button/Button.component";
 import TextCount from "../../../ui/text-count/TextCount.component";
 
 import {
-  ProfileDetailsErrorContainer,
   ProfileDetailsLabel,
   ProfileDetailsRow,
   StyledAccountProfileDetails,
 } from "../account-profile-details-section/AccountProfileDetailsSection.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
-import {
-  ResetPasswordButtonContainer,
-  ResetPasswordSuccessContainer,
-} from "./ResetPasswordSection.styles";
-import { FormSuccess } from "../../../ui/form-success/FormSuccess.styles";
+import { ResetPasswordButtonContainer } from "./ResetPasswordSection.styles";
 import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 
-const PASSWORD_MIN_LENGTH = 8;
+import { onErrorToast } from "../../../utils/onErrorToast";
+
+import { PASSWORD_MIN_LENGTH } from "../../../data/consts";
 
 function ResetPasswordSection() {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, getValues, reset, watch, clearErrors } =
+    useForm();
   const watchPassword = watch("password", "");
 
-  const { updatePassword, isLoading, isError, isSuccess } = useUpdatePassword();
+  const { updatePassword, isLoading } = useUpdatePassword();
 
   function onChangePassword(data) {
-    updatePassword(data.password);
-    reset();
+    updatePassword(data.password, {
+      onSettled: () => reset(),
+    });
+  }
+
+  function onError(e) {
+    onErrorToast(e, clearErrors, reset);
   }
 
   return (
-    <StyledAccountProfileDetails onSubmit={handleSubmit(onChangePassword)}>
+    <StyledAccountProfileDetails
+      onSubmit={handleSubmit(onChangePassword, onError)}
+    >
       <ProfileDetailsRow>
         <ProfileDetailsLabel>New Password</ProfileDetailsLabel>
         <FormInput
           type="password"
           id="password"
           {...register("password", {
-            required: true,
-            minLength: PASSWORD_MIN_LENGTH,
+            required: { value: true, message: "Password cannot be empty!" },
+            minLength: {
+              value: PASSWORD_MIN_LENGTH,
+              message: `Password must be at least ${PASSWORD_MIN_LENGTH} characters!`,
+            },
             validate: (value) => !value.includes(" "),
           })}
           disabled={isLoading}
         />
         <TextCount value={watchPassword} minLength={PASSWORD_MIN_LENGTH} />
-        <ProfileDetailsErrorContainer>
-          {errors.password ? (
-            errors.password.type === "required" ? (
-              <FormError>Password is required</FormError>
-            ) : errors.password.type === "minLength" ? (
-              <FormError>Passwords must be at least 8 characters</FormError>
-            ) : (
-              <FormError>Passwords must not contain spaces</FormError>
-            )
-          ) : null}
-        </ProfileDetailsErrorContainer>
       </ProfileDetailsRow>
 
       <ProfileDetailsRow>
@@ -73,22 +62,16 @@ function ResetPasswordSection() {
           type="password"
           id="passwordConfirm"
           {...register("passwordConfirm", {
-            required: true,
-            validate: (value) => value === getValues().password,
+            required: {
+              value: true,
+              message: "Confirm Password cannot be empty!",
+            },
+            validate: (value) =>
+              value === getValues().password || "Passwords must match!",
           })}
           disabled={isLoading}
         />
-        <ProfileDetailsErrorContainer>
-          {errors.passwordConfirm && (
-            <FormError>Passwords must match</FormError>
-          )}
-        </ProfileDetailsErrorContainer>
       </ProfileDetailsRow>
-
-      <ResetPasswordSuccessContainer>
-        {isError && <FormError>Unable to update Password</FormError>}
-        {isSuccess && <FormSuccess>Password successfully updated!</FormSuccess>}
-      </ResetPasswordSuccessContainer>
 
       <ResetPasswordButtonContainer>
         <Button>Update Password</Button>

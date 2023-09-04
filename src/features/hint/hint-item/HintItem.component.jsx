@@ -1,18 +1,20 @@
 import PropTypes from "prop-types";
 
 import { useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import { HiTrash } from "react-icons/hi";
+
+import { useDeleteHint } from "../../../query/hint/useDeleteHint";
+import { useUpdateHint } from "../../../query/hint/useUpdateHint";
+import { useAllGames } from "../../../query/game/useAllGames";
 
 import Modal from "../../../ui/modal/Modal.component";
 import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
 import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
 import Votes from "../../../ui/votes/Votes.component";
 import GameTag from "../../../ui/game-tag/GameTag.component";
-
-import { useDeleteHint } from "../../../query/hint/useDeleteHint";
-import { useUpdateHint } from "../../../query/hint/useUpdateHint";
-import { useAllGames } from "../../../query/game/useAllGames";
+import Notification from "../../../ui/notification/Notification.component";
 
 import {
   HintActionsContainer,
@@ -31,14 +33,17 @@ function HintItem({ hint, id, user }) {
 
   const { gameData } = useAllGames();
 
-  const {
-    deleteHint,
-    isLoading: isDeletingHint,
-    isError: isDeleteHintError,
-  } = useDeleteHint();
+  const { deleteHint, isLoading: isDeletingHint } = useDeleteHint();
 
   function deleteExistingHint() {
-    deleteHint(hint.id);
+    deleteHint(hint.id, {
+      onSuccess: () =>
+        toast(() => <Notification text="Successfully deleted hint!" />),
+      onError: () =>
+        toast.error(() => (
+          <Notification text="Unable to delete hint at this time" />
+        )),
+    });
   }
 
   return (
@@ -58,7 +63,6 @@ function HintItem({ hint, id, user }) {
               <ConfirmationCheck
                 onConfirm={deleteExistingHint}
                 actionLoading={isDeletingHint}
-                actionError={isDeleteHintError}
               >
                 <ConfirmationText>
                   Are you sure you wish to delete your hint? This cannot be

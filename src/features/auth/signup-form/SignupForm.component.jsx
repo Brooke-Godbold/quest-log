@@ -13,7 +13,6 @@ import Button from "../../../ui/button/Button.component";
 import TextCount from "../../../ui/text-count/TextCount.component";
 import Notification from "../../../ui/notification/Notification.component";
 
-import { LoginFormErrorContainer } from "../login-form/LoginForm.styles";
 import {
   CurrentlyPlayingContainer,
   SignUpGridContainer,
@@ -23,16 +22,19 @@ import {
   SignupSuccessText,
   StyledSignupForm,
 } from "./SIgnupForm.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
 import { ProfileDetailsLabel } from "../../account/account-profile-details-section/AccountProfileDetailsSection.styles";
 import { FormInput } from "../../../ui/FormInput/FormInput.styles";
 import { useAllGames } from "../../../query/game/useAllGames";
 import Spinner from "../../../ui/spinner/Spinner";
 import { CurrentlyPlaying } from "../../account/currently-playing-row/CurrentlyPlayingRow.styles";
 
-const USERNAME_MIN_LENGTH = 8;
-const USERNAME_MAX_LENGTH = 20;
-const PASSWORD_MIN_LENGTH = 8;
+import {
+  PASSWORD_MIN_LENGTH,
+  USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
+} from "../../../data/consts";
+
+import { onErrorToast } from "../../../utils/onErrorToast";
 
 function SignupForm() {
   const { isAuthenticated } = useUser();
@@ -112,7 +114,7 @@ function SignupForm() {
   }
 
   function onError(e) {
-    console.log(`ERROR`, e);
+    onErrorToast(e);
   }
 
   useEffect(
@@ -120,9 +122,13 @@ function SignupForm() {
       if (!emailCheckProfiles || !usernameCheckProfiles) return;
 
       if (emailCheckProfiles.length > 0) {
-        setError("email", { type: "inUse" });
+        toast.error(() => (
+          <Notification text="That email is already in use!" />
+        ));
       } else if (usernameCheckProfiles.length > 0) {
-        setError("username", { type: "inUse" });
+        toast.error(() => (
+          <Notification text="That username is already in use!" />
+        ));
       } else {
         signup(
           { email: getValues().email, password: getValues().password },
@@ -193,8 +199,14 @@ function SignupForm() {
                 disabled={isLoading}
                 aria-invalid={errors.email ? "true" : "false"}
                 {...register("email", {
-                  required: true,
-                  pattern: /\S+@\S+\.\S+/,
+                  required: {
+                    value: true,
+                    message: "An email address is required!",
+                  },
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Your email must be a valid email address!",
+                  },
                 })}
                 $error={errors.email}
               />
@@ -209,10 +221,18 @@ function SignupForm() {
                 disabled={isLoading}
                 aria-invalid={errors.username ? "true" : "false"}
                 {...register("username", {
-                  required: true,
-                  minLength: USERNAME_MIN_LENGTH,
-                  maxLength: USERNAME_MAX_LENGTH,
-                  validate: (value) => !value.includes(" "),
+                  required: { value: true, message: "A username is required!" },
+                  minLength: {
+                    value: USERNAME_MIN_LENGTH,
+                    message: `Username must be at least ${USERNAME_MIN_LENGTH} characters!`,
+                  },
+                  maxLength: {
+                    value: USERNAME_MAX_LENGTH,
+                    message: `Username cannot be more than ${USERNAME_MAX_LENGTH} characters!`,
+                  },
+                  validate: (value) =>
+                    !value.includes(" ") ||
+                    "Username cannot include white space!",
                 })}
                 $error={errors.username}
               />
@@ -231,9 +251,14 @@ function SignupForm() {
                 disabled={isLoading}
                 aria-invalid={errors.password ? "true" : "false"}
                 {...register("password", {
-                  required: true,
-                  minLength: PASSWORD_MIN_LENGTH,
-                  validate: (value) => !value.includes(" "),
+                  required: { value: true, message: "A password is required!" },
+                  minLength: {
+                    value: PASSWORD_MIN_LENGTH,
+                    message: `Your password must be at least ${PASSWORD_MIN_LENGTH} characters!`,
+                  },
+                  validate: (value) =>
+                    !value.includes(" ") ||
+                    "Password cannot include white space!",
                 })}
                 $error={errors.password}
               />
@@ -251,8 +276,12 @@ function SignupForm() {
                 disabled={isLoading}
                 aria-invalid={errors.passwordConfirm ? "true" : "false"}
                 {...register("passwordConfirm", {
-                  required: true,
-                  validate: (value) => value === getValues().password,
+                  required: {
+                    value: true,
+                    message: "You must confirm your password!",
+                  },
+                  validate: (value) =>
+                    value === getValues().password || "Passwords must match!",
                 })}
                 $error={errors.passwordConfirm}
               />
@@ -272,7 +301,9 @@ function SignupForm() {
                   disabled={isLoading}
                   id="currentlyPlaying"
                   {...register("currentlyPlaying", {
-                    validate: (value) => value !== "placeholder",
+                    validate: (value) =>
+                      value !== "placeholder" ||
+                      "Select what you're currently playing!",
                   })}
                 >
                   <option key="placeholder" value="placeholder">
@@ -287,52 +318,6 @@ function SignupForm() {
               </CurrentlyPlayingContainer>
             </SignUpGridItem>
           </SignUpGridContainer>
-
-          <LoginFormErrorContainer>
-            {errors.email ? (
-              errors.email.type === "required" ? (
-                <FormError>Email is required</FormError>
-              ) : errors.email.type === "inUse" ? (
-                <FormError>This email has already been registered</FormError>
-              ) : (
-                <FormError>This is not a valid email address</FormError>
-              )
-            ) : null}
-
-            {errors.username ? (
-              errors.username.type === "required" ? (
-                <FormError>Username is required</FormError>
-              ) : errors.username.type === "minLength" ? (
-                <FormError>Usernames must be at least 8 characters</FormError>
-              ) : errors.username.type === "maxLength" ? (
-                <FormError>
-                  Usernames cannot be more than 20 characters
-                </FormError>
-              ) : errors.username.type === "inUse" ? (
-                <FormError>This username is already in use</FormError>
-              ) : (
-                <FormError>Usernames must not contain spaces</FormError>
-              )
-            ) : null}
-
-            {errors.password ? (
-              errors.password.type === "required" ? (
-                <FormError>Password is required</FormError>
-              ) : errors.password.type === "minLength" ? (
-                <FormError>Passwords must be at least 8 characters</FormError>
-              ) : (
-                <FormError>Passwords must not contain spaces</FormError>
-              )
-            ) : null}
-
-            {errors.passwordConfirm && (
-              <FormError>Passwords must match</FormError>
-            )}
-
-            {errors.currentlyPlaying && (
-              <FormError>Select what you&apos;re playing currently!</FormError>
-            )}
-          </LoginFormErrorContainer>
 
           <Button disabled={isLoading} isLight={false}>
             Sign Up

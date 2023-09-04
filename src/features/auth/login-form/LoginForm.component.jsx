@@ -17,15 +17,15 @@ import Notification from "../../../ui/notification/Notification.component";
 
 import {
   LoginButtonsContainer,
-  LoginFormErrorContainer,
   LoginFormInputTable,
   LoginHeading,
   LoginModalButton,
   StyledLoginForm,
 } from "./LoginForm.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
 import { FormInput } from "../../../ui/FormInput/FormInput.styles";
+
+import { onErrorToast } from "../../../utils/onErrorToast";
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -56,7 +56,7 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
   }
 
   function onError(e) {
-    setErrors(e);
+    onErrorToast(e);
   }
 
   function onForgottenPassword(e) {
@@ -82,8 +82,11 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               disabled={isLoggingIn}
               aria-invalid={errors.email ? "true" : "false"}
               {...register("email", {
-                required: true,
-                pattern: /\S+@\S+\.\S+/,
+                required: { value: true, message: "Email is required!" },
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "This email is not valid!",
+                },
               })}
             />
 
@@ -93,21 +96,12 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               id="password"
               disabled={isLoggingIn}
               aria-invalid={errors.password ? "true" : "false"}
-              {...register("password", { required: true })}
+              {...register("password", {
+                value: true,
+                message: "Password is required!",
+              })}
             />
           </LoginFormInputTable>
-
-          <LoginFormErrorContainer>
-            {errors.email && errors.email.type === "required" && (
-              <FormError>Email is required</FormError>
-            )}
-            {errors.email && errors.email.type === "pattern" && (
-              <FormError>This is not a valid email address</FormError>
-            )}
-            {errors.password && errors.password.type === "required" && (
-              <FormError>Password is required</FormError>
-            )}
-          </LoginFormErrorContainer>
 
           <LoginButtonsContainer>
             <Button disabled={isLoggingIn} isLight={true}>

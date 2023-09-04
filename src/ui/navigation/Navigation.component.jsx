@@ -68,7 +68,7 @@ function Navigation() {
                   </HeaderActionButton>
                 }
               />
-              <HeaderActionLink to="/messages">
+              <HeaderActionLink to="/messages" onClick={handleToggleNavigation}>
                 {unreadMessagesCount > 0 ? (
                   <>
                     <BsEnvelopePlusFill />

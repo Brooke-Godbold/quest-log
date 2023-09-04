@@ -5,6 +5,8 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
+import { useLocations } from "../../../contexts/LocationsContext";
+
 import { useAddPost } from "../../../query/post/useAddPost";
 
 import Button from "../../../ui/button/Button.component";
@@ -14,7 +16,6 @@ import Notification from "../../../ui/notification/Notification.component";
 import {
   AddPostButtons,
   AddPostCancelButton,
-  AddPostErrorContainer,
   AddPostGame,
   AddPostHeader,
   AddPostTextArea,
@@ -22,13 +23,12 @@ import {
   ImageUploadInput,
   StyledAddPostForm,
 } from "./AddPostForm.styles";
-import { FormError } from "../../../ui/form-error/FormError.styles";
-import { useLocations } from "../../../contexts/LocationsContext";
+
+import { POST_MAX_LENGTH, POST_MIN_LENGTH } from "../../../data/consts";
+
 import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
 import { validateFile } from "../../../utils/validateFile";
-
-const MAX_LENGTH = 450;
-const MIN_LENGTH = 25;
+import { onErrorToast } from "../../../utils/onErrorToast";
 
 function AddPostForm({
   gameData,
@@ -51,6 +51,7 @@ function AddPostForm({
     handleSubmit,
     watch,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
   const watchPostContent = watch("postContent", "");
@@ -123,13 +124,19 @@ function AddPostForm({
   ]);
 
   function onError(e) {
-    console.log("ERROR: ", e);
+    onErrorToast(e);
   }
 
   function onCancel(e) {
     e.preventDefault();
     onCloseModal?.();
   }
+
+  useEffect(() => {
+    if (errors.image) {
+      onErrorToast(errors, clearErrors);
+    }
+  }, [errors, clearErrors]);
 
   return (
     <StyledAddPostForm onSubmit={handleSubmit(onPost, onError)}>
@@ -140,7 +147,9 @@ function AddPostForm({
             disabled={isLoading}
             id="gameId"
             {...register("gameId", {
-              validate: (value) => value !== "placeholder",
+              validate: (value) =>
+                value !== "placeholder" ||
+                "You must select a game for this post!",
             })}
           >
             <option key="placeholder" value="placeholder">
@@ -159,15 +168,24 @@ function AddPostForm({
           disabled={isLoading}
           id="postContent"
           {...register("postContent", {
-            required: true,
-            minLength: MIN_LENGTH,
-            maxLength: MAX_LENGTH,
+            required: {
+              value: true,
+              message: `Posts must be at least ${POST_MIN_LENGTH} characters!`,
+            },
+            minLength: {
+              value: POST_MIN_LENGTH,
+              message: `Posts must be at least ${POST_MIN_LENGTH} characters!`,
+            },
+            maxLength: {
+              value: POST_MAX_LENGTH,
+              message: `Posts cannot be more than ${POST_MAX_LENGTH} characters!`,
+            },
           })}
         />
         <TextCount
           value={watchPostContent}
-          minLength={MIN_LENGTH}
-          maxLength={MAX_LENGTH}
+          minLength={POST_MIN_LENGTH}
+          maxLength={POST_MAX_LENGTH}
         />
       </AddPostTextSection>
       <ImageUploadInput
@@ -176,21 +194,6 @@ function AddPostForm({
         id="image"
         disabled={isLoading}
       />
-      {errors && (
-        <AddPostErrorContainer>
-          {(errors.postContent?.type === "minLength" ||
-            errors.postContent?.type === "required") && (
-            <FormError>Posts must be at least 25 characters!</FormError>
-          )}
-          {errors.postContent?.type === "maxLength" && (
-            <FormError>Posts cannot be over 450 characters!</FormError>
-          )}
-          {errors.gameId?.type === "validate" && (
-            <FormError>Make sure you select a game for this post!</FormError>
-          )}
-          {errors.image && <FormError>Error uploading image!</FormError>}
-        </AddPostErrorContainer>
-      )}
       <AddPostButtons>
         <Button disabled={isLoading} isLight={true}>
           Post
