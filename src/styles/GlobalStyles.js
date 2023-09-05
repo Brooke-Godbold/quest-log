@@ -23,6 +23,10 @@ const GlobalStyles = createGlobalStyle`
   --color-brown-850: #100705;
   --color-brown-900: #080402;
 
+  /* Blue */
+  --color-blue-300: #2B50AA;
+  --color-blue-600: #132a64;
+
   /* Grey */
   --color-grey-0: #fff;
   --color-grey-50: #f9fafb;
@@ -48,6 +52,7 @@ const GlobalStyles = createGlobalStyle`
   --color-indigo-700: #4338ca;
 
   --color-red-100: #ffdfdf;
+  --color-red-400: rgb(255, 84, 84, 0.7);
   --color-red-600: #db2727;
   --color-red-700: #b91c1c;
   --color-red-800: #991b1b;

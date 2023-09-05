@@ -6,13 +6,9 @@ import {
 } from "../../../styles/GlobalStyles";
 
 const StyledHintListSection = styled.div`
-  background-color: var(--color-brand-700);
   min-height: 0;
   display: grid;
-  grid-template-rows: auto 1fr;
-
-  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
-  border-radius: 7px;
+  grid-template-rows: auto auto 1fr;
 
   max-width: 100%;
 
@@ -33,6 +29,12 @@ const ButtonContainer = styled.div`
 `;
 
 const HintListContainer = styled.div`
+  background-color: var(--color-brand-700);
+
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+
   position: relative;
   height: 0;
   min-height: 100%;
@@ -40,6 +42,10 @@ const HintListContainer = styled.div`
   overflow: auto;
 
   ${CommonScrollBar}
+
+  @media (max-width: 75em) {
+    height: auto;
+  }
 `;
 
 const HintList = styled.div`

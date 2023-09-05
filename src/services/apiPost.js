@@ -21,6 +21,19 @@ export async function getPostsByUserId(userId) {
   return data;
 }
 
+export async function getPostsByGameIds(gameIds) {
+  if (!gameIds) return [];
+
+  const { data, error } = await supabase
+    .from("post")
+    .select("*")
+    .in("gameId", gameIds);
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function getPostById(id) {
   if (!id) return null;
 
@@ -50,7 +63,7 @@ export async function getReplyByPostId(postId) {
 }
 
 export async function getPostsByContent(content) {
-  if (!content) return null;
+  if (!content) return [];
 
   const { data, error } = await supabase
     .from("post")

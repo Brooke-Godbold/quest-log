@@ -20,7 +20,9 @@ import {
   SendMessageButton,
   StyledNewMessage,
 } from "./NewMessage.styles";
+
 import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
+import { pushMessagesUpdate } from "../../../utils/pushMessagesUpdate";
 
 function NewMessage({ conversation }) {
   const {
@@ -74,7 +76,17 @@ function NewMessage({ conversation }) {
       data: updatedConversation,
     };
 
-    updateMessages(newData, { onSuccess: () => reset() });
+    updateMessages(newData, {
+      onSuccess: () => {
+        reset();
+
+        const partnerId =
+          conversation.userIdA !== user?.id
+            ? conversation.userIdA
+            : conversation.userIdB;
+        pushMessagesUpdate(partnerId);
+      },
+    });
   }
 
   useEffect(

@@ -22,6 +22,7 @@ import {
   StyledAddPostForm,
 } from "../add-post-form/AddPostForm.styles";
 import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
+import { pushMessagesUpdate } from "../../../utils/pushMessagesUpdate";
 
 function DirectMessage({ onCloseModal, username, receiverId }) {
   const { register, handleSubmit, reset } = useForm();
@@ -67,6 +68,8 @@ function DirectMessage({ onCloseModal, username, receiverId }) {
 
         setCurrentConversation(receiverId);
         navigate("/messages", { replace: true });
+
+        pushMessagesUpdate(receiverId);
       },
       onError: () =>
         toast.error((t) => (

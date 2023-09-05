@@ -35,7 +35,14 @@ import {
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
 import ZoomableImage from "../../../ui/zoomable-image/ZoomableImage.component";
 
-function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
+function SocialFeedPost({
+  post,
+  quotedPost,
+  id,
+  gameData,
+  isDetail = false,
+  innerRef,
+}) {
   const { isAuthenticated, user } = useUser();
 
   const navigate = useNavigate();
@@ -45,7 +52,7 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
 
   const { replies } = useReplyByPostId(post.id);
 
-  const { updatePost } = useUpdatePost();
+  const { updatePost } = useUpdatePost(onVoteSuccess);
 
   const { profile: quotedUser } = useProfileByUser(quotedPost?.userId);
 
@@ -54,8 +61,13 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
     setSearchParams(searchParams);
   }
 
+  function onVoteSuccess() {
+    searchParams.set("post", post.id);
+    setSearchParams(searchParams);
+  }
+
   return (
-    <StyledSocialFeedPost id={id}>
+    <StyledSocialFeedPost id={id} ref={innerRef}>
       <AvatarNavLink userId={post.userId} />
       {quotedPost && (
         <QuoteBlock onClick={handleClickQuote}>
@@ -66,7 +78,7 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
       <PostContent>{post.description}</PostContent>
       {post.imageUrl && <ZoomableImage imageUrl={post.imageUrl} />}
       <PostDetails>
-        {post.gameId && (
+        {post.gameId && gameData && (
           <GameTag to={`/game/${post.gameId}`}>
             {gameData.filter((game) => game.id === post.gameId)[0].name}
           </GameTag>
@@ -78,6 +90,7 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
           upvotes={post.upvotes}
           downvotes={post.downvotes}
           userId={post.userId}
+          searchParam="post"
         />
         <PostCreatedTime>{`Posted at: ${format(
           new Date(post.created_at),
@@ -149,9 +162,13 @@ function SocialFeedPost({ post, quotedPost, id, gameData, isDetail = false }) {
 SocialFeedPost.propTypes = {
   post: PropTypes.object.isRequired,
   quotedPost: PropTypes.object,
-  gameData: PropTypes.array.isRequired,
+  gameData: PropTypes.array,
   isDetail: PropTypes.bool,
   id: PropTypes.string,
+  innerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default SocialFeedPost;

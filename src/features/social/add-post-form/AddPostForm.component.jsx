@@ -152,9 +152,11 @@ function AddPostForm({
                 "You must select a game for this post!",
             })}
           >
-            <option key="placeholder" value="placeholder">
-              Please select...
-            </option>
+            {currentGames.length > 1 && (
+              <option key="placeholder" value="placeholder">
+                Please select...
+              </option>
+            )}
             {currentGames.map((gameId) => (
               <option key={gameId} value={gameId}>
                 {gameData.filter((game) => game.id === gameId)[0].name}

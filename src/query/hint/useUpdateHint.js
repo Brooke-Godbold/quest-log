@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateHint as updateHintApi } from "../../services/apiHints";
 
-export function useUpdateHint() {
+export function useUpdateHint(onSuccess) {
   const queryClient = useQueryClient();
 
   const { mutate: updateHint, isLoading: isUpdatingHint } = useMutation({
@@ -10,6 +10,7 @@ export function useUpdateHint() {
       queryClient.invalidateQueries({
         queryKey: ["hints"],
       });
+      onSuccess?.();
     },
   });
 

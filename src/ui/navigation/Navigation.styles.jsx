@@ -304,6 +304,21 @@ const NavigationGamesLink = styled(NavLink)`
   transition: all 0.3s;
 `;
 
+const NavigationGameMenuLink = styled(NavLink)`
+  ${CommonButton}
+
+  background-color: var(--color-blue-300);
+
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+  &:hover {
+    background-color: var(--color-blue-600);
+  }
+`;
+
 export {
   StyledNavigation,
   NavigationMenuButton,
@@ -319,4 +334,5 @@ export {
   UnreadMessages,
   NavigationGamesContainer,
   NavigationGamesLink,
+  NavigationGameMenuLink,
 };

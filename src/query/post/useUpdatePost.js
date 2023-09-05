@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePost as updatePostApi } from "../../services/apiPost";
 
-export function useUpdatePost() {
+export function useUpdatePost(onSuccess) {
   const queryClient = useQueryClient();
 
   const {
@@ -11,6 +11,7 @@ export function useUpdatePost() {
   } = useMutation({
     mutationFn: updatePostApi,
     onSuccess: () => {
+      onSuccess?.();
       queryClient.invalidateQueries({
         queryKey: ["post"],
       });

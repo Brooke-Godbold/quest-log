@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import { HiTrash } from "react-icons/hi";
@@ -27,9 +27,11 @@ import {
 } from "./HintItem.styles";
 import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
 
-function HintItem({ hint, id, user }) {
+function HintItem({ hint, id, user, innerRef }) {
   const { userId } = useParams();
-  const { updateHint } = useUpdateHint();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { updateHint } = useUpdateHint(onVoteSuccess);
 
   const { gameData } = useAllGames();
 
@@ -46,8 +48,13 @@ function HintItem({ hint, id, user }) {
     });
   }
 
+  function onVoteSuccess() {
+    searchParams.set("hint", hint.id);
+    setSearchParams(searchParams);
+  }
+
   return (
-    <StyledHintItem id={id}>
+    <StyledHintItem id={id} ref={innerRef}>
       <NavLinkContainer>
         <AvatarNavLink userId={hint.userId} view="hints" gameId={hint.gameId} />
       </NavLinkContainer>
@@ -78,6 +85,7 @@ function HintItem({ hint, id, user }) {
           upvotes={hint.upvotes}
           downvotes={hint.downvotes}
           userId={hint.userId}
+          searchParam="hint"
         />
       </HintActionsContainer>
       <HintTagsContainer>
@@ -100,8 +108,11 @@ function HintItem({ hint, id, user }) {
 HintItem.propTypes = {
   hint: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
-  setCurrentHint: PropTypes.func,
   user: PropTypes.object,
+  innerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default HintItem;

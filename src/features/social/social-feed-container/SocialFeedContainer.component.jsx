@@ -1,5 +1,5 @@
 import { useParams, useSearchParams } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { compareDesc } from "date-fns";
 
 import { usePostByUser } from "../../../query/post/usePostByUser";
@@ -21,10 +21,12 @@ import {
 } from "react-icons/bs";
 import { TbWorldSearch } from "react-icons/tb";
 
-import SocialFeedPost from "../social-feed-post/SocialFeedPost.component";
 import Spinner from "../../../ui/spinner/Spinner";
-import HintItem from "../../hint/hint-item/HintItem.component";
 import Blocked from "../blocked/Blocked.component";
+import PostList from "../post-list/PostList.component";
+import Hints from "../../hint/hints/Hints.component";
+import ReplyList from "../reply-list/ReplyList.component";
+import SearchResultList from "../../search/search-result-list/SearchResultList.component";
 
 import {
   SocialFeedButton,
@@ -34,8 +36,9 @@ import {
 } from "./SocialFeedContainer.styles";
 import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
 import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+
 import { useSearch } from "../../../hooks/useSearch";
-import SearchResultItem from "../../search/search-result-item/SearchResultItem.component";
+import { useScrollToItem } from "../../../hooks/useScrollToItem";
 
 function SocialFeedContainer() {
   const { userId, postId } = useParams();
@@ -189,6 +192,13 @@ function SocialFeedContainer() {
     return [];
   }, [allPosts, searchParams, profile, userPosts, replies, hintData, user]);
 
+  const canShowPosts =
+    !isLoadingPosts && sortedPosts && !isLoadingGames && gameData;
+
+  const canShowHints = !isLoadingHints && hintData;
+
+  const canShowReplies = postId && !isLoadingReplies;
+
   useEffect(
     function () {
       if (
@@ -207,26 +217,7 @@ function SocialFeedContainer() {
     [isAuthenticated, searchParams, setSearchParams]
   );
 
-  useEffect(
-    function () {
-      setTimeout(() => {
-        if (!searchParams.get("post")) return;
-
-        const currentPost = document.getElementById(
-          `post_${searchParams.get("post")}`
-        );
-
-        if (!currentPost) return;
-
-        currentPost.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "center",
-        });
-      }, 150);
-    },
-    [searchParams]
-  );
+  useScrollToItem([userPosts, hintData, replies]);
 
   function setGameFilter(e) {
     e.target.value >= 0
@@ -234,6 +225,14 @@ function SocialFeedContainer() {
       : searchParams.delete("game");
     setSearchParams(searchParams);
   }
+
+  const TopScrollElement = () => {
+    const elementRef = useRef();
+
+    useEffect(() => elementRef.current.scrollIntoView());
+
+    return <div ref={elementRef} />;
+  };
 
   return (
     <>
@@ -330,79 +329,18 @@ function SocialFeedContainer() {
             ) : null}
           </SocialFeedButtons>
           <SocialFeedContent>
+            <TopScrollElement />
             {searchParams.get("search") && searchResults ? (
-              <>
-                {searchResults.gameResults?.map((game) => (
-                  <SearchResultItem
-                    key={game.name}
-                    gameData={game}
-                    description={game.description}
-                  />
-                ))}
-                {searchResults.profileResults?.map((profile) => (
-                  <SearchResultItem
-                    key={profile.userId}
-                    userId={profile.userId}
-                    description={profile.bio}
-                  />
-                ))}
-                {searchResults.postResults?.map((post) => (
-                  <SocialFeedPost
-                    id={`post_${post.id}`}
-                    key={post.id}
-                    post={post}
-                    gameData={gameData}
-                    parentPostId={post.postId}
-                    quotedPost={
-                      post.quoteId &&
-                      sortedPosts?.filter(
-                        (reply) => reply.id === post.quoteId
-                      )[0]
-                    }
-                  />
-                ))}
-              </>
-            ) : postId && !isLoadingReplies ? (
-              sortedPosts.map((post) => (
-                <SocialFeedPost
-                  id={`post_${post.id}`}
-                  key={post.id}
-                  post={post}
-                  gameData={gameData}
-                  parentPostId={post.postId}
-                  quotedPost={
-                    post.quoteId &&
-                    sortedPosts.filter((reply) => reply.id === post.quoteId)[0]
-                  }
-                />
-              ))
+              <SearchResultList
+                searchResultObject={searchResults}
+                gameData={gameData}
+              />
+            ) : canShowReplies ? (
+              <ReplyList replies={sortedPosts} gameData={gameData} />
             ) : searchParams.get("view") === "hints" ? (
-              !isLoadingHints &&
-              hintData &&
-              sortedPosts.map((hint) => (
-                <HintItem
-                  hint={hint}
-                  id={`hint_${hint.id}`}
-                  user={user}
-                  isNewHint={false}
-                  key={hint.id}
-                />
-              ))
-            ) : !isLoadingPosts &&
-              sortedPosts &&
-              !isLoadingGames &&
-              gameData ? (
-              sortedPosts
-                .filter((post) => !post.postId)
-                .map((post) => (
-                  <SocialFeedPost
-                    key={post.id}
-                    id={`post_${post.id}`}
-                    post={post}
-                    gameData={gameData}
-                    parentPostId={post.postId}
-                  />
-                ))
+              canShowHints && <Hints hints={sortedPosts} user={user} />
+            ) : canShowPosts ? (
+              <PostList posts={sortedPosts} gameData={gameData} />
             ) : (
               <Spinner />
             )}

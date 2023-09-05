@@ -1,15 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { add, compareAsc, compareDesc } from "date-fns";
 
 import { useHint } from "../../../query/hint/useHint";
 import { useUser } from "../../../query/auth/useUser";
 import { useProfilesByUsername } from "../../../query/profile/useProfilesByUsername";
+import { usePostsByGames } from "../../../query/post/usePostByGame";
+import { useAllGames } from "../../../query/game/useAllGames";
 
 import Spinner from "../../../ui/spinner/Spinner";
-import HintItem from "../hint-item/HintItem.component";
+import PostList from "../../social/post-list/PostList.component";
+import Hints from "../hints/Hints.component";
 
 import { HintList, HintListContainer, NoHints } from "./HintList.styles";
+
+import { useScrollToItem } from "../../../hooks/useScrollToItem";
 
 function HintListBody() {
   const { user } = useUser();
@@ -32,14 +37,26 @@ function HintListBody() {
     isFetchingProfile,
   } = useProfilesByUsername(searchUsername);
 
+  const { gameData, isLoading: isLoadingGames } = useAllGames();
+  const { posts, isGettingPosts } = usePostsByGames([id]);
+
   const isLoading =
-    isLoadingHints || isFetchingHints || isGettingProfile || isFetchingProfile;
+    isLoadingHints ||
+    isFetchingHints ||
+    isGettingProfile ||
+    isFetchingProfile ||
+    isGettingPosts ||
+    isLoadingGames;
+
+  const isNoResultsAvailable =
+    (searchParams.get("view") === "posts" && posts?.length === 0) ||
+    (searchParams.get("view") === "hints" && hintData?.length === 0);
 
   const [initialLoad, setInitialLoad] = useState(true);
 
   const [sortedFilteredData, setSortedFilteredData] = useState([]);
 
-  const currentHint = useRef(0);
+  useScrollToItem([hintData, posts]);
 
   useEffect(
     function () {
@@ -55,14 +72,16 @@ function HintListBody() {
         setSearchParams(searchParams);
       }
     },
-    [searchParams, setSearchParams, user, profileData, hintData]
+    [searchParams, setSearchParams, user]
   );
 
   useEffect(
     function () {
-      if (!hintData) return;
+      const data = searchParams.get("view") === "posts" ? posts : hintData;
 
-      const currentData = [...hintData];
+      if (!data) return;
+
+      const currentData = [...data];
       const sortedData = sortHints(currentData, sortValue);
       const filteredData = filterHints(sortedData, filterValue, user);
 
@@ -71,23 +90,12 @@ function HintListBody() {
           ? filterByUser(filteredData)
           : filteredData;
 
-      const tagFiltered = searchParams.get("tag")
-        ? filterByTags(usernameFiltered)
-        : usernameFiltered;
+      const tagFiltered =
+        searchParams.get("tag") && searchParams.get("view") === "hints"
+          ? filterByTags(usernameFiltered)
+          : usernameFiltered;
 
       setSortedFilteredData(tagFiltered);
-
-      const currentHintElement = document.getElementById(
-        `hint_${currentHint.current}`
-      );
-
-      if (!currentHintElement) return;
-
-      currentHintElement.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "nearest",
-      });
 
       function filterByUser(hints) {
         return hints.filter((hint) => {
@@ -97,12 +105,12 @@ function HintListBody() {
 
       function filterByTags(hints) {
         return hints.filter((hint) =>
-          hint.hintTypes.includes(searchParams.get("tag"))
+          hint.hintTypes?.includes(searchParams.get("tag"))
         );
       }
     },
 
-    [hintData, sortValue, filterValue, user, searchParams, profileData]
+    [hintData, posts, sortValue, filterValue, user, searchParams, profileData]
   );
 
   function sortHints(hintData, sortBy) {
@@ -166,20 +174,14 @@ function HintListBody() {
   return (
     <HintListContainer>
       <HintList>
-        {(isLoading && initialLoad) || !hintData ? (
+        {isLoading && initialLoad ? (
           <Spinner />
-        ) : hintData.length === 0 ? (
+        ) : isNoResultsAvailable ? (
           <NoHints>Nothing here yet...</NoHints>
+        ) : searchParams.get("view") === "posts" && gameData ? (
+          <PostList posts={sortedFilteredData} gameData={gameData} />
         ) : (
-          sortedFilteredData.map((hint) => (
-            <HintItem
-              hint={hint}
-              key={hint.id}
-              id={`hint_${hint.id}`}
-              currentHint={currentHint}
-              user={user}
-            />
-          ))
+          <Hints hints={sortedFilteredData} user={user} />
         )}
       </HintList>
     </HintListContainer>

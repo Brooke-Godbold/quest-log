@@ -16,6 +16,8 @@ export const HINT_MAX_LENGTH = 450;
 export const POST_MAX_LENGTH = 450;
 export const POST_MIN_LENGTH = 25;
 
+export const BATCH_ITEM_MULTIPLIER = 10;
+
 export const anonymousImageUrl =
   "https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/avatars/anonymous.jpg";
 export const brandDarkUrl =

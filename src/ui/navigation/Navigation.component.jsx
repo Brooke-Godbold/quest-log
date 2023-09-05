@@ -18,6 +18,7 @@ import {
   HeaderActionLink,
   NavigationButton,
   NavigationContainer,
+  NavigationGameMenuLink,
   NavigationGamesContainer,
   NavigationGamesLink,
   NavigationHeader,
@@ -43,6 +44,7 @@ function Navigation() {
   const { logout } = useLogout();
 
   const isSmallDevice = useMediaQuery("only screen and (max-width : 65em)");
+  const isMobileDevice = useMediaQuery("only screen and (max-width : 40em)");
 
   const { setCurrentConversation } = useConversations();
   const { conversations } = useMessages(user?.id);
@@ -113,19 +115,21 @@ function Navigation() {
             </>
           )}
         </NavigationHeader>
-        <NavigationGamesContainer
-          $active={navigationActive || accountNavigationActive}
-        >
-          {gameData?.map((game) => (
-            <NavigationGamesLink
-              key={game.id}
-              onClick={handleCloseNavigation}
-              to={`/game/${game.id}`}
-            >
-              <NavigationMenuImage src={game.imageUrl} />
-            </NavigationGamesLink>
-          ))}
-        </NavigationGamesContainer>
+        {!isMobileDevice && (
+          <NavigationGamesContainer
+            $active={navigationActive || accountNavigationActive}
+          >
+            {gameData?.map((game) => (
+              <NavigationGamesLink
+                key={game.id}
+                onClick={handleCloseNavigation}
+                to={`/game/${game.id}`}
+              >
+                <NavigationMenuImage src={game.imageUrl} />
+              </NavigationGamesLink>
+            ))}
+          </NavigationGamesContainer>
+        )}
         <NavigationMenuContainer $active={navigationActive}>
           <NavigationLink
             onClick={handleCloseNavigation}
@@ -153,6 +157,16 @@ function Navigation() {
               >
                 Public Profile
               </NavigationLink>
+              {isMobileDevice &&
+                gameData?.map((game) => (
+                  <NavigationGameMenuLink
+                    key={`currently_playing_game_${game.id}`}
+                    onClick={handleCloseNavigation}
+                    to={`/game/${game.id}`}
+                  >
+                    {game.name}
+                  </NavigationGameMenuLink>
+                ))}
               <NavigationButton onClick={handleSwitchNavigation}>
                 Account
               </NavigationButton>
@@ -226,5 +240,3 @@ function Navigation() {
 }
 
 export default Navigation;
-
-//"https://xhkwznfhytvgvorvkcdp.supabase.co/storage/v1/object/public/avatars/anonymous.jpg"

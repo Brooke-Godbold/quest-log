@@ -32,7 +32,7 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
 
   const { register, handleSubmit, clearErrors, watch } = useForm();
 
-  const watchContent = watch("content");
+  const watchContent = watch("content", "");
 
   function onNewHint(data) {
     if (newHintTags.current.length === 0) {

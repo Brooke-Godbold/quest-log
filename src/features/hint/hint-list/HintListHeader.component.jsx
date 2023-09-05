@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
@@ -23,8 +23,12 @@ import {
 import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
 
 import { TAGS } from "../../../data/consts";
+import AddPostForm from "../../social/add-post-form/AddPostForm.component";
+import { useAllGames } from "../../../query/game/useAllGames";
+import { useEffect } from "react";
 
 function HintListHeader() {
+  const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSort = searchParams.get("sort") || "popularity";
   const currentFilter = searchParams.get("filter") || "none";
@@ -32,6 +36,8 @@ function HintListHeader() {
   const { register, handleSubmit, reset } = useForm();
 
   const { isAuthenticated, user } = useUser();
+
+  const { gameData } = useAllGames();
 
   const isSmallDevice = useMediaQuery("only screen and (max-width : 90em)");
 
@@ -69,20 +75,42 @@ function HintListHeader() {
     setSearchParams(searchParams);
   }
 
+  useEffect(() => {
+    if (!searchParams.get("view")) {
+      searchParams.set("view", "hints");
+      setSearchParams(searchParams);
+    }
+  }, [searchParams, setSearchParams]);
+
   return (
     <StyledHintListHeader>
       <ButtonContainer>
         <HintHeaderFilterSection $width={30}>
           {isAuthenticated && (
             <div>
-              <Modal>
-                <Modal.Open opens="newHint">
-                  <Button isLight={false}>New</Button>
-                </Modal.Open>
-                <Modal.Window name="newHint">
-                  <NewHint user={user} />
-                </Modal.Window>
-              </Modal>
+              {searchParams.get("view") === "posts" ? (
+                <Modal>
+                  <Modal.Open opens="newHint">
+                    <Button isLight={false}>New</Button>
+                  </Modal.Open>
+                  <Modal.Window name="newHint">
+                    <AddPostForm
+                      gameData={gameData}
+                      currentGames={[Number(id)]}
+                      userId={user.id}
+                    />
+                  </Modal.Window>
+                </Modal>
+              ) : (
+                <Modal>
+                  <Modal.Open opens="newHint">
+                    <Button isLight={false}>New</Button>
+                  </Modal.Open>
+                  <Modal.Window name="newHint">
+                    <NewHint user={user} />
+                  </Modal.Window>
+                </Modal>
+              )}
             </div>
           )}
 
@@ -174,14 +202,16 @@ function HintListHeader() {
             </StyledButtonContainer>
           )}
 
-          <GameSelect onChange={handleSearchTags}>
-            <option value="None">All</option>
-            {TAGS.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </GameSelect>
+          {searchParams.get("view") !== "posts" && (
+            <GameSelect onChange={handleSearchTags}>
+              <option value="None">All</option>
+              {TAGS.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </GameSelect>
+          )}
         </HintHeaderFilterSection>
       </ButtonContainer>
     </StyledHintListHeader>
