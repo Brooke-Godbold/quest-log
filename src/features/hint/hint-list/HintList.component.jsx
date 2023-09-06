@@ -24,7 +24,7 @@ function HintListSection({ detailsActive }) {
   function setView(view) {
     searchParams.set("view", view);
     searchParams.delete("search");
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   return (

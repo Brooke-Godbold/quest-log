@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import GameDetails from "../../features/game/game-details/GameDetails.component";
 import HintListSection from "../../features/hint/hint-list/HintList.component";
-import { StyledGame } from "./Game.styles";
-import { useQueryClient } from "@tanstack/react-query";
 import SwitchViewContainer from "../../features/game/switch-view/SwitchViewContainer.component";
+
+import { StyledGame } from "./Game.styles";
 
 function Game() {
   const [detailsActive, setDetailsActive] = useState(true);

@@ -1,15 +1,18 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
 import { HiX } from "react-icons/hi";
 
 import { useUser } from "../../../query/auth/useUser";
+import { useAllGames } from "../../../query/game/useAllGames";
 
 import Button from "../../../ui/button/Button.component";
 import ToggleButton from "../../../ui/toggle-button/ToggleButton.component";
 import NewHint from "../new-hint/NewHint.component";
 import Modal from "../../../ui/modal/Modal.component";
+import AddPostForm from "../../social/add-post-form/AddPostForm.component";
 
 import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
 import {
@@ -23,9 +26,6 @@ import {
 import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
 
 import { TAGS } from "../../../data/consts";
-import AddPostForm from "../../social/add-post-form/AddPostForm.component";
-import { useAllGames } from "../../../query/game/useAllGames";
-import { useEffect } from "react";
 
 function HintListHeader() {
   const { id } = useParams();
@@ -45,26 +45,26 @@ function HintListHeader() {
     if (searchParams.get("sort") === toggleValue) return;
 
     searchParams.set("sort", toggleValue);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   function handleSetFilter(toggleValue) {
     if (searchParams.get("filter") === toggleValue) return;
 
     searchParams.set("filter", toggleValue);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   function handleSearchUsername(data) {
     searchParams.set("username", data.username);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
 
     reset();
   }
 
   function resetSearchUsername() {
     searchParams.delete("username");
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   function handleSearchTags(e) {
@@ -72,13 +72,13 @@ function HintListHeader() {
       ? searchParams.delete("tag")
       : searchParams.set("tag", e.target.value);
 
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   useEffect(() => {
     if (!searchParams.get("view")) {
       searchParams.set("view", "hints");
-      setSearchParams(searchParams);
+      setSearchParams(searchParams, { replace: true });
     }
   }, [searchParams, setSearchParams]);
 

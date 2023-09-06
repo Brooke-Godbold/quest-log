@@ -6,12 +6,15 @@ import { useProfileByUser } from "../../query/profile/useProfileByUser";
 import { useLogout } from "../../query/auth/useLogout";
 import { useMessages } from "../../query/message/useMessages";
 import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
+import { useGamesByIds } from "../../query/game/useGamesByIds";
+import { useConversations } from "../../contexts/ConversationsContext";
 
 import { HiPlus } from "react-icons/hi";
 import { BsEnvelopeOpen, BsEnvelopePlusFill } from "react-icons/bs";
 
 import LoginModal from "../login-modal/LoginModal.component";
 import AddPostButton from "../../features/social/add-post-button/AddPostButton.component";
+import Search from "../search/Search.component";
 
 import {
   HeaderActionButton,
@@ -32,9 +35,6 @@ import {
 } from "./Navigation.styles";
 
 import { anonymousImageUrl } from "../../data/consts";
-import Search from "../search/Search.component";
-import { useGamesByIds } from "../../query/game/useGamesByIds";
-import { useConversations } from "../../contexts/ConversationsContext";
 
 function Navigation() {
   const { user } = useUser();

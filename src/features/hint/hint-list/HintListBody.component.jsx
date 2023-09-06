@@ -69,7 +69,7 @@ function HintListBody() {
     function () {
       if (!user && searchParams.get("filter") === "mine") {
         searchParams.set("filter", "none");
-        setSearchParams(searchParams);
+        setSearchParams(searchParams, { replace: true });
       }
     },
     [searchParams, setSearchParams, user]

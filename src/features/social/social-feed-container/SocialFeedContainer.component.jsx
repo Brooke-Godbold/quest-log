@@ -93,7 +93,7 @@ function SocialFeedContainer() {
   function setView(view) {
     searchParams.set("view", view);
     searchParams.delete("search");
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   const sortedPosts = useMemo(() => {
@@ -211,7 +211,7 @@ function SocialFeedContainer() {
       ) {
         searchParams.delete("search");
         searchParams.set("view", "trending");
-        setSearchParams(searchParams);
+        setSearchParams(searchParams, { replace: true });
       }
     },
     [isAuthenticated, searchParams, setSearchParams]
@@ -223,7 +223,7 @@ function SocialFeedContainer() {
     e.target.value >= 0
       ? searchParams.set("game", e.target.value)
       : searchParams.delete("game");
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   const TopScrollElement = () => {

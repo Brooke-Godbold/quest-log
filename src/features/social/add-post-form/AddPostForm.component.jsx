@@ -104,11 +104,11 @@ function AddPostForm({
     } else {
       searchParams.set("post", newPostId);
     }
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
 
     if (redirectToDetailView) {
       setPreviousLocation();
-      navigate(`/social/post/${parentPostId}?view=recent`, { replace: true });
+      navigate(`/social/post/${parentPostId}?view=recent`);
     } else {
       onCloseModal?.();
     }

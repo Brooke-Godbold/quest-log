@@ -10,6 +10,7 @@ import SocialFeedContainer from "../../features/social/social-feed-container/Soc
 import Spinner from "../../ui/spinner/Spinner";
 
 import { StyledSocialPost } from "./SocialPost.styles";
+import { usePageTitle } from "../../hooks/usePageTitle";
 
 function SocialPost() {
   const { postId } = useParams();
@@ -24,6 +25,8 @@ function SocialPost() {
     isLoading: isGamesLoading,
     isError: isGamesError,
   } = useAllGames();
+
+  usePageTitle("View Post");
 
   return (
     <StyledSocialPost>

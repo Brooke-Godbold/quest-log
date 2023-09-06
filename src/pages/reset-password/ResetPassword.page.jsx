@@ -7,8 +7,11 @@ import {
 import supabase from "../../services/supabase";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePageTitle } from "../../hooks/usePageTitle";
 
 function ResetPassword() {
+  usePageTitle("Reset Password");
+
   const [isShowPasswordReset, setIsShowPasswordReset] = useState(false);
 
   const navigate = useNavigate();

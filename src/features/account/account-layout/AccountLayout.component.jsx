@@ -14,8 +14,11 @@ import {
   AccountSectionNavLink,
   StyledAccountLayout,
 } from "./AccountLayout.styles";
+import { usePageTitle } from "../../../hooks/usePageTitle";
 
 function AccountLayout({ children }) {
+  usePageTitle("Account");
+
   const { user } = useUser();
 
   const { isGettingProfile } = useProfileByUser(user?.id);

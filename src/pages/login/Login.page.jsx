@@ -5,8 +5,11 @@ import { useUser } from "../../query/auth/useUser";
 import LoginContainer from "../../features/auth/login-container/LoginContainer.component";
 
 import { StyledLogin } from "./Login.styles";
+import { usePageTitle } from "../../hooks/usePageTitle";
 
 function Login() {
+  usePageTitle("Login");
+
   const { isAuthenticated, user } = useUser();
 
   const navigate = useNavigate();

@@ -50,7 +50,7 @@ function HintItem({ hint, id, user, innerRef }) {
 
   function onVoteSuccess() {
     searchParams.set("hint", hint.id);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   return (
@@ -97,7 +97,7 @@ function HintItem({ hint, id, user, innerRef }) {
       </HintTagsContainer>
       <HintDescription>{hint.description}</HintDescription>
       {userId && gameData && (
-        <GameTag to={`/game/${hint.gameId}`}>
+        <GameTag to={`/game/${hint.gameId}?view=hints`}>
           {gameData.filter((game) => game.id === hint.gameId)[0]?.name}
         </GameTag>
       )}

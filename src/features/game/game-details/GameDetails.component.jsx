@@ -17,9 +17,13 @@ import {
   StyledGameDetails,
 } from "./GameDetails.styles";
 
+import { usePageTitle } from "../../../hooks/usePageTitle";
+
 function GameDetails({ detailsActive }) {
   const { id } = useParams();
   const { gameData, isFetching } = useGame(id);
+
+  usePageTitle(gameData?.name);
 
   return (
     <StyledGameDetails $detailsActive={detailsActive}>

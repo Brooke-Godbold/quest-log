@@ -58,12 +58,12 @@ function SocialFeedPost({
 
   function handleClickQuote() {
     searchParams.set("post", post.quoteId);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   function onVoteSuccess() {
     searchParams.set("post", post.id);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   }
 
   return (
@@ -79,7 +79,7 @@ function SocialFeedPost({
       {post.imageUrl && <ZoomableImage imageUrl={post.imageUrl} />}
       <PostDetails>
         {post.gameId && gameData && (
-          <GameTag to={`/game/${post.gameId}`}>
+          <GameTag to={`/game/${post.gameId}?view=hints`}>
             {gameData.filter((game) => game.id === post.gameId)[0].name}
           </GameTag>
         )}
@@ -129,10 +129,7 @@ function SocialFeedPost({
               navigate(
                 previousLocation
                   ? `${previousLocation}&post=${post.id}`
-                  : `/social/${post?.userId}?view=posts&post=${post.id}`,
-                {
-                  replace: true,
-                }
+                  : `/social/${post?.userId}?view=posts&post=${post.id}`
               )
             }
           >
@@ -144,7 +141,11 @@ function SocialFeedPost({
         ) : (
           !post.postId && (
             <DetailLink
-              onClick={() => setPreviousLocation()}
+              onClick={() => {
+                setPreviousLocation();
+                searchParams.set("post", post.id);
+                setSearchParams(searchParams, { replace: true });
+              }}
               to={`/social/post/${post.id}?view=recent`}
             >
               <ResponsiveButtonContent>

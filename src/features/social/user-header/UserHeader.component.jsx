@@ -22,6 +22,7 @@ import Spinner from "../../../ui/spinner/Spinner";
 import Modal from "../../../ui/modal/Modal.component";
 import Notification from "../../../ui/notification/Notification.component";
 import DirectMessage from "../direct-message/DirectMessage.component";
+import AddPostButton from "../add-post-button/AddPostButton.component";
 
 import {
   CurrentlyPlaying,
@@ -44,7 +45,8 @@ import {
 } from "./UserHeader.styles";
 
 import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
-import AddPostButton from "../add-post-button/AddPostButton.component";
+
+import { usePageTitle } from "../../../hooks/usePageTitle";
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
@@ -75,6 +77,8 @@ function UserHeader() {
   const messagingEnabled =
     viewedProfile?.messaging === 2 ||
     (mutualFollowers && viewedProfile?.messaging === 1);
+
+  usePageTitle(viewedProfile?.displayName);
 
   function onFollow() {
     if (!userProfile) return;
@@ -284,7 +288,7 @@ function UserHeader() {
                     {viewedProfile.currentGames.map((gameId) => (
                       <CurrentlyPlaying
                         key={gameId}
-                        to={`/game/${gameId}?username=${viewedProfile.username}`}
+                        to={`/game/${gameId}?view=hints&username=${viewedProfile.username}`}
                       >
                         {gameData.filter((game) => game.id === gameId)[0].name}
                       </CurrentlyPlaying>
