@@ -295,7 +295,7 @@ function UserHeader() {
             )}
           </UserProfile>
           <AddPostButton
-            isActive={!userId || userId === user.id}
+            isActive={!userId || userId === user?.id}
             styledPostButton={<AddNewPostButton>Add New Post</AddNewPostButton>}
           />
         </>
