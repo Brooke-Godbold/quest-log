@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getProfilesByUsername } from "../../services/apiProfile";
+import { useQuery } from '@tanstack/react-query';
+import { getProfileByUsername } from '../../services/apiProfile';
 
 export function useProfilesByUsername(username) {
   const {
@@ -8,8 +8,8 @@ export function useProfilesByUsername(username) {
     data: profile,
     isError,
   } = useQuery({
-    queryKey: ["profile", username],
-    queryFn: () => getProfilesByUsername(username),
+    queryKey: ['profile', username],
+    queryFn: () => getProfileByUsername(username),
     retry: false,
   });
 

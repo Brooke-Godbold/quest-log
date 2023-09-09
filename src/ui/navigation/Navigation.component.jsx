@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useState } from 'react';
+import { useMediaQuery } from '@uidotdev/usehooks';
 
-import { useUser } from "../../query/auth/useUser";
-import { useProfileByUser } from "../../query/profile/useProfileByUser";
-import { useLogout } from "../../query/auth/useLogout";
-import { useMessages } from "../../query/message/useMessages";
-import { useUnreadMessagesCount } from "../../hooks/useUnreadMessagesCount";
-import { useGamesByIds } from "../../query/game/useGamesByIds";
-import { useConversations } from "../../contexts/ConversationsContext";
+import { useUser } from '../../query/auth/useUser';
+import { useProfileByUser } from '../../query/profile/useProfileByUser';
+import { useLogout } from '../../query/auth/useLogout';
+import { useMessages } from '../../query/message/useMessages';
+import { useUnreadMessagesCount } from '../../hooks/useUnreadMessagesCount';
+import { useGamesByIds } from '../../query/game/useGamesByIds';
+import { useConversations } from '../../contexts/ConversationsContext';
 
-import { HiPlus } from "react-icons/hi";
-import { BsEnvelopeOpen, BsEnvelopePlusFill } from "react-icons/bs";
+import { HiPlus } from 'react-icons/hi';
+import { BsEnvelopeOpen, BsEnvelopePlusFill } from 'react-icons/bs';
 
-import LoginModal from "../login-modal/LoginModal.component";
-import AddPostButton from "../../features/social/add-post-button/AddPostButton.component";
-import Search from "../search/Search.component";
+import LoginModal from '../login-modal/LoginModal.component';
+import AddPostButton from '../../features/social/add-post-button/AddPostButton.component';
+import Search from '../search/Search.component';
 
 import {
   HeaderActionButton,
@@ -32,19 +32,24 @@ import {
   NavigationOverlay,
   StyledNavigation,
   UnreadMessages,
-} from "./Navigation.styles";
+} from './Navigation.styles';
 
-import { anonymousImageUrl } from "../../data/consts";
+import { anonymousImageUrl } from '../../data/consts';
+import Spinner from '../spinner/Spinner';
 
 function Navigation() {
-  const { user } = useUser();
-  const { profile } = useProfileByUser(user?.id);
+  const { user, isGettingUser } = useUser();
+  const { profile, isGettingProfile, isFetchingProfile } = useProfileByUser(
+    user?.id
+  );
   const { gameData } = useGamesByIds(profile?.currentGames);
+
+  const isLoading = isGettingUser || isGettingProfile || isFetchingProfile;
 
   const { logout } = useLogout();
 
-  const isSmallDevice = useMediaQuery("only screen and (max-width : 65em)");
-  const isMobileDevice = useMediaQuery("only screen and (max-width : 40em)");
+  const isSmallDevice = useMediaQuery('only screen and (max-width : 65em)');
+  const isMobileDevice = useMediaQuery('only screen and (max-width : 40em)');
 
   const { setCurrentConversation } = useConversations();
   const { conversations } = useMessages(user?.id);
@@ -88,9 +93,13 @@ function Navigation() {
       <NavigationContainer>
         <NavigationHeader>
           <NavigationMenuButton onClick={handleToggleNavigation}>
-            <NavigationMenuImage
-              src={profile ? profile.avatarUrl : anonymousImageUrl}
-            />
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <NavigationMenuImage
+                src={profile ? profile.avatarUrl : anonymousImageUrl}
+              />
+            )}
           </NavigationMenuButton>
           {user && (
             <>
@@ -137,7 +146,7 @@ function Navigation() {
           >
             Trending
           </NavigationLink>
-          {user ? (
+          {user && profile ? (
             <>
               <NavigationLink
                 onClick={handleCloseNavigation}
@@ -153,7 +162,7 @@ function Navigation() {
               </NavigationLink>
               <NavigationLink
                 onClick={handleCloseNavigation}
-                to={`/social/${user.id}?view=posts`}
+                to={`/social/${profile.username}?view=posts`}
               >
                 Public Profile
               </NavigationLink>

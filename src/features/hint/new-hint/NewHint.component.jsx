@@ -1,16 +1,16 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useParams } from "react-router-dom";
-import { useRef } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import { useParams } from 'react-router-dom';
+import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
-import { useAddHint } from "../../../query/hint/useAddHint";
+import { useAddHint } from '../../../query/hint/useAddHint';
 
-import TagButton from "../tag-button/TagButton.component";
-import Button from "../../../ui/button/Button.component";
-import TextCount from "../../../ui/text-count/TextCount.component";
-import Notification from "../../../ui/notification/Notification.component";
+import TagButton from '../tag-button/TagButton.component';
+import Button from '../../../ui/button/Button.component';
+import TextCount from '../../../ui/text-count/TextCount.component';
+import Notification from '../../../ui/notification/Notification.component';
 
 import {
   NewHintBody,
@@ -18,11 +18,11 @@ import {
   NewHintHeader,
   NewHintTextArea,
   StyledNewHint,
-} from "./NewHint.styles";
-import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
+} from './NewHint.styles';
+import { StyledButtonContainer } from '../../../ui/button-container/ButtonContainer.styles';
 
-import { HINT_MAX_LENGTH, HINT_MIN_LENGTH, TAGS } from "../../../data/consts";
-import { onErrorToast } from "../../../utils/onErrorToast";
+import { HINT_MAX_LENGTH, HINT_MIN_LENGTH, TAGS } from '../../../data/consts';
+import { onErrorToast } from '../../../utils/onErrorToast';
 
 function NewHint({ onCloseModal, user: { id: userId } }) {
   const { id: gameId } = useParams();
@@ -32,7 +32,7 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
 
   const { register, handleSubmit, clearErrors, watch } = useForm();
 
-  const watchContent = watch("content", "");
+  const watchContent = watch('content', '');
 
   function onNewHint(data) {
     if (newHintTags.current.length === 0) {
@@ -76,7 +76,7 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
       newHintTags.current.push(newTag);
     }
 
-    clearErrors("tags");
+    clearErrors('tags');
   }
 
   return (
@@ -98,7 +98,7 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
       </NewHintHeader>
       <NewHintBody>
         <NewHintTextArea
-          {...register("content", {
+          {...register('content', {
             required: {
               value: true,
               message: `Your hint must be at least ${HINT_MIN_LENGTH} characters!`,

@@ -1,20 +1,20 @@
-import { useParams, useSearchParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useMediaQuery } from '@uidotdev/usehooks';
 
-import { HiX } from "react-icons/hi";
+import { HiX } from 'react-icons/hi';
 
-import { useUser } from "../../../query/auth/useUser";
-import { useAllGames } from "../../../query/game/useAllGames";
+import { useUser } from '../../../query/auth/useUser';
+import { useAllGames } from '../../../query/game/useAllGames';
 
-import Button from "../../../ui/button/Button.component";
-import ToggleButton from "../../../ui/toggle-button/ToggleButton.component";
-import NewHint from "../new-hint/NewHint.component";
-import Modal from "../../../ui/modal/Modal.component";
-import AddPostForm from "../../social/add-post-form/AddPostForm.component";
+import Button from '../../../ui/button/Button.component';
+import ToggleButton from '../../../ui/toggle-button/ToggleButton.component';
+import NewHint from '../new-hint/NewHint.component';
+import Modal from '../../../ui/modal/Modal.component';
+import AddPostForm from '../../social/add-post-form/AddPostForm.component';
 
-import { StyledButtonContainer } from "../../../ui/button-container/ButtonContainer.styles";
+import { StyledButtonContainer } from '../../../ui/button-container/ButtonContainer.styles';
 import {
   ButtonContainer,
   HintHeaderFilterSection,
@@ -22,16 +22,16 @@ import {
   StyledHintListHeader,
   UserSearch,
   UserSearchInput,
-} from "./HintList.styles";
-import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
+} from './HintList.styles';
+import { GameSelect } from '../../../ui/game-select/GameSelect.styles';
 
-import { TAGS } from "../../../data/consts";
+import { TAGS } from '../../../data/consts';
 
 function HintListHeader() {
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentSort = searchParams.get("sort") || "popularity";
-  const currentFilter = searchParams.get("filter") || "none";
+  const currentSort = searchParams.get('sort') || 'popularity';
+  const currentFilter = searchParams.get('filter') || 'none';
 
   const { register, handleSubmit, reset } = useForm();
 
@@ -39,45 +39,45 @@ function HintListHeader() {
 
   const { gameData } = useAllGames();
 
-  const isSmallDevice = useMediaQuery("only screen and (max-width : 90em)");
+  const isSmallDevice = useMediaQuery('only screen and (max-width : 90em)');
 
   function handleSetSort(toggleValue) {
-    if (searchParams.get("sort") === toggleValue) return;
+    if (searchParams.get('sort') === toggleValue) return;
 
-    searchParams.set("sort", toggleValue);
+    searchParams.set('sort', toggleValue);
     setSearchParams(searchParams, { replace: true });
   }
 
   function handleSetFilter(toggleValue) {
-    if (searchParams.get("filter") === toggleValue) return;
+    if (searchParams.get('filter') === toggleValue) return;
 
-    searchParams.set("filter", toggleValue);
+    searchParams.set('filter', toggleValue);
     setSearchParams(searchParams, { replace: true });
   }
 
   function handleSearchUsername(data) {
-    searchParams.set("username", data.username);
+    searchParams.set('username', data.username);
     setSearchParams(searchParams, { replace: true });
 
     reset();
   }
 
   function resetSearchUsername() {
-    searchParams.delete("username");
+    searchParams.delete('username');
     setSearchParams(searchParams, { replace: true });
   }
 
   function handleSearchTags(e) {
-    e.target.value === "None"
-      ? searchParams.delete("tag")
-      : searchParams.set("tag", e.target.value);
+    e.target.value === 'None'
+      ? searchParams.delete('tag')
+      : searchParams.set('tag', e.target.value);
 
     setSearchParams(searchParams, { replace: true });
   }
 
   useEffect(() => {
-    if (!searchParams.get("view")) {
-      searchParams.set("view", "hints");
+    if (!searchParams.get('view')) {
+      searchParams.set('view', 'hints');
       setSearchParams(searchParams, { replace: true });
     }
   }, [searchParams, setSearchParams]);
@@ -88,7 +88,7 @@ function HintListHeader() {
         <HintHeaderFilterSection $width={30}>
           {isAuthenticated && (
             <div>
-              {searchParams.get("view") === "posts" ? (
+              {searchParams.get('view') === 'posts' ? (
                 <Modal>
                   <Modal.Open opens="newHint">
                     <Button isLight={false}>New</Button>
@@ -116,9 +116,9 @@ function HintListHeader() {
 
           <UserSearch onSubmit={handleSubmit(handleSearchUsername)}>
             <UserSearchInput
-              {...register("username", { required: true })}
+              {...register('username', { required: true })}
               placeholder={
-                searchParams.get("username") || "Search by username..."
+                searchParams.get('username') || 'Search by username...'
               }
             />
             <ResetUserButton onClick={resetSearchUsername}>
@@ -202,7 +202,7 @@ function HintListHeader() {
             </StyledButtonContainer>
           )}
 
-          {searchParams.get("view") !== "posts" && (
+          {searchParams.get('view') !== 'posts' && (
             <GameSelect onChange={handleSearchTags}>
               <option value="None">All</option>
               {TAGS.map((tag) => (

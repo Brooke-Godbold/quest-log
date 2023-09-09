@@ -1,7 +1,7 @@
-import { NavLink } from "react-router-dom";
-import { css, styled } from "styled-components";
+import { NavLink } from 'react-router-dom';
+import { css, styled } from 'styled-components';
 
-import { CommonButton } from "../../styles/GlobalStyles";
+import { CommonButton } from '../../styles/GlobalStyles';
 
 const StyledNavigation = styled.div`
   position: relative;
@@ -19,8 +19,8 @@ const NavigationOverlay = styled.div`
   height: 100vh;
 
   transition: all 0.3s;
-  backdrop-filter: ${(props) => (props.$active ? "blur(4px)" : "none")};
-  pointer-events: ${(props) => (props.$active ? "all" : "none")};
+  backdrop-filter: ${(props) => (props.$active ? 'blur(4px)' : 'none')};
+  pointer-events: ${(props) => (props.$active ? 'all' : 'none')};
 
   z-index: 999;
 `;
@@ -168,7 +168,7 @@ const NavigationMenuContainer = styled.div`
   transition: all 0.3s;
   position: absolute;
   transform: ${(props) =>
-    props.$active ? "translate(0, 0)" : "translate(-100%, 0)"};
+    props.$active ? 'translate(0, 0)' : 'translate(-100%, 0)'};
 
   & *:first-child {
     border-top-right-radius: 5px;
@@ -215,60 +215,60 @@ const NavigationGamesContainer = styled.div`
 
   & a:nth-child(1) {
     transition: all 0.3s;
-    opacity: ${(props) => (props.$active ? "1" : "0")};
+    opacity: ${(props) => (props.$active ? '1' : '0')};
     transform: ${(props) =>
-      props.$active ? "translate(200%, 0)" : "translate(0, 0)"};
+      props.$active ? 'translate(200%, 0)' : 'translate(0, 0)'};
 
     &:hover {
       transform: ${(props) =>
-        props.$active ? "translate(200%, 0) scale(110%)" : "translate(0, 0)"};
+        props.$active ? 'translate(200%, 0) scale(110%)' : 'translate(0, 0)'};
     }
 
     &:active {
       transform: ${(props) =>
-        props.$active ? "translate(200%, 0) scale(120%)" : "translate(0, 0)"};
+        props.$active ? 'translate(200%, 0) scale(120%)' : 'translate(0, 0)'};
     }
   }
 
   & a:nth-child(2) {
     transition: all 0.3s;
     transform: ${(props) =>
-      props.$active ? "translate(200%, 0)" : "translate(-125%, 0)"};
-    opacity: ${(props) => (props.$active ? "1" : "0")};
+      props.$active ? 'translate(200%, 0)' : 'translate(-125%, 0)'};
+    opacity: ${(props) => (props.$active ? '1' : '0')};
 
     &:hover {
       transform: ${(props) =>
         props.$active
-          ? "translate(200%, 0) scale(110%)"
-          : "translate(-125%, 0)"};
+          ? 'translate(200%, 0) scale(110%)'
+          : 'translate(-125%, 0)'};
     }
 
     &:active {
       transform: ${(props) =>
         props.$active
-          ? "translate(200%, 0) scale(120%)"
-          : "translate(-125%, 0)"};
+          ? 'translate(200%, 0) scale(120%)'
+          : 'translate(-125%, 0)'};
     }
   }
 
   & a:nth-child(3) {
     transition: all 0.3s;
     transform: ${(props) =>
-      props.$active ? "translate(200%, 0)" : "translate(-250%, 0)"};
-    opacity: ${(props) => (props.$active ? "1" : "0")};
+      props.$active ? 'translate(200%, 0)' : 'translate(-250%, 0)'};
+    opacity: ${(props) => (props.$active ? '1' : '0')};
 
     &:hover {
       transform: ${(props) =>
         props.$active
-          ? "translate(200%, 0) scale(110%)"
-          : "translate(-250%, 0)"};
+          ? 'translate(200%, 0) scale(110%)'
+          : 'translate(-250%, 0)'};
     }
 
     &:active {
       transform: ${(props) =>
         props.$active
-          ? "translate(200%, 0) scale(120%)"
-          : "translate(-250%, 0)"};
+          ? 'translate(200%, 0) scale(120%)'
+          : 'translate(-250%, 0)'};
     }
   }
 
@@ -281,7 +281,7 @@ const NavigationGamesContainer = styled.div`
     top: 90%;
 
     transform: ${(props) =>
-      props.$active ? "translate(240%, 0)" : "translate(0, 0)"};
+      props.$active ? 'translate(240%, 0)' : 'translate(0, 0)'};
 
     & a:nth-child(-n + 3) {
       transform: translate(0);

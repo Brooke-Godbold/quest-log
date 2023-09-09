@@ -1,17 +1,17 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useForm } from "react-hook-form";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useForm } from 'react-hook-form';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 
-import { useLocations } from "../../../contexts/LocationsContext";
+import { useLocations } from '../../../contexts/LocationsContext';
 
-import { useAddPost } from "../../../query/post/useAddPost";
+import { useAddPost } from '../../../query/post/useAddPost';
 
-import Button from "../../../ui/button/Button.component";
-import TextCount from "../../../ui/text-count/TextCount.component";
-import Notification from "../../../ui/notification/Notification.component";
+import Button from '../../../ui/button/Button.component';
+import TextCount from '../../../ui/text-count/TextCount.component';
+import Notification from '../../../ui/notification/Notification.component';
 
 import {
   AddPostButtons,
@@ -22,13 +22,13 @@ import {
   AddPostTextSection,
   ImageUploadInput,
   StyledAddPostForm,
-} from "./AddPostForm.styles";
+} from './AddPostForm.styles';
 
-import { POST_MAX_LENGTH, POST_MIN_LENGTH } from "../../../data/consts";
+import { POST_MAX_LENGTH, POST_MIN_LENGTH } from '../../../data/consts';
 
-import { filterWhiteSpace } from "../../../utils/filterWhiteSpace";
-import { validateFile } from "../../../utils/validateFile";
-import { onErrorToast } from "../../../utils/onErrorToast";
+import { filterWhiteSpace } from '../../../utils/filterWhiteSpace';
+import { validateFile } from '../../../utils/validateFile';
+import { onErrorToast } from '../../../utils/onErrorToast';
 
 function AddPostForm({
   gameData,
@@ -54,7 +54,7 @@ function AddPostForm({
     clearErrors,
     formState: { errors },
   } = useForm();
-  const watchPostContent = watch("postContent", "");
+  const watchPostContent = watch('postContent', '');
 
   const { addPost, isLoading } = useAddPost();
 
@@ -62,8 +62,8 @@ function AddPostForm({
 
   function onPost(data) {
     if (filterWhiteSpace(data.postContent.trim()).length < 5) {
-      setError("postContent", {
-        type: "required",
+      setError('postContent', {
+        type: 'required',
       });
       return;
     }
@@ -100,9 +100,9 @@ function AddPostForm({
     if (!newPostId) return;
 
     if (parentPostId) {
-      searchParams.set("post", parentPostId);
+      searchParams.set('post', parentPostId);
     } else {
-      searchParams.set("post", newPostId);
+      searchParams.set('post', newPostId);
     }
     setSearchParams(searchParams, { replace: true });
 
@@ -141,15 +141,15 @@ function AddPostForm({
   return (
     <StyledAddPostForm onSubmit={handleSubmit(onPost, onError)}>
       <AddPostHeader>
-        <h3>{!currentGames ? "Reply" : "New Post"}</h3>
+        <h3>{!currentGames ? 'Reply' : 'New Post'}</h3>
         {currentGames && (
           <AddPostGame
             disabled={isLoading}
             id="gameId"
-            {...register("gameId", {
+            {...register('gameId', {
               validate: (value) =>
-                value !== "placeholder" ||
-                "You must select a game for this post!",
+                value !== 'placeholder' ||
+                'You must select a game for this post!',
             })}
           >
             {currentGames.length > 1 && (
@@ -169,7 +169,7 @@ function AddPostForm({
         <AddPostTextArea
           disabled={isLoading}
           id="postContent"
-          {...register("postContent", {
+          {...register('postContent', {
             required: {
               value: true,
               message: `Posts must be at least ${POST_MIN_LENGTH} characters!`,
@@ -191,7 +191,7 @@ function AddPostForm({
         />
       </AddPostTextSection>
       <ImageUploadInput
-        {...register("image")}
+        {...register('image')}
         type="file"
         id="image"
         disabled={isLoading}

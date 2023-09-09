@@ -2,35 +2,35 @@ import {
   QueryCache,
   QueryClient,
   QueryClientProvider,
-} from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import GlobalStyles from "./styles/GlobalStyles";
-import Game from "./pages/game/Game.page";
-import AppLayout from "./ui/app-layout/AppLayout.component";
-import Signup from "./pages/signup/Signup.page";
-import ConfirmSignup from "./pages/confirm-signup/ConfirmSignup.page";
-import Account from "./pages/account/Account.page";
-import ResetPassword from "./pages/reset-password/ResetPassword.page";
-import Login from "./pages/login/Login.page";
-import User from "./pages/user/User.page";
-import AccountProfileDetailsSection from "./features/account/account-profile-details-section/AccountProfileDetailsSection.component";
-import AccountAvatarSection from "./features/account/account-avatar-section/AccountAvatarSection.component";
-import AccountHintsSection from "./features/account/account-hints-section/AccountHintsSection";
-import ResetPasswordSection from "./features/account/reset-password-section/ResetPasswordSection.component";
-import SocialFeed from "./pages/social-feed/SocialFeed.page";
-import SocialPost from "./pages/social-post/SocialPost.page";
-import NotFound from "./pages/not-found/NotFound.page";
-import { Toaster, toast } from "react-hot-toast";
-import Error from "./pages/error/Error.page";
-import Messages from "./pages/messages/Messages.component";
-import ProtectedRoute from "./ui/protected-route/ProtectedRoute.component";
-import { ConversationsProvider } from "./contexts/ConversationsContext";
-import AccountPrivacySection from "./features/account/account-privacy-section/AccountPrivacySection.component";
-import AccountUserSection from "./features/account/account-user-section/AccountUserSection.component";
-import Notification from "./ui/notification/Notification.component";
-import { LocationsProvider } from "./contexts/LocationsContext";
+import GlobalStyles from './styles/GlobalStyles';
+import Game from './pages/game/Game.page';
+import AppLayout from './ui/app-layout/AppLayout.component';
+import Signup from './pages/signup/Signup.page';
+import ConfirmSignup from './pages/confirm-signup/ConfirmSignup.page';
+import Account from './pages/account/Account.page';
+import ResetPassword from './pages/reset-password/ResetPassword.page';
+import Login from './pages/login/Login.page';
+import User from './pages/user/User.page';
+import AccountProfileDetailsSection from './features/account/account-profile-details-section/AccountProfileDetailsSection.component';
+import AccountAvatarSection from './features/account/account-avatar-section/AccountAvatarSection.component';
+import AccountHintsSection from './features/account/account-hints-section/AccountHintsSection';
+import ResetPasswordSection from './features/account/reset-password-section/ResetPasswordSection.component';
+import SocialFeed from './pages/social-feed/SocialFeed.page';
+import SocialPost from './pages/social-post/SocialPost.page';
+import NotFound from './pages/not-found/NotFound.page';
+import { Toaster, toast } from 'react-hot-toast';
+import Error from './pages/error/Error.page';
+import Messages from './pages/messages/Messages.component';
+import ProtectedRoute from './ui/protected-route/ProtectedRoute.component';
+import { ConversationsProvider } from './contexts/ConversationsContext';
+import AccountPrivacySection from './features/account/account-privacy-section/AccountPrivacySection.component';
+import AccountUserSection from './features/account/account-user-section/AccountUserSection.component';
+import Notification from './ui/notification/Notification.component';
+import { LocationsProvider } from './contexts/LocationsContext';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -65,14 +65,14 @@ function App() {
       <Toaster
         toastOptions={{
           style: {
-            boxShadow: "0px 0px 7px 1px rgb(31, 31, 31, 0.2)",
-            backgroundColor: "var(--color-brand-700)",
-            color: "var(--color-brand-300)",
+            boxShadow: '0px 0px 7px 1px rgb(31, 31, 31, 0.2)',
+            backgroundColor: 'var(--color-brand-700)',
+            color: 'var(--color-brand-300)',
           },
           error: {
             style: {
-              backgroundColor: "var(--color-red-800)",
-              color: "var(--color-red-100)",
+              backgroundColor: 'var(--color-red-800)',
+              color: 'var(--color-red-100)',
             },
           },
         }}
@@ -95,7 +95,7 @@ function App() {
               errorElement={<Error />}
             />
             <Route
-              path="social/:userId"
+              path="social/:username"
               element={<User />}
               errorElement={<Error />}
             />

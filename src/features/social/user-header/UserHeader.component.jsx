@@ -1,28 +1,28 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
-import { useProfileByUser } from "../../../query/profile/useProfileByUser";
-import { useAllGames } from "../../../query/game/useAllGames";
-import { useUser } from "../../../query/auth/useUser";
-import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
-import { useConversations } from "../../../contexts/ConversationsContext";
-import { useMessages } from "../../../query/message/useMessages";
-import { useIsBlocked } from "../../../hooks/useIsBlocked";
-import { useIsFollowing } from "../../../hooks/useIsFollowing";
+import { useProfileByUser } from '../../../query/profile/useProfileByUser';
+import { useAllGames } from '../../../query/game/useAllGames';
+import { useUser } from '../../../query/auth/useUser';
+import { useUpdateProfile } from '../../../query/profile/useUpdateProfile';
+import { useConversations } from '../../../contexts/ConversationsContext';
+import { useMessages } from '../../../query/message/useMessages';
+import { useIsBlocked } from '../../../hooks/useIsBlocked';
+import { useIsFollowing } from '../../../hooks/useIsFollowing';
 
-import { HiPlus } from "react-icons/hi";
-import { HiCheck } from "react-icons/hi";
-import { FaTwitch } from "react-icons/fa";
-import { GrYoutube } from "react-icons/gr";
-import { RiKickFill } from "react-icons/ri";
-import { ImBlocked } from "react-icons/im";
-import { BiMessageDetail } from "react-icons/bi";
+import { HiPlus } from 'react-icons/hi';
+import { HiCheck } from 'react-icons/hi';
+import { FaTwitch } from 'react-icons/fa';
+import { GrYoutube } from 'react-icons/gr';
+import { RiKickFill } from 'react-icons/ri';
+import { ImBlocked } from 'react-icons/im';
+import { BiMessageDetail } from 'react-icons/bi';
 
-import Spinner from "../../../ui/spinner/Spinner";
-import Modal from "../../../ui/modal/Modal.component";
-import Notification from "../../../ui/notification/Notification.component";
-import DirectMessage from "../direct-message/DirectMessage.component";
-import AddPostButton from "../add-post-button/AddPostButton.component";
+import Spinner from '../../../ui/spinner/Spinner';
+import Modal from '../../../ui/modal/Modal.component';
+import Notification from '../../../ui/notification/Notification.component';
+import DirectMessage from '../direct-message/DirectMessage.component';
+import AddPostButton from '../add-post-button/AddPostButton.component';
 
 import {
   CurrentlyPlaying,
@@ -42,20 +42,21 @@ import {
   UserProfile,
   DisplayName,
   AddNewPostButton,
-} from "./UserHeader.styles";
+} from './UserHeader.styles';
 
-import { kickUrl, twitchUrl, youtubeUrl } from "../../../data/consts";
+import { kickUrl, twitchUrl, youtubeUrl } from '../../../data/consts';
 
-import { usePageTitle } from "../../../hooks/usePageTitle";
+import { usePageTitle } from '../../../hooks/usePageTitle';
+import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
 
-  const { userId } = useParams();
+  const { username } = useParams();
 
   const { gameData } = useAllGames();
 
-  const { profile: viewedProfile, isError } = useProfileByUser(userId);
+  const { profile: viewedProfile, isError } = useProfilesByUsername(username);
   const { profile: userProfile } = useProfileByUser(user?.id);
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
     userProfile?.userId
@@ -70,8 +71,11 @@ function UserHeader() {
     user?.id
   );
 
-  const { isFollowing } = useIsFollowing(user?.id, userId);
-  const { isFollowing: isFollowed } = useIsFollowing(userId, user?.id);
+  const { isFollowing } = useIsFollowing(user?.id, viewedProfile?.userId);
+  const { isFollowing: isFollowed } = useIsFollowing(
+    viewedProfile?.userId,
+    user?.id
+  );
   const mutualFollowers = user && isFollowing && isFollowed;
 
   const messagingEnabled =
@@ -83,9 +87,11 @@ function UserHeader() {
   function onFollow() {
     if (!userProfile) return;
 
-    const following = userProfile.following.includes(userId)
-      ? userProfile.following.filter((followedUser) => followedUser !== userId)
-      : [...userProfile.following, userId];
+    const following = userProfile.following.includes(viewedProfile.userId)
+      ? userProfile.following.filter(
+          (followedUser) => followedUser !== viewedProfile.userId
+        )
+      : [...userProfile.following, viewedProfile.userId];
 
     updateProfile(
       {
@@ -118,18 +124,22 @@ function UserHeader() {
 
   function onGotoMessages() {
     setCurrentConversation(viewedProfile.userId);
-    navigate("/messages", { replace: true });
+    navigate('/messages', { replace: true });
   }
 
   function onBlock() {
     if (!userProfile) return;
 
-    const blocked = userProfile.blocked.includes(userId)
-      ? userProfile.blocked.filter((blockedUser) => blockedUser !== userId)
-      : [...userProfile.blocked, userId];
+    const blocked = userProfile.blocked.includes(viewedProfile.userId)
+      ? userProfile.blocked.filter(
+          (blockedUser) => blockedUser !== viewedProfile.userId
+        )
+      : [...userProfile.blocked, viewedProfile.userId];
 
-    const following = blocked.includes(userId)
-      ? userProfile.following.filter((followedUser) => followedUser !== userId)
+    const following = blocked.includes(viewedProfile.userId)
+      ? userProfile.following.filter(
+          (followedUser) => followedUser !== viewedProfile.userId
+        )
       : userProfile.following;
 
     updateProfile(
@@ -178,14 +188,17 @@ function UserHeader() {
               )}
               {isAuthenticated &&
                 user &&
-                user.id !== userId &&
+                viewedProfile &&
+                user.id !== viewedProfile.userId &&
                 conversations && (
                   <UserActionsContainer>
                     <ActionButton
                       $interactable={true}
                       disabled={isUpdatingProfile || isLoadingBlocked}
                       onClick={onBlock}
-                      $active={userProfile?.blocked.includes(userId)}
+                      $active={userProfile?.blocked.includes(
+                        viewedProfile.userId
+                      )}
                     >
                       <ImBlocked />
                     </ActionButton>
@@ -195,9 +208,11 @@ function UserHeader() {
                         isUpdatingProfile || isBlocked || isLoadingBlocked
                       }
                       onClick={onFollow}
-                      $active={userProfile?.following.includes(userId)}
+                      $active={userProfile?.following.includes(
+                        viewedProfile.userId
+                      )}
                     >
-                      {userProfile?.following.includes(userId) ? (
+                      {userProfile?.following.includes(viewedProfile.userId) ? (
                         <HiCheck />
                       ) : (
                         <HiPlus />
@@ -299,7 +314,9 @@ function UserHeader() {
             )}
           </UserProfile>
           <AddPostButton
-            isActive={!userId || userId === user?.id}
+            isActive={
+              !viewedProfile?.userId || viewedProfile.userId === user?.id
+            }
             styledPostButton={<AddNewPostButton>Add New Post</AddNewPostButton>}
           />
         </>

@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useUser } from "../../../query/auth/useUser";
-import { useAllGames } from "../../../query/game/useAllGames";
-import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useUser } from '../../../query/auth/useUser';
+import { useAllGames } from '../../../query/game/useAllGames';
+import { useProfileByUser } from '../../../query/profile/useProfileByUser';
 
-import Modal from "../../../ui/modal/Modal.component";
-import AddPostForm from "../add-post-form/AddPostForm.component";
+import Modal from '../../../ui/modal/Modal.component';
+import AddPostForm from '../add-post-form/AddPostForm.component';
 
 function AddPostButton({ styledPostButton, onOpenCallback, isActive = true }) {
   const { isAuthenticated, user } = useUser();

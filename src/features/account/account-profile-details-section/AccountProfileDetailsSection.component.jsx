@@ -1,21 +1,20 @@
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
-import { useUser } from "../../../query/auth/useUser";
-import { useProfileByUser } from "../../../query/profile/useProfileByUser";
-import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
-import { useAllGames } from "../../../query/game/useAllGames";
-import { useSearchGames } from "../../../query/game/useSearchGames";
+import { useUser } from '../../../query/auth/useUser';
+import { useProfileByUser } from '../../../query/profile/useProfileByUser';
+import { useUpdateProfile } from '../../../query/profile/useUpdateProfile';
+import { useAllGames } from '../../../query/game/useAllGames';
 
-import { FaTwitch } from "react-icons/fa";
-import { GrYoutube } from "react-icons/gr";
-import { RiKickFill } from "react-icons/ri";
+import { FaTwitch } from 'react-icons/fa';
+import { GrYoutube } from 'react-icons/gr';
+import { RiKickFill } from 'react-icons/ri';
 
-import Spinner from "../../../ui/spinner/Spinner";
-import CurrentlyPlayingRow from "../currently-playing-row/CurrentlyPlayingRow.component";
-import TextCount from "../../../ui/text-count/TextCount.component";
-import Notification from "../../../ui/notification/Notification.component";
+import Spinner from '../../../ui/spinner/Spinner';
+import CurrentlyPlayingRow from '../currently-playing-row/CurrentlyPlayingRow.component';
+import TextCount from '../../../ui/text-count/TextCount.component';
+import Notification from '../../../ui/notification/Notification.component';
 
 import {
   AccountProfileBio,
@@ -25,8 +24,8 @@ import {
   ProfileDetailsLabel,
   ProfileDetailsRow,
   StyledAccountProfileDetails,
-} from "./AccountProfileDetailsSection.styles";
-import { FormInput } from "../../../ui/FormInput/FormInput.styles";
+} from './AccountProfileDetailsSection.styles';
+import { FormInput } from '../../../ui/FormInput/FormInput.styles';
 
 import {
   BIO_MAX_LENGTH,
@@ -35,9 +34,9 @@ import {
   kickUrl,
   twitchUrl,
   youtubeUrl,
-} from "../../../data/consts";
+} from '../../../data/consts';
 
-import { onErrorToast } from "../../../utils/onErrorToast";
+import { onErrorToast } from '../../../utils/onErrorToast';
 
 function AccountProfileDetailsSection() {
   const { user, isGettingUser } = useUser();
@@ -46,11 +45,7 @@ function AccountProfileDetailsSection() {
   );
 
   const { gameData } = useAllGames();
-  const [availableGames, setAvailableGames] = useState([]);
   const [currentlyPlaying, setCurrentlyPlaying] = useState([]);
-
-  const [gameQuery, setGameQuery] = useState(null);
-  const { gameData: gameDataList } = useSearchGames(gameQuery);
 
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
     user ? user.id : null
@@ -64,15 +59,9 @@ function AccountProfileDetailsSection() {
     watch,
     clearErrors,
     reset: resetProfile,
-  } = useForm({ mode: "onBlur", resetOptions: { keepDefaultValues: true } });
-  const watchDisplayName = watch("displayName", profile?.displayName);
-  const watchBio = watch("bio", profile?.bio);
-
-  const {
-    register: registerCurrentPlaying,
-    handleSubmit: handleSubmitCurrentlyPlaying,
-    reset: resetCurrentlyPlaying,
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: 'onBlur', resetOptions: { keepDefaultValues: true } });
+  const watchDisplayName = watch('displayName', profile?.displayName);
+  const watchBio = watch('bio', profile?.bio);
 
   function onSubmitProfile(data) {
     const newProfileData = {
@@ -106,59 +95,6 @@ function AccountProfileDetailsSection() {
       }
     );
   }
-
-  function onSubmitCurrentlyPlaying(data) {
-    if (!user) return;
-
-    const currentGames = Object.keys(data)
-      .map((key) => {
-        if (data[key] === "placeholder") return;
-        return gameData.filter((game) => game.name === data[key])[0].id;
-      })
-      .filter((game) => game);
-
-    if (
-      profile.currentGames.every((item) => currentGames.includes(item)) &&
-      currentGames.every((item) => profile.currentGames.includes(item))
-    )
-      return;
-
-    updateProfile(
-      {
-        userId: user.id,
-        data: {
-          currentGames,
-        },
-      },
-      {
-        onSuccess: () => toast(() => <Notification text="Updated Profile!" />),
-        onError: () => {
-          toast.error(() => (
-            <Notification text="Unable to update Profile right now" />
-          ));
-          resetCurrentlyPlaying();
-        },
-      }
-    );
-  }
-
-  useEffect(
-    function () {
-      if (!gameDataList) return;
-
-      if (gameQuery?.length < 3) {
-        setAvailableGames([]);
-        return;
-      }
-
-      const games = gameDataList.reduce((acc, cur) => [...acc, cur.name], []);
-
-      setAvailableGames(games);
-
-      if (currentlyPlaying?.length === 0) addNewCurrentlyPlaying();
-    },
-    [gameDataList, currentlyPlaying, gameQuery]
-  );
 
   useEffect(
     function () {
@@ -194,6 +130,27 @@ function AccountProfileDetailsSection() {
     });
   }
 
+  useEffect(() => {
+    if (
+      JSON.stringify(currentlyPlaying.filter((game) => game)) ===
+        JSON.stringify(profile.currentGames) ||
+      currentlyPlaying.length === 0
+    )
+      return;
+
+    updateProfile(
+      { userId: user.id, data: { currentGames: currentlyPlaying } },
+      {
+        onSuccess: () => toast(() => <Notification text="Updated Profile!" />),
+        onError: () => {
+          toast.error(() => (
+            <Notification text="Unable to update Profile right now" />
+          ));
+        },
+      }
+    );
+  }, [currentlyPlaying, profile, updateProfile, user]);
+
   if (isGettingUser || isGettingProfile || !profile) return <Spinner />;
 
   return (
@@ -208,10 +165,10 @@ function AccountProfileDetailsSection() {
           <FormInput
             id="displayName"
             type="text"
-            {...registerProfile("displayName", {
+            {...registerProfile('displayName', {
               required: {
                 value: true,
-                message: "Display name cannot be empty!",
+                message: 'Display name cannot be empty!',
               },
               minLength: {
                 value: USERNAME_MIN_LENGTH,
@@ -222,7 +179,7 @@ function AccountProfileDetailsSection() {
                 message: `Username cannot be longer than ${USERNAME_MAX_LENGTH} characters!`,
               },
               validate: (value) =>
-                !value.includes(" ") || "Username cannot include white space!",
+                !value.includes(' ') || 'Username cannot include white space!',
             })}
             defaultValue={profile.displayName}
             disabled={isLoading}
@@ -239,7 +196,7 @@ function AccountProfileDetailsSection() {
           <AccountProfileBio
             id="bio"
             type="text"
-            {...registerProfile("bio", {
+            {...registerProfile('bio', {
               maxLength: {
                 value: BIO_MAX_LENGTH,
                 message: `Bio cannot be longer than ${BIO_MAX_LENGTH} characters!`,
@@ -252,32 +209,20 @@ function AccountProfileDetailsSection() {
         </ProfileDetailsRow>
       </StyledAccountProfileDetails>
 
-      <StyledAccountProfileDetails
-        onChange={handleSubmitCurrentlyPlaying(onSubmitCurrentlyPlaying)}
-      >
-        {availableGames && gameData && currentlyPlaying ? (
+      <StyledAccountProfileDetails>
+        {gameData && currentlyPlaying ? (
           <ProfileDetailsRow>
             <ProfileDetailsLabel>Currently Playing</ProfileDetailsLabel>
             <CurrentlyPlayingContainer>
-              <FormInput
-                list="games"
-                id="currentlyPlaying"
-                onChange={(e) => setGameQuery(e.target.value)}
-                placeholder="playing something new?"
-              />
               {currentlyPlaying.length > 0
-                ? currentlyPlaying.map((gameId, index) => (
+                ? currentlyPlaying.map((gameId) => (
                     <CurrentlyPlayingRow
                       key={`currentlyPlaying_${gameId}`}
                       gameId={gameId}
-                      gameData={gameData}
-                      rowIndex={index}
-                      isLoading={isLoading}
+                      setCurrentlyPlaying={setCurrentlyPlaying}
                       currentlyPlaying={currentlyPlaying}
-                      register={registerCurrentPlaying}
                       addNewCurrentlyPlaying={addNewCurrentlyPlaying}
                       removeCurrentlyPlaying={removeCurrentlyPlaying}
-                      availableGames={availableGames}
                     />
                   ))
                 : null}
@@ -302,10 +247,10 @@ function AccountProfileDetailsSection() {
               <FormInput
                 id="twitch"
                 type="text"
-                {...registerProfile("twitch", {
+                {...registerProfile('twitch', {
                   validate: (value) =>
-                    !value.includes(" ") ||
-                    "Twitch channel cannot include white space!",
+                    !value.includes(' ') ||
+                    'Twitch channel cannot include white space!',
                 })}
                 defaultValue={profile.twitch}
                 disabled={isLoading}
@@ -320,10 +265,10 @@ function AccountProfileDetailsSection() {
               <FormInput
                 id="youtube"
                 type="text"
-                {...registerProfile("youtube", {
+                {...registerProfile('youtube', {
                   validate: (value) =>
-                    !value.includes(" ") ||
-                    "YouTube channel cannot include white space!",
+                    !value.includes(' ') ||
+                    'YouTube channel cannot include white space!',
                 })}
                 defaultValue={profile.youtube}
                 disabled={isLoading}
@@ -338,10 +283,10 @@ function AccountProfileDetailsSection() {
               <FormInput
                 id="kick"
                 type="text"
-                {...registerProfile("kick", {
+                {...registerProfile('kick', {
                   validate: (value) =>
-                    !value.includes(" ") ||
-                    "Kick channel cannot include white space!",
+                    !value.includes(' ') ||
+                    'Kick channel cannot include white space!',
                 })}
                 defaultValue={profile.kick}
                 disabled={isLoading}

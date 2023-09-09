@@ -1,18 +1,18 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
-import { useLogin } from "../../../query/auth/useLogin";
+import { useLogin } from '../../../query/auth/useLogin';
 
-import { AiOutlineLogin } from "react-icons/ai";
-import { MdAppRegistration } from "react-icons/md";
+import { AiOutlineLogin } from 'react-icons/ai';
+import { MdAppRegistration } from 'react-icons/md';
 
-import Button from "../../../ui/button/Button.component";
-import Spinner from "../../../ui/spinner/Spinner";
-import Notification from "../../../ui/notification/Notification.component";
+import Button from '../../../ui/button/Button.component';
+import Spinner from '../../../ui/spinner/Spinner';
+import Notification from '../../../ui/notification/Notification.component';
 
 import {
   LoginButtonsContainer,
@@ -20,11 +20,11 @@ import {
   LoginHeading,
   LoginModalButton,
   StyledLoginForm,
-} from "./LoginForm.styles";
-import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
-import { FormInput } from "../../../ui/FormInput/FormInput.styles";
+} from './LoginForm.styles';
+import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/ResponsiveButtonContent.styles';
+import { FormInput } from '../../../ui/FormInput/FormInput.styles';
 
-import { onErrorToast } from "../../../utils/onErrorToast";
+import { onErrorToast } from '../../../utils/onErrorToast';
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -76,12 +76,12 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               id="email"
               placeholder="john.smith@gmail.com"
               disabled={isLoggingIn}
-              aria-invalid={errors.email ? "true" : "false"}
-              {...register("email", {
-                required: { value: true, message: "Email is required!" },
+              aria-invalid={errors.email ? 'true' : 'false'}
+              {...register('email', {
+                required: { value: true, message: 'Email is required!' },
                 pattern: {
                   value: /\S+@\S+\.\S+/,
-                  message: "This email is not valid!",
+                  message: 'This email is not valid!',
                 },
               })}
             />
@@ -91,10 +91,10 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               type="password"
               id="password"
               disabled={isLoggingIn}
-              aria-invalid={errors.password ? "true" : "false"}
-              {...register("password", {
+              aria-invalid={errors.password ? 'true' : 'false'}
+              {...register('password', {
                 value: true,
-                message: "Password is required!",
+                message: 'Password is required!',
               })}
             />
           </LoginFormInputTable>
@@ -112,7 +112,7 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               onClick={(e) => {
                 e.preventDefault();
                 onCloseModal?.();
-                navigate("/signup", { replace: true });
+                navigate('/signup', { replace: true });
               }}
             >
               <ResponsiveButtonContent>

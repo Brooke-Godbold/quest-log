@@ -1,50 +1,55 @@
-import { useParams, useSearchParams } from "react-router-dom";
-import { useEffect, useMemo, useRef } from "react";
-import { compareDesc } from "date-fns";
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { compareDesc } from 'date-fns';
 
-import { usePostByUser } from "../../../query/post/usePostByUser";
-import { useHint } from "../../../query/hint/useHint";
-import { useUser } from "../../../query/auth/useUser";
-import { useAllGames } from "../../../query/game/useAllGames";
-import { useReplyByPostId } from "../../../query/post/useReplyByPostId";
-import { usePostById } from "../../../query/post/usePostById";
-import { useAllPosts } from "../../../query/post/useAllPosts";
-import { useProfileByUser } from "../../../query/profile/useProfileByUser";
-import { useIsBlocked } from "../../../hooks/useIsBlocked";
+import { usePostByUser } from '../../../query/post/usePostByUser';
+import { useHint } from '../../../query/hint/useHint';
+import { useUser } from '../../../query/auth/useUser';
+import { useAllGames } from '../../../query/game/useAllGames';
+import { useReplyByPostId } from '../../../query/post/useReplyByPostId';
+import { usePostById } from '../../../query/post/usePostById';
+import { useAllPosts } from '../../../query/post/useAllPosts';
+import { useProfileByUser } from '../../../query/profile/useProfileByUser';
+import { useIsBlocked } from '../../../hooks/useIsBlocked';
 
-import { BiTime } from "react-icons/bi";
+import { BiTime } from 'react-icons/bi';
 import {
   BsPeopleFill,
   BsTrophyFill,
   BsStickyFill,
   BsPersonFillCheck,
-} from "react-icons/bs";
-import { TbWorldSearch } from "react-icons/tb";
+} from 'react-icons/bs';
+import { TbWorldSearch } from 'react-icons/tb';
 
-import Spinner from "../../../ui/spinner/Spinner";
-import Blocked from "../blocked/Blocked.component";
-import PostList from "../post-list/PostList.component";
-import Hints from "../../hint/hints/Hints.component";
-import ReplyList from "../reply-list/ReplyList.component";
-import SearchResultList from "../../search/search-result-list/SearchResultList.component";
+import Spinner from '../../../ui/spinner/Spinner';
+import Blocked from '../blocked/Blocked.component';
+import PostList from '../post-list/PostList.component';
+import Hints from '../../hint/hints/Hints.component';
+import ReplyList from '../reply-list/ReplyList.component';
+import SearchResultList from '../../search/search-result-list/SearchResultList.component';
 
 import {
   SocialFeedButton,
   SocialFeedButtons,
   SocialFeedContent,
   StyledSocialFeedContainer,
-} from "./SocialFeedContainer.styles";
-import { GameSelect } from "../../../ui/game-select/GameSelect.styles";
-import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
+} from './SocialFeedContainer.styles';
+import { GameSelect } from '../../../ui/game-select/GameSelect.styles';
+import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/ResponsiveButtonContent.styles';
 
-import { useSearch } from "../../../hooks/useSearch";
-import { useScrollToItem } from "../../../hooks/useScrollToItem";
+import { useSearch } from '../../../hooks/useSearch';
+import { useScrollToItem } from '../../../hooks/useScrollToItem';
+import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
 
 function SocialFeedContainer() {
-  const { userId, postId } = useParams();
+  const { username, postId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { isAuthenticated, user } = useUser();
+  const { profile: viewedProfile } = useProfilesByUsername(username);
+  const userId = viewedProfile?.userId;
+
+  const [uniqueGames, setUniqueGames] = useState([]);
 
   const {
     gameData,
@@ -66,11 +71,11 @@ function SocialFeedContainer() {
     isFetching: isFetchingHints,
     isError: isHintError,
   } = useHint({
-    by: "userId",
+    by: 'userId',
     id: userId,
   });
 
-  const { searchResults } = useSearch(searchParams.get("search"));
+  const { searchResults } = useSearch(searchParams.get('search'));
 
   const { post, isGettingPost, isError: isPostIdError } = usePostById(postId);
 
@@ -91,16 +96,16 @@ function SocialFeedContainer() {
   const isLoadingGames = isGettingGames || isGamesError;
 
   function setView(view) {
-    searchParams.set("view", view);
-    searchParams.delete("search");
+    searchParams.set('view', view);
+    searchParams.delete('search');
     setSearchParams(searchParams, { replace: true });
   }
 
   const sortedPosts = useMemo(() => {
     if (!allPosts && !userPosts && !replies) return;
 
-    switch (searchParams.get("view")) {
-      case "trending":
+    switch (searchParams.get('view')) {
+      case 'trending':
         if (!allPosts) break;
         return [
           ...allPosts.sort(
@@ -111,7 +116,7 @@ function SocialFeedContainer() {
           ),
         ];
 
-      case "following":
+      case 'following':
         if (!profile || !allPosts) break;
         return [
           ...allPosts
@@ -124,7 +129,7 @@ function SocialFeedContainer() {
             ),
         ];
 
-      case "discover":
+      case 'discover':
         if (!profile || !allPosts) break;
         return [
           ...allPosts
@@ -142,7 +147,7 @@ function SocialFeedContainer() {
             ),
         ];
 
-      case "posts":
+      case 'posts':
         if (!userPosts) break;
         return [
           ...userPosts
@@ -153,23 +158,23 @@ function SocialFeedContainer() {
               )
             )
             .filter((post) =>
-              searchParams.get("game")
-                ? post.gameId === Number(searchParams.get("game"))
+              searchParams.get('game')
+                ? post.gameId === Number(searchParams.get('game'))
                 : post
             ),
         ];
 
-      case "hints":
+      case 'hints':
         if (!hintData) break;
         return [
           ...hintData.filter((hint) =>
-            searchParams.get("game")
-              ? hint.gameId === Number(searchParams.get("game"))
+            searchParams.get('game')
+              ? hint.gameId === Number(searchParams.get('game'))
               : hint
           ),
         ];
 
-      case "popular":
+      case 'popular':
         if (!replies) break;
         return [
           ...replies.sort(
@@ -180,7 +185,7 @@ function SocialFeedContainer() {
           ),
         ];
 
-      case "recent":
+      case 'recent':
         if (!replies) break;
         return [
           ...replies.sort((postA, postB) =>
@@ -202,27 +207,49 @@ function SocialFeedContainer() {
   useEffect(
     function () {
       if (
-        (!searchParams.get("search") &&
+        (!searchParams.get('search') &&
           !isAuthenticated &&
-          (searchParams.get("view") === "following" ||
-            searchParams.get("view") === "discover")) ||
-        (!searchParams.get("search") && !searchParams.get("view")) ||
-        (searchParams.get("search") && searchParams.get("view"))
+          (searchParams.get('view') === 'following' ||
+            searchParams.get('view') === 'discover')) ||
+        (!searchParams.get('search') && !searchParams.get('view')) ||
+        (searchParams.get('search') && searchParams.get('view'))
       ) {
-        searchParams.delete("search");
-        searchParams.set("view", "trending");
+        searchParams.delete('search');
+        searchParams.set('view', 'trending');
         setSearchParams(searchParams, { replace: true });
       }
     },
     [isAuthenticated, searchParams, setSearchParams]
   );
 
+  useEffect(() => {
+    if (
+      searchParams.get('view') !== 'posts' &&
+      searchParams.get('view') !== 'hints'
+    )
+      return;
+
+    let items;
+
+    if (searchParams.get('view') === 'posts') items = userPosts;
+    else if (searchParams.get('view') === 'hints') items = hintData;
+
+    if (!items) return;
+
+    const gameIds = items.reduce((acc, cur) => {
+      acc.push(cur.gameId);
+      return acc;
+    }, []);
+    const gameIdsFiltered = gameIds.filter((game) => game);
+    setUniqueGames([...new Set(gameIdsFiltered)]);
+  }, [searchParams, userPosts, hintData]);
+
   useScrollToItem([userPosts, hintData, replies]);
 
   function setGameFilter(e) {
     e.target.value >= 0
-      ? searchParams.set("game", e.target.value)
-      : searchParams.delete("game");
+      ? searchParams.set('game', e.target.value)
+      : searchParams.delete('game');
     setSearchParams(searchParams, { replace: true });
   }
 
@@ -244,8 +271,8 @@ function SocialFeedContainer() {
             {userId ? (
               <>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "posts"}
-                  onClick={() => setView("posts")}
+                  $active={searchParams.get('view') === 'posts'}
+                  onClick={() => setView('posts')}
                 >
                   <ResponsiveButtonContent>
                     <p>Posts</p>
@@ -253,21 +280,25 @@ function SocialFeedContainer() {
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
                 <GameSelect
-                  value={searchParams.get("game") || -1}
+                  value={searchParams.get('game') || -1}
                   onChange={setGameFilter}
                 >
-                  <option key={"none"} value={-1}>
+                  <option key={'none'} value={-1}>
                     All
                   </option>
-                  {gameData?.map((game) => (
-                    <option key={game.id} value={game.id}>
-                      {game.name}
-                    </option>
-                  ))}
+                  {gameData &&
+                    uniqueGames.map((id) => {
+                      const game = gameData.find((game) => game.id === id);
+                      return (
+                        <option key={game.id} value={game.id}>
+                          {game.name}
+                        </option>
+                      );
+                    })}
                 </GameSelect>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "hints"}
-                  onClick={() => setView("hints")}
+                  $active={searchParams.get('view') === 'hints'}
+                  onClick={() => setView('hints')}
                 >
                   <ResponsiveButtonContent>
                     <p>Hints</p>
@@ -278,8 +309,8 @@ function SocialFeedContainer() {
             ) : postId ? (
               <>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "recent"}
-                  onClick={() => setView("recent")}
+                  $active={searchParams.get('view') === 'recent'}
+                  onClick={() => setView('recent')}
                 >
                   <ResponsiveButtonContent>
                     <p>Recent</p>
@@ -287,8 +318,8 @@ function SocialFeedContainer() {
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "popular"}
-                  onClick={() => setView("popular")}
+                  $active={searchParams.get('view') === 'popular'}
+                  onClick={() => setView('popular')}
                 >
                   <ResponsiveButtonContent>
                     <p>Popular</p>
@@ -299,8 +330,8 @@ function SocialFeedContainer() {
             ) : isAuthenticated ? (
               <>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "trending"}
-                  onClick={() => setView("trending")}
+                  $active={searchParams.get('view') === 'trending'}
+                  onClick={() => setView('trending')}
                 >
                   <ResponsiveButtonContent>
                     <p>Trending</p>
@@ -308,8 +339,8 @@ function SocialFeedContainer() {
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "following"}
-                  onClick={() => setView("following")}
+                  $active={searchParams.get('view') === 'following'}
+                  onClick={() => setView('following')}
                 >
                   <ResponsiveButtonContent>
                     <p>Following</p>
@@ -317,8 +348,8 @@ function SocialFeedContainer() {
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
                 <SocialFeedButton
-                  $active={searchParams.get("view") === "discover"}
-                  onClick={() => setView("discover")}
+                  $active={searchParams.get('view') === 'discover'}
+                  onClick={() => setView('discover')}
                 >
                   <ResponsiveButtonContent>
                     <p>Discover</p>
@@ -330,14 +361,14 @@ function SocialFeedContainer() {
           </SocialFeedButtons>
           <SocialFeedContent>
             <TopScrollElement />
-            {searchParams.get("search") && searchResults ? (
+            {searchParams.get('search') && searchResults ? (
               <SearchResultList
                 searchResultObject={searchResults}
                 gameData={gameData}
               />
             ) : canShowReplies ? (
               <ReplyList replies={sortedPosts} gameData={gameData} />
-            ) : searchParams.get("view") === "hints" ? (
+            ) : searchParams.get('view') === 'hints' ? (
               canShowHints && <Hints hints={sortedPosts} user={user} />
             ) : canShowPosts ? (
               <PostList posts={sortedPosts} gameData={gameData} />

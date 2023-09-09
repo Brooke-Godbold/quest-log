@@ -1,25 +1,27 @@
-import supabase, { supabaseStoragePath, supabaseUrl } from "./supabase";
+import supabase, { supabaseStoragePath, supabaseUrl } from './supabase';
 
 export async function getProfileByEmail(email) {
-  if (!email || email === "") return null;
+  if (!email || email === '') return null;
 
   const { data, error } = await supabase
-    .from("profile")
-    .select("*")
-    .eq("email", email);
+    .from('profile')
+    .select('*')
+    .eq('email', email);
 
   if (error) throw new Error(error.message);
 
   return data;
 }
 
-export async function getProfilesByUsername(username) {
-  if (!username || username === "") return null;
+export async function getProfileByUsername(username) {
+  if (!username || username === '') return null;
 
   const { data, error } = await supabase
-    .from("profile")
-    .select("*")
-    .ilike("username", `%${username}%`);
+    .from('profile')
+    .select('*')
+    .eq('username', username)
+    .single()
+    .select();
 
   if (error) throw new Error(error.message);
 
@@ -30,9 +32,9 @@ export async function getProfileByUserId(userId) {
   if (!userId) return null;
 
   const { data, error } = await supabase
-    .from("profile")
-    .select("*")
-    .eq("userId", userId)
+    .from('profile')
+    .select('*')
+    .eq('userId', userId)
     .single()
     .select();
 
@@ -45,8 +47,8 @@ export async function getProfilesByValues({ column, values }) {
   if (values.length === 0) return null;
 
   const { data, error } = await supabase
-    .from("profile")
-    .select("*")
+    .from('profile')
+    .select('*')
     .contains(column, values);
 
   if (error) throw new Error(error.message);
@@ -56,7 +58,7 @@ export async function getProfilesByValues({ column, values }) {
 
 export async function addProfile(profileData) {
   const { data, error } = await supabase
-    .from("profile")
+    .from('profile')
     .insert(profileData)
     .select();
 
@@ -69,10 +71,10 @@ export async function updateProfile(profileData) {
   let newProfileData = profileData;
 
   if (profileData.avatar) {
-    const avatarName = `${Math.random()}`.replaceAll(".", "");
+    const avatarName = `${Math.random()}`.replaceAll('.', '');
 
     const { error: storageError } = await supabase.storage
-      .from("avatars")
+      .from('avatars')
       .upload(avatarName, profileData.avatar);
 
     if (storageError) {
@@ -88,11 +90,11 @@ export async function updateProfile(profileData) {
 
       if (newProfileData.oldAvatarUrl) {
         const { error: deleteError } = await supabase.storage
-          .from("avatars")
+          .from('avatars')
           .remove([
             `${newProfileData.oldAvatarUrl.replaceAll(
               `${supabaseUrl}/${supabaseStoragePath}/avatars/`,
-              ""
+              ''
             )}`,
           ]);
 
@@ -102,9 +104,9 @@ export async function updateProfile(profileData) {
   }
 
   const { data, error } = await supabase
-    .from("profile")
+    .from('profile')
     .update(newProfileData.data)
-    .eq("userId", newProfileData.userId)
+    .eq('userId', newProfileData.userId)
     .select()
     .single();
 

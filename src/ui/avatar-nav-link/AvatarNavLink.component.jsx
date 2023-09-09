@@ -1,19 +1,19 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useProfileByUser } from "../../query/profile/useProfileByUser";
+import { useProfileByUser } from '../../query/profile/useProfileByUser';
 
-import { supabaseStoragePath, supabaseUrl } from "../../services/supabase";
+import { supabaseStoragePath, supabaseUrl } from '../../services/supabase';
 
-import Spinner from "../spinner/Spinner";
+import Spinner from '../spinner/Spinner';
 
 import {
   DisplayName,
   StyledAvatarNavLink,
   UserAvatar,
   UserName,
-} from "./AvatarNavLink.styles";
+} from './AvatarNavLink.styles';
 
-function AvatarNavLink({ userId, gameId, view = "posts", gameData }) {
+function AvatarNavLink({ userId, gameId, view = 'posts', gameData }) {
   const {
     profile,
     isGettingProfile,
@@ -24,10 +24,12 @@ function AvatarNavLink({ userId, gameId, view = "posts", gameData }) {
     <StyledAvatarNavLink
       to={
         userId
-          ? `/social/${userId}?view=${view}${gameId ? `&game=${gameId}` : ""}`
+          ? `/social/${profile?.username}?view=${view}${
+              gameId ? `&game=${gameId}` : ''
+            }`
           : gameData
           ? `/game/${gameData.id}`
-          : ""
+          : ''
       }
     >
       {userId ? (
