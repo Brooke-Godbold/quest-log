@@ -4,9 +4,9 @@ import { add, compareAsc, compareDesc } from 'date-fns';
 
 import { useHint } from '../../../query/hint/useHint';
 import { useUser } from '../../../query/auth/useUser';
-import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
 import { usePostsByGames } from '../../../query/post/usePostByGame';
 import { useAllGames } from '../../../query/game/useAllGames';
+import { useProfilesByLikeUsername } from '../../../query/profile/useProfilesByLikeUsername';
 
 import Spinner from '../../../ui/spinner/Spinner';
 import PostList from '../../social/post-list/PostList.component';
@@ -31,11 +31,8 @@ function HintListBody() {
     hintData,
   } = useHint({ by: 'gameId', id });
 
-  const {
-    profile: profileData,
-    isGettingProfile,
-    isFetchingProfile,
-  } = useProfilesByUsername(searchUsername);
+  const { profiles, isGettingProfile, isFetchingProfile } =
+    useProfilesByLikeUsername(searchUsername);
 
   const { gameData, isLoading: isLoadingGames } = useAllGames();
   const { posts, isGettingPosts } = usePostsByGames([id]);
@@ -86,7 +83,7 @@ function HintListBody() {
       const filteredData = filterHints(sortedData, filterValue, user);
 
       const usernameFiltered =
-        searchParams.get('username') && profileData
+        searchParams.get('username') && profiles
           ? filterByUser(filteredData)
           : filteredData;
 
@@ -98,7 +95,9 @@ function HintListBody() {
       setSortedFilteredData(tagFiltered);
 
       function filterByUser(hints) {
-        return hints.filter((hint) => hint.userId === profileData.userId);
+        return hints.filter((hint) => {
+          return profiles.some((profile) => hint.userId === profile.userId);
+        });
       }
 
       function filterByTags(hints) {
@@ -108,7 +107,7 @@ function HintListBody() {
       }
     },
 
-    [hintData, posts, sortValue, filterValue, user, searchParams, profileData]
+    [hintData, posts, sortValue, filterValue, user, searchParams, profiles]
   );
 
   function sortHints(hintData, sortBy) {

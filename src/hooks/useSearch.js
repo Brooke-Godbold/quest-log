@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-import { useSearchGames } from "../query/game/useSearchGames";
-import { useProfilesByUsername } from "../query/profile/useProfilesByUsername";
-import { usePostsByContent } from "../query/post/usePostsByContent";
-import { usePostsByGames } from "../query/post/usePostByGame";
+import { useEffect, useState } from 'react';
+
+import { useSearchGames } from '../query/game/useSearchGames';
+import { usePostsByContent } from '../query/post/usePostsByContent';
+import { usePostsByGames } from '../query/post/usePostByGame';
+import { useProfilesByLikeUsername } from '../query/profile/useProfilesByLikeUsername';
 
 export function useSearch(searchQuery) {
   const [searchResults, setSearchResults] = useState({});
 
   const { gameData } = useSearchGames(searchQuery);
-  const { profile: profiles } = useProfilesByUsername(searchQuery);
+  const { profiles } = useProfilesByLikeUsername(searchQuery);
   const { posts: postsByContent } = usePostsByContent(searchQuery);
 
   const gameIds = gameData?.reduce((arr, cur) => [...arr, cur.id], []);

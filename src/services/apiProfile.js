@@ -28,6 +28,19 @@ export async function getProfileByUsername(username) {
   return data;
 }
 
+export async function getProfilesByUsername(username) {
+  if (!username || username === '') return null;
+
+  const { data, error } = await supabase
+    .from('profile')
+    .select('*')
+    .ilike('username', `%${username}%`);
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function getProfileByUserId(userId) {
   if (!userId) return null;
 
