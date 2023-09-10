@@ -8,7 +8,7 @@ export function useProfilesByUsername(username) {
     data: profile,
     isError,
   } = useQuery({
-    queryKey: ['profile', username],
+    queryKey: [`profile_${username}`],
     queryFn: () => getProfileByUsername(username),
     retry: false,
   });

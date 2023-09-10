@@ -1,27 +1,27 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { useEffect } from "react";
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { useEffect } from 'react';
 
-import { supabaseStoragePath, supabaseUrl } from "../../../services/supabase";
+import { supabaseStoragePath, supabaseUrl } from '../../../services/supabase';
 
-import { useUpdateProfile } from "../../../query/profile/useUpdateProfile";
-import { useUser } from "../../../query/auth/useUser";
-import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useUpdateProfile } from '../../../query/profile/useUpdateProfile';
+import { useUser } from '../../../query/auth/useUser';
+import { useProfileByUser } from '../../../query/profile/useProfileByUser';
 
-import Spinner from "../../../ui/spinner/Spinner";
-import Notification from "../../../ui/notification/Notification.component";
+import Spinner from '../../../ui/spinner/Spinner';
+import Notification from '../../../ui/notification/Notification.component';
 
 import {
   Avatar,
   AvatarUploadInput,
   StyledAccountAvatarSection,
   UsernameLabel,
-} from "./AccountAvatarSection.styles";
+} from './AccountAvatarSection.styles';
 
-import { validateFile } from "../../../utils/validateFile";
-import { onErrorToast } from "../../../utils/onErrorToast";
+import { validateFile } from '../../../utils/validateFile';
+import { onErrorToast } from '../../../utils/onErrorToast';
 
 function AccountAvatarSection() {
   const {
@@ -34,7 +34,10 @@ function AccountAvatarSection() {
   const { user } = useUser();
   const { profile, isGettingProfile } = useProfileByUser(user?.id);
 
-  const { updateProfile, isLoading } = useUpdateProfile(user?.id);
+  const { updateProfile, isLoading } = useUpdateProfile(
+    user?.id,
+    profile?.username
+  );
 
   function onUpload(e) {
     if (!profile || !e.target.files || !e.target.files[0]) return;
@@ -80,10 +83,10 @@ function AccountAvatarSection() {
         <Spinner />
       )}
       <UsernameLabel>
-        {profile && profile.username ? profile.username : "Anonymous"}
+        {profile && profile.username ? profile.username : 'Anonymous'}
       </UsernameLabel>
       <AvatarUploadInput
-        {...register("avatar")}
+        {...register('avatar')}
         type="file"
         id="avatar"
         disabled={isLoading}

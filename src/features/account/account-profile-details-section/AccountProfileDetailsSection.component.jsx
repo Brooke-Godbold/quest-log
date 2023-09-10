@@ -41,14 +41,15 @@ import { onErrorToast } from '../../../utils/onErrorToast';
 function AccountProfileDetailsSection() {
   const { user, isGettingUser } = useUser();
   const { profile, isGettingProfile, isFetchingProfile } = useProfileByUser(
-    user ? user.id : null
+    user?.id
   );
 
   const { gameData } = useAllGames();
   const [currentlyPlaying, setCurrentlyPlaying] = useState([]);
 
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
-    user ? user.id : null
+    user?.id,
+    profile?.username
   );
 
   const isLoading = isFetchingProfile || isGettingProfile || isUpdatingProfile;

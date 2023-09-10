@@ -59,7 +59,8 @@ function UserHeader() {
   const { profile: viewedProfile, isError } = useProfilesByUsername(username);
   const { profile: userProfile } = useProfileByUser(user?.id);
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
-    userProfile?.userId
+    userProfile?.userId,
+    userProfile?.username
   );
 
   const { conversations } = useMessages(user?.id);
