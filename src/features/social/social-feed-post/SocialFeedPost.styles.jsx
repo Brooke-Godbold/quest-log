@@ -1,6 +1,6 @@
-import { styled } from "styled-components";
-import { NavLink } from "react-router-dom";
-import { CommonItem } from "../../../styles/GlobalStyles";
+import { styled } from 'styled-components';
+import { NavLink } from 'react-router-dom';
+import { CommonItem } from '../../../styles/GlobalStyles';
 
 const QuoteBlock = styled.button`
   display: flex;
@@ -22,6 +22,11 @@ const QuoteBlock = styled.button`
   & p,
   & h3 {
     cursor: pointer;
+  }
+
+  & p {
+    text-align: right;
+    margin-left: 5rem;
   }
 
   &:focus {

@@ -101,6 +101,27 @@ const HeaderActionLink = styled(NavLink)`
   ${ActionButton}
 `;
 
+const BackButton = styled.button`
+  ${ActionButton}
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  z-index: 1000;
+
+  transform: translate(-25%, -25%);
+
+  &:active,
+  &:hover {
+    transform: translate(-25%, -25%) scale(110%);
+  }
+
+  & svg {
+    transform: scale(125%);
+  }
+`;
+
 const UnreadMessages = styled.div`
   position: absolute;
   pointer-events: none;
@@ -335,4 +356,5 @@ export {
   NavigationGamesContainer,
   NavigationGamesLink,
   NavigationGameMenuLink,
+  BackButton,
 };

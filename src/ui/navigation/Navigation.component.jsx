@@ -11,12 +11,14 @@ import { useConversations } from '../../contexts/ConversationsContext';
 
 import { HiPlus } from 'react-icons/hi';
 import { BsEnvelopeOpen, BsEnvelopePlusFill } from 'react-icons/bs';
+import { MdArrowBack } from 'react-icons/md';
 
 import LoginModal from '../login-modal/LoginModal.component';
 import AddPostButton from '../../features/social/add-post-button/AddPostButton.component';
 import Search from '../search/Search.component';
 
 import {
+  BackButton,
   HeaderActionButton,
   HeaderActionLink,
   NavigationButton,
@@ -36,6 +38,7 @@ import {
 
 import { anonymousImageUrl } from '../../data/consts';
 import Spinner from '../spinner/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 function Navigation() {
   const { user, isGettingUser } = useUser();
@@ -57,6 +60,8 @@ function Navigation() {
 
   const [navigationActive, setNavigationActive] = useState(false);
   const [accountNavigationActive, setAccountNavigationActive] = useState(false);
+
+  const navigate = useNavigate();
 
   function handleToggleNavigation() {
     if (navigationActive || accountNavigationActive) {
@@ -85,6 +90,11 @@ function Navigation() {
     logout();
   }
 
+  function back() {
+    handleCloseNavigation();
+    navigate(-1);
+  }
+
   return (
     <StyledNavigation>
       <NavigationOverlay
@@ -92,6 +102,9 @@ function Navigation() {
       />
       <NavigationContainer>
         <NavigationHeader>
+          <BackButton onClick={back}>
+            <MdArrowBack />
+          </BackButton>
           <NavigationMenuButton onClick={handleToggleNavigation}>
             {isLoading ? (
               <Spinner />
