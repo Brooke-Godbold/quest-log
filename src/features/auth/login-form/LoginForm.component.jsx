@@ -112,7 +112,7 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               onClick={(e) => {
                 e.preventDefault();
                 onCloseModal?.();
-                navigate('/signup', { replace: true });
+                navigate('/signup');
               }}
             >
               <ResponsiveButtonContent>

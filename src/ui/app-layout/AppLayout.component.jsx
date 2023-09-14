@@ -12,8 +12,6 @@ function AppLayout() {
   const { user } = useUser();
   const queryClient = useQueryClient();
 
-  console.log(import.meta.env.VITE_SUPABASE_KEY);
-
   useEffect(() => {
     if (user) {
       const messageReceiverChannel = supabase.channel(`${user.id}`);

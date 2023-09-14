@@ -1,4 +1,4 @@
-import { createGlobalStyle, css } from "styled-components";
+import { createGlobalStyle, css } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
 :root {
@@ -184,14 +184,14 @@ const CommonButton = css`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 5px;
   background-color: ${(props) =>
-    props.$light ? "var(--color-brand-200)" : "var(--color-brand-700)"};
-  color: ${(props) => (props.$light ? "#333" : "#ddd")};
+    props.$light ? 'var(--color-brand-200)' : 'var(--color-brand-700)'};
+  color: ${(props) => (props.$light ? '#333' : '#ddd')};
   border: 4px solid transparent;
   transition: all 0.3s;
 
   &:hover {
     background-color: ${(props) =>
-      props.$light ? "var(--color-brand-400)" : "var(--color-brand-800)"};
+      props.$light ? 'var(--color-brand-400)' : 'var(--color-brand-800)'};
   }
 
   &:focus,
@@ -199,7 +199,7 @@ const CommonButton = css`
     outline: none;
     border: 4px solid
       ${(props) =>
-        props.$light ? "rgb(17, 17, 17, 0.4)" : "rgb(119, 119, 119, 0.4)"};
+        props.$light ? 'rgb(17, 17, 17, 0.4)' : 'rgb(119, 119, 119, 0.4)'};
   }
 
   @media (max-width: 120em) {
@@ -219,6 +219,11 @@ const CommonScrollBar = css`
     background-color: var(--color-brand-400); /* color of the scroll thumb */
     border: 3px solid var(--color-brand-400); /* creates padding around scroll thumb */
   }
+
+  scrollbar-width: thin;
+
+  scrollbar-color: var(--color-brand-600) transparent;
+  scroll-padding: 3px;
 `;
 
 const CommonPage = css`

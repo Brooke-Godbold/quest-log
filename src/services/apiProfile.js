@@ -19,13 +19,12 @@ export async function getProfileByUsername(username) {
   const { data, error } = await supabase
     .from('profile')
     .select('*')
-    .eq('username', username)
-    .single()
-    .select();
+    .eq('username', username);
 
   if (error) throw new Error(error.message);
 
-  return data;
+  if (data[0] === undefined) return null;
+  else return data[0];
 }
 
 export async function getProfilesByUsername(username) {

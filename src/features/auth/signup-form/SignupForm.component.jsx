@@ -89,7 +89,7 @@ function SignupForm() {
 
   useEffect(
     function () {
-      if (!emailCheckProfiles || !usernameCheckProfile) return;
+      if (!emailCheckProfiles) return;
 
       if (!currentlyPlayingIds?.length > 0) {
         toast.error(() => (
@@ -101,7 +101,7 @@ function SignupForm() {
         toast.error(() => (
           <Notification text="That email is already in use!" />
         ));
-      } else if (usernameCheckProfile > 0) {
+      } else if (usernameCheckProfile) {
         toast.error(() => (
           <Notification text="That username is already in use!" />
         ));
