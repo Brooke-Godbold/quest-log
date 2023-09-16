@@ -1,11 +1,11 @@
-import supabase from "./supabase";
+import supabase from './supabase';
 
 export async function GetMessagesByUserId(userId) {
   if (!userId) return null;
 
   const { data, error } = await supabase
-    .from("messages")
-    .select("*")
+    .from('messages')
+    .select('*')
     .or(`userIdA.eq.${userId}, userIdB.eq.${userId}`);
 
   if (error) throw new Error(error.message);
@@ -15,9 +15,9 @@ export async function GetMessagesByUserId(userId) {
 
 export async function UpdateMessagesById(conversationData) {
   const { data, error } = await supabase
-    .from("messages")
+    .from('messages')
     .update({ conversation: conversationData.data })
-    .eq("id", conversationData.messagesId);
+    .eq('id', conversationData.messagesId);
 
   if (error) throw new Error(error.message);
 
@@ -26,7 +26,7 @@ export async function UpdateMessagesById(conversationData) {
 
 export async function addMessage(conversationData) {
   const { data, error } = await supabase
-    .from("messages")
+    .from('messages')
     .insert(conversationData);
 
   if (error) throw new Error(error.message);

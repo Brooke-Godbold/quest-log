@@ -100,7 +100,10 @@ export async function updateProfile(profileData) {
         data: { ...newProfileData.data, avatarUrl: avatarPath },
       };
 
-      if (newProfileData.oldAvatarUrl) {
+      if (
+        newProfileData.oldAvatarUrl &&
+        !newProfileData.oldAvatarUrl.includes('anonymous')
+      ) {
         const { error: deleteError } = await supabase.storage
           .from('avatars')
           .remove([

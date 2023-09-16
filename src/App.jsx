@@ -68,11 +68,13 @@ function App() {
             boxShadow: '0px 0px 7px 1px rgb(31, 31, 31, 0.2)',
             backgroundColor: 'var(--color-brand-700)',
             color: 'var(--color-brand-300)',
+            border: 'double 7px #dfbb58c1',
           },
           error: {
             style: {
               backgroundColor: 'var(--color-red-800)',
               color: 'var(--color-red-100)',
+              border: 'double 7px var(--color-red-400)',
             },
           },
         }}

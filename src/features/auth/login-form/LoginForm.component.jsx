@@ -39,7 +39,8 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
 
     login(data, {
       onSuccess: () => {
-        onCloseModal?.();
+        toast(() => <Notification text="Successfully logged in!" />),
+          onCloseModal?.();
       },
       onError: () =>
         toast.error((t) => (

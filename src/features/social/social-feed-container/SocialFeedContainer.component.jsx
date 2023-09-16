@@ -13,13 +13,10 @@ import { useProfileByUser } from '../../../query/profile/useProfileByUser';
 import { useIsBlocked } from '../../../hooks/useIsBlocked';
 
 import { BiTime } from 'react-icons/bi';
-import {
-  BsPeopleFill,
-  BsTrophyFill,
-  BsStickyFill,
-  BsPersonFillCheck,
-} from 'react-icons/bs';
+import { BsPeopleFill, BsPersonFillCheck } from 'react-icons/bs';
 import { TbWorldSearch } from 'react-icons/tb';
+import { GrGamepad } from 'react-icons/gr';
+import { RiFileList3Line } from 'react-icons/ri';
 
 import Spinner from '../../../ui/spinner/Spinner';
 import Blocked from '../blocked/Blocked.component';
@@ -223,6 +220,18 @@ function SocialFeedContainer() {
   );
 
   useEffect(() => {
+    if (!username) return;
+
+    if (
+      searchParams.get('view') !== 'posts' &&
+      searchParams.get('view') !== 'hints'
+    ) {
+      searchParams.set('view', 'posts');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, username, setSearchParams]);
+
+  useEffect(() => {
     if (
       searchParams.get('view') !== 'posts' &&
       searchParams.get('view') !== 'hints'
@@ -276,7 +285,7 @@ function SocialFeedContainer() {
                 >
                   <ResponsiveButtonContent>
                     <p>Posts</p>
-                    <BsStickyFill />
+                    <RiFileList3Line />
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
                 <GameSelect
@@ -284,7 +293,7 @@ function SocialFeedContainer() {
                   onChange={setGameFilter}
                 >
                   <option key={'none'} value={-1}>
-                    All
+                    All Games
                   </option>
                   {gameData &&
                     uniqueGames.map((id) => {
@@ -302,7 +311,7 @@ function SocialFeedContainer() {
                 >
                   <ResponsiveButtonContent>
                     <p>Hints</p>
-                    <BsTrophyFill />
+                    <GrGamepad />
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
               </>

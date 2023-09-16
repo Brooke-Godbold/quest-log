@@ -56,12 +56,19 @@ function UserHeader() {
 
   const { gameData } = useAllGames();
 
-  const { profile: viewedProfile, isError } = useProfilesByUsername(username);
+  const {
+    profile: viewedProfile,
+    isError,
+    isGettingProfile,
+    isFetchingProfile,
+  } = useProfilesByUsername(username);
   const { profile: userProfile } = useProfileByUser(user?.id);
   const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile(
     userProfile?.userId,
     userProfile?.username
   );
+
+  const isLoadingViewedProfile = isGettingProfile || isFetchingProfile;
 
   const { conversations } = useMessages(user?.id);
   const { setCurrentConversation } = useConversations();
@@ -175,9 +182,19 @@ function UserHeader() {
   return (
     <StyledUserHeader>
       {!viewedProfile ? (
-        <Spinner />
+        isLoadingViewedProfile ? (
+          <Spinner />
+        ) : (
+          <UserHeaderError>
+            <p>Sorry!</p>
+            {`We couldn't find Username '${username}'!`}
+          </UserHeaderError>
+        )
       ) : isError ? (
-        <UserHeaderError>We couldn&apos;t find that one...</UserHeaderError>
+        <UserHeaderError>
+          <p>Oops!</p>
+          <p>Looks like something went wrong...</p>
+        </UserHeaderError>
       ) : (
         <>
           <UserProfile>

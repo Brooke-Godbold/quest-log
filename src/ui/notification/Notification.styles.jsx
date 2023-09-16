@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledNotification = styled.div`
   padding: 0.8rem 2rem;

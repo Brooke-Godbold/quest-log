@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import {
   CommonButton,
   CommonInput,
   CommonScrollBar,
-} from "../../../styles/GlobalStyles";
+} from '../../../styles/GlobalStyles';
 
 const StyledAddPostForm = styled.form`
   display: flex;

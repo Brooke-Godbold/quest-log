@@ -16,11 +16,11 @@ function AppLayout() {
     if (user) {
       const messageReceiverChannel = supabase.channel(`${user.id}`);
       messageReceiverChannel
-        .on('broadcast', { event: 'messages' }, (payload) =>
+        .on('broadcast', { event: 'messages' }, (payload) => {
           queryClient.invalidateQueries({
-            queryKey: [payload.message],
-          })
-        )
+            queryKey: [payload.payload.message],
+          });
+        })
         .subscribe();
     }
   }, [user, queryClient]);

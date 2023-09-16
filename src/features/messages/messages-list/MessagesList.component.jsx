@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { compareDesc } from "date-fns";
+import { useEffect, useState } from 'react';
+import { compareDesc } from 'date-fns';
 
-import { useConversations } from "../../../contexts/ConversationsContext";
+import { useConversations } from '../../../contexts/ConversationsContext';
 
-import { useUser } from "../../../query/auth/useUser";
-import { useMessages } from "../../../query/message/useMessages";
+import { useUser } from '../../../query/auth/useUser';
+import { useMessages } from '../../../query/message/useMessages';
 
-import MessagesSender from "../messages-sender/MessagesSender.component";
+import MessagesSender from '../messages-sender/MessagesSender.component';
 
-import { StyledMessagesList } from "./MessagesList.styles";
+import { StyledMessagesList } from './MessagesList.styles';
 
 function MessagesList() {
   const { user } = useUser();
@@ -20,7 +20,7 @@ function MessagesList() {
 
   useEffect(
     function () {
-      if (!conversations || !user) return;
+      if (!conversations || conversations.length === 0 || !user) return;
 
       const c = [...conversations].sort((c1, c2) =>
         compareDesc(

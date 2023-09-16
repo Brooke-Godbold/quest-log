@@ -59,6 +59,7 @@ function SignupForm() {
 
   const { gameData, isLoading: isLoadingGames } = useAllGames();
 
+  const [signingUp, setSigningUp] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
 
   const { isGettingProfile: isCheckingEmail, profile: emailCheckProfiles } =
@@ -79,6 +80,7 @@ function SignupForm() {
     isLoadingGames;
 
   function onSubmit(data) {
+    setSigningUp(true);
     setEmailCheck(data.email);
     setUsernameCheck(data.username);
   }
@@ -89,15 +91,13 @@ function SignupForm() {
 
   useEffect(
     function () {
-      if (!emailCheckProfiles) return;
+      if (!emailCheckProfiles || !signingUp) return;
 
       if (!currentlyPlayingIds?.length > 0) {
         toast.error(() => (
           <Notification text="Select what you're playing currently!" />
         ));
-      }
-
-      if (emailCheckProfiles.length > 0) {
+      } else if (emailCheckProfiles.length > 0) {
         toast.error(() => (
           <Notification text="That email is already in use!" />
         ));
@@ -140,6 +140,8 @@ function SignupForm() {
           }
         );
       }
+
+      setSigningUp(false);
     },
     [
       emailCheckProfiles,
@@ -148,6 +150,7 @@ function SignupForm() {
       addProfile,
       getValues,
       currentlyPlayingIds,
+      signingUp,
     ]
   );
 

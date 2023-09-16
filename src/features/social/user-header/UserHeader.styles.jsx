@@ -1,6 +1,6 @@
-import { styled } from "styled-components";
-import { NavLink } from "react-router-dom";
-import { CommonButton, CommonScrollBar } from "../../../styles/GlobalStyles";
+import { styled } from 'styled-components';
+import { NavLink } from 'react-router-dom';
+import { CommonButton, CommonScrollBar } from '../../../styles/GlobalStyles';
 
 const StyledUserHeader = styled.div`
   display: flex;
@@ -176,9 +176,9 @@ const SocialMediaButton = styled.a`
   width: 25%;
 
   background-color: ${(props) =>
-    props.$active ? "var(--color-brand-700)" : "rgba(122, 122, 122, 0.3)"};
+    props.$active ? 'var(--color-brand-700)' : 'rgba(122, 122, 122, 0.3)'};
 
-  cursor: ${(props) => (props.$active ? "pointer" : "auto")};
+  cursor: ${(props) => (props.$active ? 'pointer' : 'auto')};
 
   display: flex;
   align-items: center;
@@ -187,12 +187,12 @@ const SocialMediaButton = styled.a`
   transition: all 0.3s;
 
   &:hover {
-    transform: ${(props) => (props.$active ? "scale(110%)" : "scale(100%)")};
+    transform: ${(props) => (props.$active ? 'scale(110%)' : 'scale(100%)')};
   }
 
   & svg {
     color: ${(props) =>
-      props.$active ? "var(--color-brand-500)" : "rgba(85, 85, 85, 0.3)"};
+      props.$active ? 'var(--color-brand-500)' : 'rgba(85, 85, 85, 0.3)'};
     transform: scale(150%);
   }
 `;
@@ -286,15 +286,15 @@ const ActionButton = styled.button`
   background-color: ${(props) =>
     props.$interactable
       ? props.$active
-        ? "var(--color-brand-700)"
-        : "var(--color-brand-400)"
-      : "rgba(71, 70, 64, 0.5)"};
+        ? 'var(--color-brand-700)'
+        : 'var(--color-brand-400)'
+      : 'rgba(71, 70, 64, 0.5)'};
   color: ${(props) =>
     props.$interactable
       ? props.$active
-        ? "var(--color-brand-300)"
-        : "var(--color-brand-700)"
-      : "rgba(146, 141, 126, 0.5)"};
+        ? 'var(--color-brand-300)'
+        : 'var(--color-brand-700)'
+      : 'rgba(146, 141, 126, 0.5)'};
 
   font-size: 2.4rem;
   font-weight: 700;
@@ -303,14 +303,14 @@ const ActionButton = styled.button`
   display: flex;
   align-items: center;
 
-  cursor: ${(props) => !props.$interactable && "auto"};
+  cursor: ${(props) => !props.$interactable && 'auto'};
 
   &:disabled {
     cursor: auto;
   }
 
   &:hover {
-    transform: ${(props) => props.$interactable && "scale(110%)"};
+    transform: ${(props) => props.$interactable && 'scale(110%)'};
   }
 
   @media (max-width: 35em) {
