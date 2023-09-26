@@ -161,7 +161,6 @@ function SocialFeedContainer() {
 
       case 'playing':
         if (!user || !currentGamesHints) break;
-        console.log(currentGamesHints);
         return [
           ...currentGamesHints
             .filter((hint) => hint.userId !== user.id)
@@ -243,7 +242,8 @@ function SocialFeedContainer() {
         (!searchParams.get('search') &&
           !isAuthenticated &&
           (searchParams.get('view') === 'following' ||
-            searchParams.get('view') === 'discover')) ||
+            searchParams.get('view') === 'discover' ||
+            searchParams.get('view') === 'playing')) ||
         (!searchParams.get('search') && !searchParams.get('view')) ||
         (searchParams.get('search') && searchParams.get('view'))
       ) {

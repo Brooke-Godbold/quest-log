@@ -1,16 +1,24 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import SocialFeedPost from "../social-feed-post/SocialFeedPost.component";
+import { useSearchParams } from 'react-router-dom';
 
-import { BATCH_ITEM_MULTIPLIER } from "../../../data/consts";
+import SocialFeedPost from '../social-feed-post/SocialFeedPost.component';
+import FollowSuggestions from '../../../ui/follow-suggestions/FollowSuggestions.component';
 
-import { refProps, useBatchLoading } from "../../../hooks/useBatchLoading";
+import { refProps, useBatchLoading } from '../../../hooks/useBatchLoading';
+
+import { BATCH_ITEM_MULTIPLIER } from '../../../data/consts';
 
 function PostList({ posts, gameData }) {
   const { batchNumber, ref } = useBatchLoading();
 
+  const [searchParams] = useSearchParams();
+
   return (
     <>
+      {posts?.length === 0 && searchParams.get('view') === 'following' && (
+        <FollowSuggestions />
+      )}
       {posts
         ?.filter((post) => !post.postId)
         .slice(0, batchNumber * BATCH_ITEM_MULTIPLIER)

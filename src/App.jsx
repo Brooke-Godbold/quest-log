@@ -35,7 +35,7 @@ import { LocationsProvider } from './contexts/LocationsContext';
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
-      if (query.meta.errorMessage) {
+      if (query.meta?.errorMessage) {
         toast.error((t) => (
           <Notification toast={t} text={query.meta.errorMessage} />
         ));
