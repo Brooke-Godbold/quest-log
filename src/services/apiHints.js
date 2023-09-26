@@ -1,11 +1,11 @@
-import supabase from "./supabase";
+import supabase from './supabase';
 
 export async function getHints(data) {
   if (!data.id) return null;
 
   const { data: hints, error } = await supabase
-    .from("hint")
-    .select("*")
+    .from('hint')
+    .select('*')
     .eq(data.by, data.id);
 
   if (error) {
@@ -17,9 +17,9 @@ export async function getHints(data) {
 
 export async function getHintsByHintIdList(hintIds) {
   const { data: hints, error } = await supabase
-    .from("hint")
-    .select("*")
-    .in("id", hintIds);
+    .from('hint')
+    .select('*')
+    .in('id', hintIds);
 
   if (error) {
     console.error(error);
@@ -28,11 +28,22 @@ export async function getHintsByHintIdList(hintIds) {
   return hints;
 }
 
+export async function getHintsByGameIds(gameIds) {
+  const { data, error } = await supabase
+    .from('hint')
+    .select('*')
+    .in('gameId', gameIds);
+
+  if (error) console.error(error);
+
+  return data;
+}
+
 export async function getHintsByListContainsValue(data) {
-  if (!data.value || data.column === "user") return null;
+  if (!data.value || data.column === 'user') return null;
 
   const { data: hints, error } = await supabase
-    .from("hint")
+    .from('hint')
     .select()
     .contains(data.column, data.value);
 
@@ -46,7 +57,7 @@ export async function getHintsByListContainsValue(data) {
 
 export async function addHint(hintData) {
   const { data: hint, error } = await supabase
-    .from("hint")
+    .from('hint')
     .insert(hintData)
     .select()
     .single();
@@ -60,7 +71,7 @@ export async function addHint(hintData) {
 
 export async function updateHint(hintData) {
   const { data: hint, error } = await supabase
-    .from("hint")
+    .from('hint')
     .update(hintData.data)
     .eq(hintData.by, hintData.id)
     .select();
@@ -73,7 +84,7 @@ export async function updateHint(hintData) {
 }
 
 export async function deleteHint(id) {
-  const { error } = await supabase.from("hint").delete().eq("id", id);
+  const { error } = await supabase.from('hint').delete().eq('id', id);
 
   if (error) {
     console.error(error);

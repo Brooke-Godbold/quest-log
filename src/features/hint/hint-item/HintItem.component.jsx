@@ -1,34 +1,36 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useParams, useSearchParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { useParams, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
-import { HiTrash } from "react-icons/hi";
+import { HiTrash } from 'react-icons/hi';
 
-import { useDeleteHint } from "../../../query/hint/useDeleteHint";
-import { useUpdateHint } from "../../../query/hint/useUpdateHint";
-import { useAllGames } from "../../../query/game/useAllGames";
+import { useDeleteHint } from '../../../query/hint/useDeleteHint';
+import { useUpdateHint } from '../../../query/hint/useUpdateHint';
+import { useAllGames } from '../../../query/game/useAllGames';
 
-import Modal from "../../../ui/modal/Modal.component";
-import ConfirmationCheck from "../../../ui/confirmation-check/ConfirmationCheck.component";
-import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
-import Votes from "../../../ui/votes/Votes.component";
-import GameTag from "../../../ui/game-tag/GameTag.component";
-import Notification from "../../../ui/notification/Notification.component";
+import Modal from '../../../ui/modal/Modal.component';
+import ConfirmationCheck from '../../../ui/confirmation-check/ConfirmationCheck.component';
+import AvatarNavLink from '../../../ui/avatar-nav-link/AvatarNavLink.component';
+import Votes from '../../../ui/votes/Votes.component';
+import GameTag from '../../../ui/game-tag/GameTag.component';
+import Notification from '../../../ui/notification/Notification.component';
 
 import {
   HintActionsContainer,
+  HintCreatedTime,
   HintDeleteButton,
   HintDescription,
   HintTag,
   HintTagsContainer,
   NavLinkContainer,
   StyledHintItem,
-} from "./HintItem.styles";
-import { ConfirmationText } from "../../../ui/confirmation-check/ConfirmationCheck.styles";
+} from './HintItem.styles';
+import { ConfirmationText } from '../../../ui/confirmation-check/ConfirmationCheck.styles';
+import { format } from 'date-fns';
 
 function HintItem({ hint, id, user, innerRef }) {
-  const { userId } = useParams();
+  const { id: gameId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { updateHint } = useUpdateHint(onVoteSuccess);
@@ -49,7 +51,7 @@ function HintItem({ hint, id, user, innerRef }) {
   }
 
   function onVoteSuccess() {
-    searchParams.set("hint", hint.id);
+    searchParams.set('hint', hint.id);
     setSearchParams(searchParams, { replace: true });
   }
 
@@ -96,11 +98,15 @@ function HintItem({ hint, id, user, innerRef }) {
           : null}
       </HintTagsContainer>
       <HintDescription>{hint.description}</HintDescription>
-      {userId && gameData && (
+      {!gameId && gameData && (
         <GameTag to={`/game/${hint.gameId}?view=hints`}>
           {gameData.filter((game) => game.id === hint.gameId)[0]?.name}
         </GameTag>
       )}
+      <HintCreatedTime>{`Posted at: ${format(
+        new Date(hint.created_at),
+        'Pp'
+      )}`}</HintCreatedTime>
     </StyledHintItem>
   );
 }

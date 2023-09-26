@@ -38,6 +38,7 @@ import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/R
 import { useSearch } from '../../../hooks/useSearch';
 import { useScrollToItem } from '../../../hooks/useScrollToItem';
 import { useIsBlocked } from '../../../hooks/useIsBlocked';
+import { useHintsByGameIds } from '../../../query/hint/useHintsByGames';
 
 function SocialFeedContainer() {
   const { username, postId } = useParams();
@@ -81,6 +82,11 @@ function SocialFeedContainer() {
 
   const { profile } = useProfileByUser(user?.id);
 
+  const {
+    hintData: currentGamesHints,
+    isFetching: isFetchingCurrentGamesHints,
+  } = useHintsByGameIds(profile?.currentGames);
+
   const { isBlocked } = useIsBlocked(postId ? post?.userId : userId, user?.id);
 
   const {
@@ -91,7 +97,11 @@ function SocialFeedContainer() {
 
   const isLoadingReplies =
     isGettingPost || isPostIdError || isGettingReplies || isRepliesError;
-  const isLoadingHints = isGettingHints || isFetchingHints || isHintError;
+  const isLoadingHints =
+    isGettingHints ||
+    isFetchingHints ||
+    isHintError ||
+    isFetchingCurrentGamesHints;
   const isLoadingPosts = isGettingPosts || isPostError;
   const isLoadingGames = isGettingGames || isGamesError;
 
@@ -150,9 +160,18 @@ function SocialFeedContainer() {
         ];
 
       case 'playing':
-        if (!profile || !allPosts) break;
-        console.log(profile.currentGames);
-        return allPosts;
+        if (!user || !currentGamesHints) break;
+        console.log(currentGamesHints);
+        return [
+          ...currentGamesHints
+            .filter((hint) => hint.userId !== user.id)
+            .sort((hintA, hintB) =>
+              compareDesc(
+                new Date(hintA.created_at),
+                new Date(hintB.created_at)
+              )
+            ),
+        ];
 
       case 'posts':
         if (!userPosts) break;
@@ -202,12 +221,19 @@ function SocialFeedContainer() {
     }
 
     return [];
-  }, [allPosts, searchParams, profile, userPosts, replies, hintData, user]);
+  }, [
+    allPosts,
+    searchParams,
+    profile,
+    userPosts,
+    replies,
+    hintData,
+    user,
+    currentGamesHints,
+  ]);
 
   const canShowPosts =
     !isLoadingPosts && sortedPosts && !isLoadingGames && gameData;
-
-  const canShowHints = !isLoadingHints && hintData;
 
   const canShowReplies = postId && !isLoadingReplies;
 
@@ -396,8 +422,9 @@ function SocialFeedContainer() {
               />
             ) : canShowReplies ? (
               <ReplyList replies={sortedPosts} gameData={gameData} />
-            ) : searchParams.get('view') === 'hints' ? (
-              canShowHints && <Hints hints={sortedPosts} user={user} />
+            ) : searchParams.get('view') === 'hints' ||
+              searchParams.get('view') === 'playing' ? (
+              !isLoadingHints && <Hints hints={sortedPosts} user={user} />
             ) : canShowPosts ? (
               <PostList posts={sortedPosts} gameData={gameData} />
             ) : (

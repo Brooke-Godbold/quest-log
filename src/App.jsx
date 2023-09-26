@@ -66,7 +66,7 @@ function App() {
         toastOptions={{
           style: {
             boxShadow: '0px 0px 7px 1px rgb(31, 31, 31, 0.2)',
-            backgroundColor: 'var(--color-brand-700)',
+            backgroundColor: 'var(--color-brand-700-transparent)',
             color: 'var(--color-brand-300)',
             border: 'double 7px #dfbb58c1',
           },

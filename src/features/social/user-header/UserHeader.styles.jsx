@@ -123,7 +123,6 @@ const UserAvatar = styled.img`
 `;
 
 const UserName = styled.h1`
-  margin-top: 1.6rem;
   font-size: 5.4rem;
   text-align: center;
 
@@ -151,6 +150,11 @@ const DisplayName = styled.h3`
 `;
 
 const Heading = styled.h3``;
+
+const FollowersCount = styled.p`
+  margin-top: 0.8rem;
+  font-weight: 700;
+`;
 
 const UserDetailsContainer = styled.div`
   display: flex;
@@ -248,7 +252,6 @@ const CurrentlyPlayingContainer = styled.div`
   }
 
   @media (max-width: 35em) {
-    //flex: initial;
     display: none;
   }
 `;
@@ -361,4 +364,5 @@ export {
   SocialMediaButton,
   UserActionsContainer,
   DisplayName,
+  FollowersCount,
 };

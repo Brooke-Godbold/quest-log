@@ -269,6 +269,48 @@ const CommonItem = css`
   }
 `;
 
+const CommonCloseButton = css`
+  border: none;
+  border-radius: 5px;
+  background: none;
+
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-brand-500);
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.15);
+
+  flex-shrink: 0;
+  width: 3.6rem;
+  height: 3.6rem;
+
+  transition: all 0.3s;
+
+  & svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--color-brand-600);
+
+    transition: all 0.3s;
+  }
+
+  &:hover {
+    background-color: var(--color-brand-400);
+
+    & svg {
+      color: var(--color-brand-500);
+    }
+  }
+`;
+
 export default GlobalStyles;
 
-export { CommonButton, CommonInput, CommonScrollBar, CommonPage, CommonItem };
+export {
+  CommonButton,
+  CommonInput,
+  CommonScrollBar,
+  CommonPage,
+  CommonItem,
+  CommonCloseButton,
+};

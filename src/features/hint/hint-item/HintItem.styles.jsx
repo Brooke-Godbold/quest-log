@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledHintItem = styled.div`
   display: grid;
@@ -81,17 +81,17 @@ const HintDeleteButton = styled.button`
 
 const Upvote = styled.button`
   color: ${(props) =>
-    props.$authorized && props.$canVote ? "#248f09" : "#333"};
+    props.$authorized && props.$canVote ? '#248f09' : '#333'};
   transition: all 0.3s;
   background-color: transparent;
   transform: none;
   cursor: ${(props) =>
-    props.$authorized && props.$canVote ? "pointer" : "auto"};
+    props.$authorized && props.$canVote ? 'pointer' : 'auto'};
   border: none;
 
   & svg {
     border: ${(props) =>
-      props.$authorized && props.$voted ? "2px solid #248f09" : "none"};
+      props.$authorized && props.$voted ? '2px solid #248f09' : 'none'};
     border-radius: 50%;
     height: 100%;
     width: auto;
@@ -103,23 +103,23 @@ const Upvote = styled.button`
 
   &:hover {
     transform: ${(props) =>
-      props.$authorized && props.$canVote ? "scale(150%)" : "none"};
+      props.$authorized && props.$canVote ? 'scale(150%)' : 'none'};
   }
 `;
 
 const Downvote = styled.button`
   color: ${(props) =>
-    props.$authorized && props.$canVote ? "#8f1209" : "#333"};
+    props.$authorized && props.$canVote ? '#8f1209' : '#333'};
   transition: all 0.3s;
   border: none;
   background-color: transparent;
   transform: none;
   cursor: ${(props) =>
-    props.$authorized && props.$canVote ? "pointer" : "auto"};
+    props.$authorized && props.$canVote ? 'pointer' : 'auto'};
 
   & svg {
     border: ${(props) =>
-      props.$authorized && props.$voted ? "2px solid #8f1209" : "none"};
+      props.$authorized && props.$voted ? '2px solid #8f1209' : 'none'};
     border-radius: 50%;
     height: 100%;
     width: auto;
@@ -131,7 +131,7 @@ const Downvote = styled.button`
 
   &:hover {
     transform: ${(props) =>
-      props.$authorized && props.$canVote ? "scale(150%)" : "none"};
+      props.$authorized && props.$canVote ? 'scale(150%)' : 'none'};
   }
 `;
 
@@ -159,6 +159,16 @@ const UserName = styled.h4`
   align-self: flex-start;
 `;
 
+const HintCreatedTime = styled.p`
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  grid-column: 2;
+
+  align-self: self-end;
+  justify-self: self-end;
+`;
+
 export {
   StyledHintItem,
   NavLinkContainer,
@@ -172,4 +182,5 @@ export {
   UserName,
   HintDeleteButton,
   HintActionsContainer,
+  HintCreatedTime,
 };

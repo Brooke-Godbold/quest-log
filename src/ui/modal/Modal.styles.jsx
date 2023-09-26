@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { CommonCloseButton } from '../../styles/GlobalStyles';
 
 const StyledModal = styled.div`
   position: fixed;
@@ -30,37 +31,11 @@ const Overlay = styled.div`
 `;
 
 const ModalCloseButton = styled.button`
+  ${CommonCloseButton}
+
   position: absolute;
-  border: none;
-  border-radius: 5px;
-  background: none;
   right: 0.75rem;
   top: 0.75rem;
-
-  padding: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-brand-500);
-  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.15);
-
-  transition: all 0.3s;
-
-  & svg {
-    width: 2.4rem;
-    height: 2.4rem;
-    color: var(--color-brand-600);
-
-    transition: all 0.3s;
-  }
-
-  &:hover {
-    background-color: var(--color-brand-400);
-
-    & svg {
-      color: var(--color-brand-500);
-    }
-  }
 `;
 
 export { StyledModal, Overlay, ModalCloseButton };

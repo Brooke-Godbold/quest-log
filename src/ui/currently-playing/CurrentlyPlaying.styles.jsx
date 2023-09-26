@@ -85,10 +85,25 @@ const CurrentlyPlayingSelection = styled.button`
   }
 `;
 
+const InfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+`;
+
+const InfoText = styled.p`
+  padding: 1.2rem;
+
+  text-align: center;
+`;
+
 export {
   StyledCurrentlyPlaying,
   CurrentlyPlayingSearchInput,
   CurrentlyPlayingSuggestions,
   CurrentlyPlayingSelection,
   CurrentlyPlayingInput,
+  InfoContainer,
+  InfoText,
 };

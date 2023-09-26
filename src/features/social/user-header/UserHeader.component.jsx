@@ -42,12 +42,14 @@ import {
   UserProfile,
   DisplayName,
   AddNewPostButton,
+  FollowersCount,
 } from './UserHeader.styles';
 
 import { kickUrl, twitchUrl, youtubeUrl } from '../../../data/consts';
 
 import { usePageTitle } from '../../../hooks/usePageTitle';
 import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
+import { useProfilesByValues } from '../../../query/profile/useProfilesByValues';
 
 function UserHeader() {
   const { isAuthenticated, user } = useUser();
@@ -67,6 +69,14 @@ function UserHeader() {
     userProfile?.userId,
     userProfile?.username
   );
+
+  const {
+    profiles: followingProfiles,
+    isFetchingProfiles: isFetchingFollowers,
+  } = useProfilesByValues({
+    column: 'following',
+    values: [viewedProfile?.userId],
+  });
 
   const isLoadingViewedProfile = isGettingProfile || isFetchingProfile;
 
@@ -278,6 +288,9 @@ function UserHeader() {
                     )}
                   </UserActionsContainer>
                 )}
+              {!isFetchingFollowers && followingProfiles?.length > 0 && (
+                <FollowersCount>{`${followingProfiles?.length} followers`}</FollowersCount>
+              )}
             </UserMain>
             <UserDetailsContainer>
               <UserBio>{viewedProfile.bio}</UserBio>

@@ -1,19 +1,22 @@
 import PropTypes from 'prop-types';
 
+import toast from 'react-hot-toast';
+
 import { HiX } from 'react-icons/hi';
 
-import { StyledNotification } from './Notification.styles';
-import { ModalCloseButton } from '../modal/Modal.styles';
-import toast from 'react-hot-toast';
+import {
+  NotificationCloseButton,
+  StyledNotification,
+} from './Notification.styles';
 
 function Notification({ toastId, text, link }) {
   return (
     <StyledNotification>
       {text && <p>{text}</p>}
       {link}
-      <ModalCloseButton onClick={() => toast.dismiss(toastId)}>
+      <NotificationCloseButton onClick={() => toast.dismiss(toastId)}>
         <HiX />
-      </ModalCloseButton>
+      </NotificationCloseButton>
     </StyledNotification>
   );
 }

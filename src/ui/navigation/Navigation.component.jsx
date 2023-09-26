@@ -114,7 +114,6 @@ function Navigation() {
         ),
         {
           duration: Infinity,
-          style: { backgroundColor: 'var(--color-brand-700-transparent)' },
         }
       )
     );
