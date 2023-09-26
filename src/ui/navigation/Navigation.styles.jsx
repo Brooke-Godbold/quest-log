@@ -1,8 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
-import { CommonButton } from '../../styles/GlobalStyles';
-
 const StyledNavigation = styled.div`
   position: relative;
 
@@ -39,7 +37,6 @@ const NavigationContainer = styled.div`
 `;
 
 const NavigationHeader = styled.div`
-  margin-left: 2.4rem;
   margin-bottom: 2.4rem;
 
   display: grid;
@@ -52,12 +49,11 @@ const NavigationHeader = styled.div`
 
   align-items: center;
 
-  @media (max-width: 20em) {
-    grid-template-columns: min-content 1fr;
-    grid-template-rows: auto auto 1fr;
+  flex-shrink: 0;
 
-    column-gap: 1.8rem;
-    row-gap: 1.2rem;
+  @media (max-width: 35em) {
+    display: flex;
+    gap: 1.2rem;
   }
 `;
 
@@ -90,6 +86,12 @@ const ActionButton = css`
 
   &:focus {
     outline: none;
+  }
+
+  @media (max-width: 35em) {
+    width: 5rem;
+
+    border: 5px double rgb(51, 51, 51, 0.7);
   }
 `;
 
@@ -173,62 +175,27 @@ const NavigationMenuImage = styled.img`
   border: 6px double rgb(51, 51, 51, 0.7);
 
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
-`;
 
-const NavigationMenuContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  @media (max-width: 35em) {
+    display: block;
+    height: 5rem;
 
-  background-color: var(--color-brand-600);
-  padding: 1.8rem 1.8rem 1.8rem 0;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-
-  width: 100%;
-
-  transition: all 0.3s;
-  position: absolute;
-  transform: ${(props) =>
-    props.$active ? 'translate(0, 0)' : 'translate(-100%, 0)'};
-
-  & *:first-child {
-    border-top-right-radius: 5px;
+    border: 5px double rgb(51, 51, 51, 0.7);
   }
-
-  & *:last-child {
-    border-bottom-right-radius: 5px;
-  }
-`;
-
-const NavigationLink = styled(NavLink)`
-  ${CommonButton}
-
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-`;
-
-const NavigationButton = styled.button`
-  ${CommonButton}
-
-  text-align: left;
-
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
 `;
 
 const NavigationGamesContainer = styled.div`
   display: flex;
   gap: 2.4rem;
 
-  margin-left: 2.4rem;
   width: max-content;
 
   transition: all 0.3s;
   position: absolute;
   left: 0;
   top: 0;
+
+  pointer-events: none;
 
   & a:focus {
     outline: none;
@@ -323,30 +290,99 @@ const NavigationGamesLink = styled(NavLink)`
   background-color: transparent;
 
   transition: all 0.3s;
+
+  pointer-events: ${(props) => (props.$active ? 'all' : 'none')};
 `;
 
-const NavigationGameMenuLink = styled(NavLink)`
-  ${CommonButton}
+const NavigationCircleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
 
-  background-color: var(--color-blue-300);
+  margin-left: 2.4rem;
 
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  @media (max-width: 100em) {
+    flex-direction: row;
+    gap: 1.2rem;
+  }
+`;
+
+const NavigationCircleButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  position: relative;
+
+  height: 10rem;
+  width: 10rem;
+
+  border: 7px double rgba(34, 34, 34, 0.5);
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+
+  background-color: var(--color-brand-400);
+  z-index: 998;
+
+  transition: all 0.3s;
+
+  & svg {
+    transform: scale(300%);
+  }
+
+  & a {
+    left: 0;
+    color: transparent;
+  }
 
   &:hover {
-    background-color: var(--color-blue-600);
+    transform: scale(110%);
+
+    & a {
+      left: 125%;
+      color: inherit;
+    }
   }
+
+  &:active {
+    transform: scale(120%);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 35em) {
+    height: 5rem;
+    width: 5rem;
+
+    border: 5px double rgba(34, 34, 34, 0.5);
+
+    & svg {
+      transform: scale(125%);
+    }
+  }
+`;
+
+const NavigationCircleText = styled.a`
+  width: max-content;
+
+  position: absolute;
+
+  pointer-events: none;
+
+  transition: all 0.3s;
+
+  font-size: 1.8rem;
+  font-weight: 700;
 `;
 
 export {
   StyledNavigation,
   NavigationMenuButton,
   NavigationMenuImage,
-  NavigationLink,
-  NavigationButton,
-  NavigationMenuContainer,
   NavigationOverlay,
   NavigationContainer,
   NavigationHeader,
@@ -355,6 +391,8 @@ export {
   UnreadMessages,
   NavigationGamesContainer,
   NavigationGamesLink,
-  NavigationGameMenuLink,
   BackButton,
+  NavigationCircleContainer,
+  NavigationCircleButton,
+  NavigationCircleText,
 };

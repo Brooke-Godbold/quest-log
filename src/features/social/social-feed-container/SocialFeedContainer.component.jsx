@@ -1,6 +1,7 @@
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { compareDesc } from 'date-fns';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { usePostByUser } from '../../../query/post/usePostByUser';
 import { useHint } from '../../../query/hint/useHint';
@@ -10,7 +11,7 @@ import { useReplyByPostId } from '../../../query/post/useReplyByPostId';
 import { usePostById } from '../../../query/post/usePostById';
 import { useAllPosts } from '../../../query/post/useAllPosts';
 import { useProfileByUser } from '../../../query/profile/useProfileByUser';
-import { useIsBlocked } from '../../../hooks/useIsBlocked';
+import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
 
 import { BiTime } from 'react-icons/bi';
 import { BsPeopleFill, BsPersonFillCheck } from 'react-icons/bs';
@@ -36,7 +37,7 @@ import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/R
 
 import { useSearch } from '../../../hooks/useSearch';
 import { useScrollToItem } from '../../../hooks/useScrollToItem';
-import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
+import { useIsBlocked } from '../../../hooks/useIsBlocked';
 
 function SocialFeedContainer() {
   const { username, postId } = useParams();
@@ -45,6 +46,8 @@ function SocialFeedContainer() {
   const { isAuthenticated, user } = useUser();
   const { profile: viewedProfile } = useProfilesByUsername(username);
   const userId = viewedProfile?.userId;
+
+  const queryClient = useQueryClient();
 
   const [uniqueGames, setUniqueGames] = useState([]);
 
@@ -93,6 +96,8 @@ function SocialFeedContainer() {
   const isLoadingGames = isGettingGames || isGamesError;
 
   function setView(view) {
+    queryClient.invalidateQueries({ queryKey: ['post'] });
+
     searchParams.set('view', view);
     searchParams.delete('search');
     setSearchParams(searchParams, { replace: true });
@@ -143,6 +148,11 @@ function SocialFeedContainer() {
               )
             ),
         ];
+
+      case 'playing':
+        if (!profile || !allPosts) break;
+        console.log(profile.currentGames);
+        return allPosts;
 
       case 'posts':
         if (!userPosts) break;
@@ -363,6 +373,15 @@ function SocialFeedContainer() {
                   <ResponsiveButtonContent>
                     <p>Discover</p>
                     <TbWorldSearch />
+                  </ResponsiveButtonContent>
+                </SocialFeedButton>
+                <SocialFeedButton
+                  $active={searchParams.get('view') === 'playing'}
+                  onClick={() => setView('playing')}
+                >
+                  <ResponsiveButtonContent>
+                    <p>Hints</p>
+                    <GrGamepad />
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
               </>

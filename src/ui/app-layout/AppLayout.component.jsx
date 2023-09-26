@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { useUser } from '../../query/auth/useUser';
 
 import Navigation from '../navigation/Navigation.component';
 
 import { Main, StyledAppLayout } from './AppLayout.styles';
-import { useEffect } from 'react';
+
 import supabase from '../../services/supabase';
-import { useUser } from '../../query/auth/useUser';
-import { useQueryClient } from '@tanstack/react-query';
 
 function AppLayout() {
   const { user } = useUser();

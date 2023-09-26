@@ -60,7 +60,7 @@ const SocialFeedButton = styled.button`
   background-color: ${(props) =>
     props.$active ? 'var(--color-brand-700)' : 'var(--color-brand-600)'};
 
-  width: 25%;
+  width: 20%;
 
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;

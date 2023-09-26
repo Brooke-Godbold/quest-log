@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledModal = styled.div`
   position: fixed;
@@ -6,12 +6,16 @@ const StyledModal = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   transition: all 0.3s;
-  padding: 3rem;
+  padding: 3.2rem;
 
   background-color: var(--color-brand-600);
   color: #bbb;
   border-radius: 4px;
   box-shadow: 0px 0px 5px 1px rgb(31, 31, 31, 0.7);
+
+  @media (max-width: 30em) {
+    padding: 1.8rem;
+  }
 `;
 
 const Overlay = styled.div`

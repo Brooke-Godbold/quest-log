@@ -1,18 +1,18 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { cloneElement, createContext, useContext, useState } from "react";
-import { createPortal } from "react-dom";
+import { cloneElement, createContext, useContext, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import { HiX } from "react-icons/hi";
+import { HiX } from 'react-icons/hi';
 
-import { ModalCloseButton, Overlay, StyledModal } from "./Modal.styles";
+import { ModalCloseButton, Overlay, StyledModal } from './Modal.styles';
 
 const ModalContext = createContext();
 
 function Modal({ children }) {
-  const [openName, setOpenName] = useState("");
+  const [openName, setOpenName] = useState('');
 
-  const close = () => setOpenName("");
+  const close = () => setOpenName('');
   const open = setOpenName;
 
   return (

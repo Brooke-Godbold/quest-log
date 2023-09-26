@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const ResponsiveButtonContent = styled.div`
   display: flex;
@@ -13,6 +13,14 @@ const ResponsiveButtonContent = styled.div`
     transform: scale(150%);
     display: none;
     color: var(--color-brand-500);
+    stroke: var(--color-brand-500);
+
+    flex-shrink: 0;
+
+    & path {
+      color: var(--color-brand-500);
+      stroke: var(--color-brand-500);
+    }
 
     cursor: pointer;
   }

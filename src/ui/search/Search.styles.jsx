@@ -1,9 +1,9 @@
-import { styled } from "styled-components";
-import { CommonInput } from "../../styles/GlobalStyles";
+import { styled } from 'styled-components';
+import { CommonInput } from '../../styles/GlobalStyles';
 
 const StyledSearch = styled.div`
   position: absolute;
-  top: 5.4rem;
+  top: 6.8rem;
   right: 2.4rem;
 
   width: 15%;
@@ -26,6 +26,16 @@ const StyledSearch = styled.div`
 
   @media (max-width: 40em) {
     width: 55%;
+  }
+
+  @media (max-width: 35em) {
+    top: 1.2rem;
+  }
+
+  @media (max-width: 25em) {
+    top: 6.8rem;
+    right: 0;
+    left: 1.2rem;
   }
 `;
 
@@ -52,7 +62,7 @@ const SearchInput = styled.input`
 
   z-index: 997;
   transform-origin: center right;
-  transform: ${(props) => (props.$active ? "scaleX(100%)" : "scaleX(0)")};
+  transform: ${(props) => (props.$active ? 'scaleX(100%)' : 'scaleX(0)')};
 
   @media (max-width: 120em) {
     right: 5%;
@@ -60,7 +70,7 @@ const SearchInput = styled.input`
 
   @media (max-width: 30em) {
     position: fixed;
-    top: 12.5%;
+    top: 15%;
     right: 10%;
     left: 10%;
 
@@ -68,7 +78,7 @@ const SearchInput = styled.input`
     height: 5vh;
 
     transform-origin: center center;
-    transform: ${(props) => (props.$active ? "scale(100%)" : "scale(0)")};
+    transform: ${(props) => (props.$active ? 'scale(100%)' : 'scale(0)')};
   }
 `;
 
@@ -84,7 +94,6 @@ const SearchButton = styled.button`
   width: 10rem;
 
   border: 7px double rgba(34, 34, 34, 0.5);
-  background-color: transparent;
   border-radius: 50%;
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
 
@@ -107,6 +116,21 @@ const SearchButton = styled.button`
 
   &:focus {
     outline: none;
+  }
+
+  @media (max-width: 35em) {
+    height: 5rem;
+    width: 5rem;
+
+    border: 5px double rgba(34, 34, 34, 0.5);
+
+    & svg {
+      transform: scale(125%);
+    }
+  }
+
+  @media (max-width: 25em) {
+    left: 1.2rem;
   }
 `;
 

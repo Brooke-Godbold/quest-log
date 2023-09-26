@@ -22,3 +22,33 @@ Run commands
 npm install
 npm run dev
 ```
+
+## Technical Configuration
+
+### Website
+
+[https://questlogger.netlify.app](https://questlogger.netlify.app)
+
+### Hosting
+
+[Netlify Admin](https://app.netlify.com/sites/questlogger/overview)
+
+The Live Website is hosted on Netlify currently, visit the questlogger Admin Page to manage the website configuration, such as setting up Environment Variables.
+
+### SMTP Server
+
+[Brevo SMTP](https://app.brevo.com/)
+
+Email Distribution is handled by Brevo. The Domain in use for Emails is thunderfrost.com. Please ensure that these details remain up to date, and that if any DNS configuration within Brevo changes, then this is updated in the DNS Records for thunderfrost.com.
+
+### Domain
+
+[Netlify DNS Panel](https://app.netlify.com/teams/brookegodbold13/dns/thunderfrost.com)
+
+The thunderfrost.com Domain Registrar is Netlify. Ensure that DNS Records are managed and kept up to date, to ensure that emails from Brevo can continue to be sent.
+
+### Back-End
+
+[Supabase Admin](https://supabase.com/dashboard/project/xhkwznfhytvgvorvkcdp)
+
+The Database is provided by Supabase, and the Database can be managed in the Admin Panel for quest-log. The Domain in use for Emails is thunderfrost.com.

@@ -107,6 +107,10 @@ function App() {
               errorElement={<Error />}
             />
             <Route
+              path="social"
+              element={<Navigate replace to="social/feed" />}
+            />
+            <Route
               path="social/post/:postId"
               element={<SocialPost />}
               errorElement={<Error />}

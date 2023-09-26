@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import Modal from "../modal/Modal.component";
-import LoginContainer from "../../features/auth/login-container/LoginContainer.component";
+import Modal from '../modal/Modal.component';
+import LoginContainer from '../../features/auth/login-container/LoginContainer.component';
 
 function LoginModal({ loginButton, onOpenCallback }) {
   return (

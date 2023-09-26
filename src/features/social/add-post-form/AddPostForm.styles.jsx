@@ -17,7 +17,8 @@ const StyledAddPostForm = styled.form`
   }
 
   @media (max-width: 30em) {
-    width: 100%;
+    width: 75vw;
+    gap: 3.2rem;
   }
 `;
 

@@ -13,7 +13,7 @@ const GlobalStyles = createGlobalStyle`
   --color-brand-700: #5e5445;
   --color-brand-800: #171511;
 
-  --color-brand-700-transparent: rgba(94, 84, 69, 0.5);
+  --color-brand-700-transparent: rgba(94, 84, 69, 0.6);
 
   /* Brown */
   --color-brown-500: #502419;

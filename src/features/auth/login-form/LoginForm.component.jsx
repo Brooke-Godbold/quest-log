@@ -94,8 +94,7 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               disabled={isLoggingIn}
               aria-invalid={errors.password ? 'true' : 'false'}
               {...register('password', {
-                value: true,
-                message: 'Password is required!',
+                required: { value: true, message: 'Password is required!' },
               })}
             />
           </LoginFormInputTable>

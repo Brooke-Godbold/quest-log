@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMediaQuery } from '@uidotdev/usehooks';
+import { useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import { useUser } from '../../query/auth/useUser';
 import { useProfileByUser } from '../../query/profile/useProfileByUser';
@@ -11,25 +13,28 @@ import { useConversations } from '../../contexts/ConversationsContext';
 
 import { HiPlus } from 'react-icons/hi';
 import { BsEnvelopeOpen, BsEnvelopePlusFill } from 'react-icons/bs';
-import { MdArrowBack } from 'react-icons/md';
+import { VscHome } from 'react-icons/vsc';
+import { RiLoginCircleLine } from 'react-icons/ri';
+import { MdPersonAddAlt } from 'react-icons/md';
 
 import LoginModal from '../login-modal/LoginModal.component';
 import AddPostButton from '../../features/social/add-post-button/AddPostButton.component';
 import Search from '../search/Search.component';
+import Spinner from '../spinner/Spinner';
+import NavigationMenu from './NavigationMenu.component';
+import Notification from '../notification/Notification.component';
 
 import {
-  BackButton,
   HeaderActionButton,
   HeaderActionLink,
-  NavigationButton,
+  NavigationCircleButton,
+  NavigationCircleContainer,
+  NavigationCircleText,
   NavigationContainer,
-  NavigationGameMenuLink,
   NavigationGamesContainer,
   NavigationGamesLink,
   NavigationHeader,
-  NavigationLink,
   NavigationMenuButton,
-  NavigationMenuContainer,
   NavigationMenuImage,
   NavigationOverlay,
   StyledNavigation,
@@ -37,10 +42,11 @@ import {
 } from './Navigation.styles';
 
 import { anonymousImageUrl } from '../../data/consts';
-import Spinner from '../spinner/Spinner';
-import { useNavigate } from 'react-router-dom';
 
 function Navigation() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { user, isGettingUser } = useUser();
   const { profile, isGettingProfile, isFetchingProfile } = useProfileByUser(
     user?.id
@@ -54,14 +60,14 @@ function Navigation() {
   const isSmallDevice = useMediaQuery('only screen and (max-width : 65em)');
   const isMobileDevice = useMediaQuery('only screen and (max-width : 40em)');
 
+  const [loginToast, setLoginToast] = useState(null);
+
   const { setCurrentConversation } = useConversations();
   const { conversations } = useMessages(user?.id);
   const unreadMessagesCount = useUnreadMessagesCount(user, conversations);
 
   const [navigationActive, setNavigationActive] = useState(false);
   const [accountNavigationActive, setAccountNavigationActive] = useState(false);
-
-  const navigate = useNavigate();
 
   function handleToggleNavigation() {
     if (navigationActive || accountNavigationActive) {
@@ -90,10 +96,29 @@ function Navigation() {
     logout();
   }
 
-  function back() {
-    handleCloseNavigation();
-    navigate(-1);
-  }
+  useEffect(() => {
+    if (user && loginToast) {
+      toast.dismiss(loginToast?.id);
+      setLoginToast(null);
+    }
+
+    if (loginToast || user || isGettingUser) return;
+
+    setLoginToast(
+      toast(
+        (t) => (
+          <Notification
+            toastId={t.id}
+            link={<a href="/login">Login now to join the conversation!</a>}
+          />
+        ),
+        {
+          duration: Infinity,
+          style: { backgroundColor: 'var(--color-brand-700-transparent)' },
+        }
+      )
+    );
+  }, [loginToast, user, isGettingUser]);
 
   return (
     <StyledNavigation>
@@ -101,160 +126,118 @@ function Navigation() {
         $active={navigationActive || accountNavigationActive}
       />
       <NavigationContainer>
-        <NavigationHeader>
-          <BackButton onClick={back}>
-            <MdArrowBack />
-          </BackButton>
-          <NavigationMenuButton onClick={handleToggleNavigation}>
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <NavigationMenuImage
-                src={profile ? profile.avatarUrl : anonymousImageUrl}
-              />
-            )}
-          </NavigationMenuButton>
-          {user && (
-            <>
-              <AddPostButton
-                onOpenCallback={handleCloseNavigation}
-                styledPostButton={
-                  <HeaderActionButton>
-                    <HiPlus />
-                  </HeaderActionButton>
-                }
-              />
-              <HeaderActionLink to="/messages" onClick={handleCloseNavigation}>
-                {unreadMessagesCount > 0 ? (
-                  <>
-                    <BsEnvelopePlusFill />
-                    <UnreadMessages></UnreadMessages>
-                  </>
-                ) : (
-                  <BsEnvelopeOpen />
-                )}
-              </HeaderActionLink>
-            </>
-          )}
-        </NavigationHeader>
-        {!isMobileDevice && (
-          <NavigationGamesContainer
-            $active={navigationActive || accountNavigationActive}
+        <NavigationCircleContainer>
+          <NavigationCircleButton
+            onClick={() => {
+              handleCloseNavigation();
+              navigate('/social/feed', {
+                replace: location.pathname === '/social/feed',
+              });
+            }}
           >
-            {gameData?.map((game) => (
-              <NavigationGamesLink
-                key={game.id}
-                onClick={handleCloseNavigation}
-                to={`/game/${game.id}`}
-              >
-                <NavigationMenuImage src={game.imageUrl} />
-              </NavigationGamesLink>
-            ))}
-          </NavigationGamesContainer>
-        )}
-        <NavigationMenuContainer $active={navigationActive}>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/social/feed?view=trending"
-          >
-            Trending
-          </NavigationLink>
-          {user && profile ? (
+            <VscHome />
+            <NavigationCircleText>Home</NavigationCircleText>
+          </NavigationCircleButton>
+          {!user && !isGettingUser ? (
             <>
-              <NavigationLink
-                onClick={handleCloseNavigation}
-                to="/social/feed?view=following"
+              {isSmallDevice ? (
+                <NavigationCircleButton
+                  onClick={() => {
+                    handleCloseNavigation();
+                    toast.dismiss(loginToast?.id);
+                    navigate('/login');
+                  }}
+                >
+                  <RiLoginCircleLine />
+                  <NavigationCircleText>Login</NavigationCircleText>
+                </NavigationCircleButton>
+              ) : (
+                <LoginModal
+                  onOpenCallback={handleCloseNavigation}
+                  loginButton={
+                    <NavigationCircleButton>
+                      <RiLoginCircleLine />
+                      <NavigationCircleText>Login</NavigationCircleText>
+                    </NavigationCircleButton>
+                  }
+                />
+              )}
+              <NavigationCircleButton
+                onClick={() => {
+                  handleCloseNavigation();
+                  toast.dismiss(loginToast?.id);
+                  navigate('/signup');
+                }}
               >
-                Following
-              </NavigationLink>
-              <NavigationLink
-                onClick={handleCloseNavigation}
-                to="/social/feed?view=discover"
-              >
-                Discover
-              </NavigationLink>
-              <NavigationLink
-                onClick={handleCloseNavigation}
-                to={`/social/${profile.username}?view=posts`}
-              >
-                Public Profile
-              </NavigationLink>
-              {isMobileDevice &&
-                gameData?.map((game) => (
-                  <NavigationGameMenuLink
-                    key={`currently_playing_game_${game.id}`}
-                    onClick={handleCloseNavigation}
-                    to={`/game/${game.id}`}
-                  >
-                    {game.name}
-                  </NavigationGameMenuLink>
-                ))}
-              <NavigationButton onClick={handleSwitchNavigation}>
-                Account
-              </NavigationButton>
-              <NavigationButton onClick={handleLogout}>Logout</NavigationButton>
+                <MdPersonAddAlt />
+                <NavigationCircleText>Sign Up</NavigationCircleText>
+              </NavigationCircleButton>
             </>
-          ) : isSmallDevice ? (
-            <NavigationLink onClick={handleCloseNavigation} to="/login">
-              Login
-            </NavigationLink>
           ) : (
-            <LoginModal
-              onOpenCallback={handleCloseNavigation}
-              loginButton={<NavigationButton>Login</NavigationButton>}
-            />
+            <NavigationHeader>
+              <NavigationMenuButton onClick={handleToggleNavigation}>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <NavigationMenuImage
+                    src={profile ? profile.avatarUrl : anonymousImageUrl}
+                  />
+                )}
+              </NavigationMenuButton>
+              {user && (
+                <>
+                  <AddPostButton
+                    onOpenCallback={handleCloseNavigation}
+                    styledPostButton={
+                      <HeaderActionButton>
+                        <HiPlus />
+                      </HeaderActionButton>
+                    }
+                  />
+                  <HeaderActionLink
+                    to="/messages"
+                    onClick={handleCloseNavigation}
+                  >
+                    {unreadMessagesCount > 0 ? (
+                      <>
+                        <BsEnvelopePlusFill />
+                        <UnreadMessages></UnreadMessages>
+                      </>
+                    ) : (
+                      <BsEnvelopeOpen />
+                    )}
+                  </HeaderActionLink>
+                </>
+              )}
+              {!isMobileDevice && (
+                <NavigationGamesContainer
+                  $active={navigationActive || accountNavigationActive}
+                >
+                  {gameData?.map((game) => (
+                    <NavigationGamesLink
+                      key={game.id}
+                      onClick={handleCloseNavigation}
+                      to={`/game/${game.id}`}
+                      replace={location.pathname === `/game/${game.id}`}
+                      $active={navigationActive || accountNavigationActive}
+                    >
+                      <NavigationMenuImage src={game.imageUrl} />
+                    </NavigationGamesLink>
+                  ))}
+                </NavigationGamesContainer>
+              )}
+            </NavigationHeader>
           )}
-        </NavigationMenuContainer>
-        <NavigationMenuContainer $active={accountNavigationActive}>
-          <NavigationButton onClick={handleSwitchNavigation}>
-            Back
-          </NavigationButton>
-          <NavigationLink onClick={handleCloseNavigation} to="/account/profile">
-            Account Profile
-          </NavigationLink>
-          <NavigationLink onClick={handleCloseNavigation} to="/account/avatar">
-            Avatar
-          </NavigationLink>
-          <NavigationLink onClick={handleCloseNavigation} to="/account/privacy">
-            Privacy Settings
-          </NavigationLink>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/account/users?view=following"
-          >
-            Following List
-          </NavigationLink>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/account/users?view=blocked"
-          >
-            Blocked List
-          </NavigationLink>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/account/hints?type=user"
-          >
-            My Hints
-          </NavigationLink>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/account/hints?type=upvotes"
-          >
-            My Upvoted Hints
-          </NavigationLink>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/account/hints?type=downvotes"
-          >
-            My Downvoted Hints
-          </NavigationLink>
-          <NavigationLink
-            onClick={handleCloseNavigation}
-            to="/account/reset-password"
-          >
-            Reset Password
-          </NavigationLink>
-        </NavigationMenuContainer>
+        </NavigationCircleContainer>
+
+        <NavigationMenu
+          mainNavigationActive={navigationActive}
+          accountNavigationActive={accountNavigationActive}
+          handleCloseNavigation={handleCloseNavigation}
+          handleSwitchNavigation={handleSwitchNavigation}
+          handleLogout={handleLogout}
+          isMobileDevice={isMobileDevice}
+        />
       </NavigationContainer>
       <Search navigationActive={navigationActive} />
     </StyledNavigation>
