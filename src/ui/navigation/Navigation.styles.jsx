@@ -377,6 +377,10 @@ const NavigationCircleText = styled.a`
 
   font-size: 1.8rem;
   font-weight: 700;
+
+  @media (max-width: 100em) {
+    display: none;
+  }
 `;
 
 export {

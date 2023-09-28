@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledAppLayout = styled.div`
   position: relative;
@@ -7,6 +7,10 @@ const StyledAppLayout = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  @media (max-height: 65em) {
+    overflow-y: ${(props) => (props.$modalOpen ? 'hidden' : 'scroll')};
+  }
 `;
 
 const Main = styled.div`

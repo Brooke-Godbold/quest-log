@@ -31,7 +31,11 @@ function FollowSuggestions() {
         )}
       </FollowSuggestionsHeaderItem>
       {suggestedProfiles
-        ?.filter((suggestion) => suggestion.userId !== user.id)
+        ?.filter(
+          (suggestion) =>
+            suggestion.userId !== user.id &&
+            !profile.following.includes(suggestion.userId)
+        )
         .slice(0, 10)
         .map((suggestion) => (
           <SearchResultItem

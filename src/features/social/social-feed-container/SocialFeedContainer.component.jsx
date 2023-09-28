@@ -16,7 +16,7 @@ import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsern
 import { BiTime } from 'react-icons/bi';
 import { BsPeopleFill, BsPersonFillCheck } from 'react-icons/bs';
 import { TbWorldSearch } from 'react-icons/tb';
-import { GrGamepad } from 'react-icons/gr';
+import { PiGameControllerDuotone } from 'react-icons/pi';
 import { RiFileList3Line } from 'react-icons/ri';
 
 import Spinner from '../../../ui/spinner/Spinner';
@@ -301,7 +301,13 @@ function SocialFeedContainer() {
   const TopScrollElement = () => {
     const elementRef = useRef();
 
-    useEffect(() => elementRef.current.scrollIntoView());
+    useEffect(() =>
+      elementRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      })
+    );
 
     return <div ref={elementRef} />;
   };
@@ -347,7 +353,7 @@ function SocialFeedContainer() {
                 >
                   <ResponsiveButtonContent>
                     <p>Hints</p>
-                    <GrGamepad />
+                    <PiGameControllerDuotone />
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
               </>
@@ -407,7 +413,7 @@ function SocialFeedContainer() {
                 >
                   <ResponsiveButtonContent>
                     <p>Hints</p>
-                    <GrGamepad />
+                    <PiGameControllerDuotone />
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
               </>

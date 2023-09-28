@@ -1,19 +1,33 @@
 import PropTypes from 'prop-types';
 
-import { cloneElement, createContext, useContext, useState } from 'react';
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import { HiX } from 'react-icons/hi';
 
 import { ModalCloseButton, Overlay, StyledModal } from './Modal.styles';
+import { useActiveModal } from '../../contexts/ActiveModalContext';
 
 const ModalContext = createContext();
 
 function Modal({ children }) {
   const [openName, setOpenName] = useState('');
+  const activeModalContext = useActiveModal();
 
-  const close = () => setOpenName('');
-  const open = setOpenName;
+  const close = () => {
+    setOpenName('');
+    activeModalContext.setIsModalOpen(false);
+  };
+  const open = (opens) => {
+    setOpenName(opens);
+    activeModalContext.setIsModalOpen(true);
+  };
 
   return (
     <ModalContext.Provider value={{ openName, close, open }}>
@@ -25,6 +39,14 @@ function Modal({ children }) {
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+function AutoOpen({ opens: opensWindowName }) {
+  const { open } = useContext(ModalContext);
+
+  useEffect(() => {
+    open(opensWindowName);
+  }, [open, opensWindowName]);
+}
 
 function Open({ children, opens: opensWindowName, onOpenCallback }) {
   const { open } = useContext(ModalContext);
@@ -68,6 +90,7 @@ Window.propTypes = {
 };
 
 Modal.Open = Open;
+Modal.AutoOpen = AutoOpen;
 Modal.Window = Window;
 
 export default Modal;

@@ -9,9 +9,14 @@ import Navigation from '../navigation/Navigation.component';
 import { Main, StyledAppLayout } from './AppLayout.styles';
 
 import supabase from '../../services/supabase';
+import NewUserFlow from '../../features/account/new-user-flow/NewUserFlow.component';
+import { useActiveModal } from '../../contexts/ActiveModalContext';
 
 function AppLayout() {
   const { user } = useUser();
+
+  const activeModalContext = useActiveModal();
+
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -28,8 +33,9 @@ function AppLayout() {
   }, [user, queryClient]);
 
   return (
-    <StyledAppLayout>
+    <StyledAppLayout $modalOpen={activeModalContext.isModalOpen}>
       <Navigation />
+      <NewUserFlow />
       <Main>
         <Outlet />
       </Main>

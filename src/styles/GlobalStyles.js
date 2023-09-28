@@ -180,7 +180,6 @@ const CommonInput = css`
 const CommonButton = css`
   padding: 1rem 2rem;
   font-size: 2rem;
-  border: none;
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 5px;
   background-color: ${(props) =>
@@ -204,6 +203,10 @@ const CommonButton = css`
 
   @media (max-width: 120em) {
     font-size: 1.6rem;
+  }
+
+  @media (max-width: 30em) {
+    padding: 0.6rem 1.2rem;
   }
 `;
 

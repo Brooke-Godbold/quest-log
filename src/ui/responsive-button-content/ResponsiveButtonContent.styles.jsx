@@ -17,11 +17,6 @@ const ResponsiveButtonContent = styled.div`
 
     flex-shrink: 0;
 
-    & path {
-      color: var(--color-brand-500);
-      stroke: var(--color-brand-500);
-    }
-
     cursor: pointer;
   }
 

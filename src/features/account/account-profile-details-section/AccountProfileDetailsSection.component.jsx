@@ -7,19 +7,12 @@ import { useProfileByUser } from '../../../query/profile/useProfileByUser';
 import { useUpdateProfile } from '../../../query/profile/useUpdateProfile';
 import { useAllGames } from '../../../query/game/useAllGames';
 
-import { FaTwitch } from 'react-icons/fa';
-import { GrYoutube } from 'react-icons/gr';
-import { RiKickFill } from 'react-icons/ri';
-
 import Spinner from '../../../ui/spinner/Spinner';
 import CurrentlyPlayingRow from '../currently-playing-row/CurrentlyPlayingRow.component';
 import TextCount from '../../../ui/text-count/TextCount.component';
 import Notification from '../../../ui/notification/Notification.component';
 
 import {
-  AccountProfileBio,
-  AccountSocialMediaContainer,
-  AccountSocialMediaInputRow,
   CurrentlyPlayingContainer,
   ProfileDetailsLabel,
   ProfileDetailsRow,
@@ -27,16 +20,11 @@ import {
 } from './AccountProfileDetailsSection.styles';
 import { FormInput } from '../../../ui/FormInput/FormInput.styles';
 
-import {
-  BIO_MAX_LENGTH,
-  USERNAME_MAX_LENGTH,
-  USERNAME_MIN_LENGTH,
-  kickUrl,
-  twitchUrl,
-  youtubeUrl,
-} from '../../../data/consts';
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from '../../../data/consts';
 
 import { onErrorToast } from '../../../utils/onErrorToast';
+import ProfileBioInput from '../../../ui/profile-bio-input/ProfileBioInput.component';
+import ProfileSocialMediaInput from '../../../ui/profile-social-media-input/ProfileSocialMediaInput.component';
 
 function AccountProfileDetailsSection() {
   const { user, isGettingUser } = useUser();
@@ -193,20 +181,12 @@ function AccountProfileDetailsSection() {
         </ProfileDetailsRow>
 
         <ProfileDetailsRow>
-          <ProfileDetailsLabel>Bio</ProfileDetailsLabel>
-          <AccountProfileBio
-            id="bio"
-            type="text"
-            {...registerProfile('bio', {
-              maxLength: {
-                value: BIO_MAX_LENGTH,
-                message: `Bio cannot be longer than ${BIO_MAX_LENGTH} characters!`,
-              },
-            })}
-            defaultValue={profile?.bio}
-            disabled={isLoading}
+          <ProfileBioInput
+            register={registerProfile}
+            isLoading={isLoading}
+            profile={profile}
+            watchBio={watchBio}
           />
-          <TextCount value={watchBio} maxLength={BIO_MAX_LENGTH} />
         </ProfileDetailsRow>
       </StyledAccountProfileDetails>
 
@@ -240,62 +220,11 @@ function AccountProfileDetailsSection() {
         )}
       >
         <ProfileDetailsRow>
-          <ProfileDetailsLabel>Social Media</ProfileDetailsLabel>
-          <AccountSocialMediaContainer>
-            <AccountSocialMediaInputRow>
-              <label>Twitch</label>
-              <p>{`${twitchUrl}`}</p>
-              <FormInput
-                id="twitch"
-                type="text"
-                {...registerProfile('twitch', {
-                  validate: (value) =>
-                    !value.includes(' ') ||
-                    'Twitch channel cannot include white space!',
-                })}
-                defaultValue={profile.twitch}
-                disabled={isLoading}
-                placeholder="myTwitchUser"
-              ></FormInput>
-              <FaTwitch />
-            </AccountSocialMediaInputRow>
-
-            <AccountSocialMediaInputRow>
-              <label>YouTube</label>
-              <p>{`${youtubeUrl}`}</p>
-              <FormInput
-                id="youtube"
-                type="text"
-                {...registerProfile('youtube', {
-                  validate: (value) =>
-                    !value.includes(' ') ||
-                    'YouTube channel cannot include white space!',
-                })}
-                defaultValue={profile.youtube}
-                disabled={isLoading}
-                placeholder="myYoutubeChannel"
-              ></FormInput>
-              <GrYoutube />
-            </AccountSocialMediaInputRow>
-
-            <AccountSocialMediaInputRow>
-              <label>Kick</label>
-              <p>{`${kickUrl}`}</p>
-              <FormInput
-                id="kick"
-                type="text"
-                {...registerProfile('kick', {
-                  validate: (value) =>
-                    !value.includes(' ') ||
-                    'Kick channel cannot include white space!',
-                })}
-                defaultValue={profile.kick}
-                disabled={isLoading}
-                placeholder="myKickUser"
-              ></FormInput>
-              <RiKickFill />
-            </AccountSocialMediaInputRow>
-          </AccountSocialMediaContainer>
+          <ProfileSocialMediaInput
+            register={registerProfile}
+            isLoading={isLoading}
+            profile={profile}
+          />
         </ProfileDetailsRow>
       </StyledAccountProfileDetails>
     </>
