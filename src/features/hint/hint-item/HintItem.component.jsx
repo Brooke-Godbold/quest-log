@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import { useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { format } from 'date-fns';
 
 import { HiTrash } from 'react-icons/hi';
 
@@ -27,11 +28,14 @@ import {
   StyledHintItem,
 } from './HintItem.styles';
 import { ConfirmationText } from '../../../ui/confirmation-check/ConfirmationCheck.styles';
-import { format } from 'date-fns';
+
+import { usePersonalization } from '../../../contexts/PersonalizationContext';
 
 function HintItem({ hint, id, user, innerRef }) {
   const { id: gameId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { isPersonalizable, personalization } = usePersonalization();
 
   const { updateHint } = useUpdateHint(onVoteSuccess);
 
@@ -56,7 +60,12 @@ function HintItem({ hint, id, user, innerRef }) {
   }
 
   return (
-    <StyledHintItem id={id} ref={innerRef}>
+    <StyledHintItem
+      $isPersonalizable={isPersonalizable}
+      $mainColor={personalization?.mainColor}
+      id={id}
+      ref={innerRef}
+    >
       <NavLinkContainer>
         <AvatarNavLink userId={hint.userId} view="hints" gameId={hint.gameId} />
       </NavLinkContainer>
@@ -93,17 +102,32 @@ function HintItem({ hint, id, user, innerRef }) {
       <HintTagsContainer>
         {hint.hintTypes
           ? hint.hintTypes.map((type) => (
-              <HintTag key={`hint_${hint.id}_${type}`}>{type}</HintTag>
+              <HintTag
+                key={`hint_${hint.id}_${type}`}
+                $isPersonalizable={isPersonalizable}
+                $tertiaryColor={personalization?.tertiaryColor}
+                $secondaryColor={personalization?.secondaryColor}
+              >
+                {type}
+              </HintTag>
             ))
           : null}
       </HintTagsContainer>
-      <HintDescription>{hint.description}</HintDescription>
+      <HintDescription
+        $isPersonalizable={isPersonalizable}
+        $tertiaryColor={personalization?.tertiaryColor}
+      >
+        {hint.description}
+      </HintDescription>
       {!gameId && gameData && (
         <GameTag to={`/game/${hint.gameId}?view=hints`}>
           {gameData.filter((game) => game.id === hint.gameId)[0]?.name}
         </GameTag>
       )}
-      <HintCreatedTime>{`Posted at: ${format(
+      <HintCreatedTime
+        $isPersonalizable={isPersonalizable}
+        $tertiaryColor={personalization?.tertiaryColor}
+      >{`Posted at: ${format(
         new Date(hint.created_at),
         'Pp'
       )}`}</HintCreatedTime>

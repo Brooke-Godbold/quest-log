@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { styled } from "styled-components";
+import { NavLink } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 const PostGameTagContainer = styled.div`
   width: 25rem;
@@ -16,10 +16,16 @@ const PostGameTagContainer = styled.div`
 `;
 
 const PostGameTag = styled(NavLink)`
+  background-color: ${(props) =>
+    (props.$isPersonalizable && props.$tertiaryColor) ||
+    'var(--color-brand-700)'};
+
+  color: ${(props) =>
+    (props.$isPersonalizable && props.$secondaryColor) ||
+    'var(--color-brand-200)'};
+
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border: none;
-  background-color: var(--color-brand-700);
-  color: var(--color-brand-200);
   border-radius: 3px;
   font-size: 1.4rem;
   padding: 0.6rem 1.8rem;

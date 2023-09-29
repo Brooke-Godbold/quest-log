@@ -1,18 +1,18 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { TbWorldSearch } from "react-icons/tb";
+import { TbWorldSearch } from 'react-icons/tb';
 
 import {
   SearchButton,
   SearchForm,
   SearchInput,
   StyledSearch,
-} from "./Search.styles";
-import { NavigationOverlay } from "../navigation/Navigation.styles";
+} from './Search.styles';
+import { NavigationOverlay } from '../navigation/Navigation.styles';
 
 function Search({ navigationActive }) {
   const [searchActive, setSearchActive] = useState(false);
@@ -37,8 +37,8 @@ function Search({ navigationActive }) {
     reset();
     setSearchActive(false);
 
-    searchParams.set("search", data.search);
-    searchParams.delete("view");
+    searchParams.set('search', data.search);
+    searchParams.delete('view');
     setSearchParams(searchParams);
   }
 
@@ -51,8 +51,8 @@ function Search({ navigationActive }) {
   }, [searchActive, reset]);
 
   useEffect(() => {
-    if (searchParams.get("search") && location.pathname !== "/social/feed")
-      navigate(`/social/feed?search=${searchParams.get("search")}`);
+    if (searchParams.get('search') && location.pathname !== '/social/feed')
+      navigate(`/social/feed?search=${searchParams.get('search')}`);
   }, [location, navigate, searchParams]);
 
   return (
@@ -63,7 +63,7 @@ function Search({ navigationActive }) {
           $active={searchActive}
           id="search"
           type="text"
-          {...register("search", { required: true, minLength: 3 })}
+          {...register('search', { required: true, minLength: 3 })}
         />
       </SearchForm>
 

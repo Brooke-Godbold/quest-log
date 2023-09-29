@@ -1,12 +1,12 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 import {
   ImageContainer,
   LargeImage,
   PreviewImage,
   StyledZoomableImage,
-} from "./ZoomableImage.styles";
-import Modal from "../modal/Modal.component";
+} from './ZoomableImage.styles';
+import Modal from '../modal/Modal.component';
 
 function ZoomableImage({ imageUrl }) {
   return (
@@ -17,15 +17,25 @@ function ZoomableImage({ imageUrl }) {
         </StyledZoomableImage>
       </Modal.Open>
       <Modal.Window name="image">
-        <ImageContainer>
-          <LargeImage src={imageUrl} />
-        </ImageContainer>
+        <MainImage imageUrl={imageUrl} />
       </Modal.Window>
     </Modal>
   );
 }
 
 ZoomableImage.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+};
+
+function MainImage({ imageUrl }) {
+  return (
+    <ImageContainer>
+      <LargeImage src={imageUrl} />
+    </ImageContainer>
+  );
+}
+
+MainImage.propTypes = {
   imageUrl: PropTypes.string.isRequired,
 };
 

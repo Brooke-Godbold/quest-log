@@ -12,7 +12,7 @@ function NewUserFlow() {
   return (
     <Modal>
       <Modal.AutoOpen opens="newUser" />
-      <Modal.Window name="newUser">
+      <Modal.Window name="newUser" closeButton={false}>
         <NewUserFlowForm />
       </Modal.Window>
     </Modal>

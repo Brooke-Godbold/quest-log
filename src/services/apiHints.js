@@ -29,6 +29,8 @@ export async function getHintsByHintIdList(hintIds) {
 }
 
 export async function getHintsByGameIds(gameIds) {
+  if (!gameIds) return null;
+
   const { data, error } = await supabase
     .from('hint')
     .select('*')

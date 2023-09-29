@@ -1,17 +1,19 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { TbArrowBigUp, TbArrowBigDown } from "react-icons/tb";
+import { TbArrowBigUp, TbArrowBigDown } from 'react-icons/tb';
 
-import { useUpdatePost } from "../../query/post/useUpdatePost";
-import { useUser } from "../../query/auth/useUser";
-import { useUpdateHint } from "../../query/hint/useUpdateHint";
+import { useUpdatePost } from '../../query/post/useUpdatePost';
+import { useUser } from '../../query/auth/useUser';
+import { useUpdateHint } from '../../query/hint/useUpdateHint';
 
 import {
   StyledVotes,
   VoteButton,
   VoteContainer,
   VoteCount,
-} from "./Votes.styles";
+} from './Votes.styles';
+
+import { usePersonalization } from '../../contexts/PersonalizationContext';
 
 function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
   const { isUpdatingPost } = useUpdatePost();
@@ -20,6 +22,8 @@ function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
   const isLoading = isUpdatingPost || isUpdatingHint;
 
   const { isAuthenticated, user } = useUser();
+
+  const { isPersonalizable, personalization } = usePersonalization();
 
   function vote(isUpvote) {
     if (!isAuthenticated || !user || isLoading || userId === user.id) return;
@@ -34,7 +38,7 @@ function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
         : downvotes;
 
       updateItem({
-        by: "id",
+        by: 'id',
         id: itemId,
         data: {
           upvotes: newUpvotes,
@@ -51,7 +55,7 @@ function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
         : upvotes;
 
       updateItem({
-        by: "id",
+        by: 'id',
         id: itemId,
         data: {
           upvotes: newUpvotes,
@@ -64,8 +68,16 @@ function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
   return (
     <StyledVotes>
       <VoteContainer>
-        <VoteCount>{upvotes.length}</VoteCount>
+        <VoteCount
+          $isPersonalizable={isPersonalizable}
+          $tertiaryColor={personalization?.tertiaryColor}
+        >
+          {upvotes.length}
+        </VoteCount>
         <VoteButton
+          $isPersonalizable={isPersonalizable}
+          $tertiaryColor={personalization?.tertiaryColor}
+          $secondaryColor={personalization?.secondaryColor}
           $canVote={isAuthenticated && userId !== user?.id}
           $votesLoading={isLoading}
           $voted={upvotes.includes(user?.id)}
@@ -75,8 +87,16 @@ function Votes({ itemId, updateItem, upvotes, downvotes, userId }) {
         </VoteButton>
       </VoteContainer>
       <VoteContainer>
-        <VoteCount>{downvotes.length}</VoteCount>
+        <VoteCount
+          $isPersonalizable={isPersonalizable}
+          $tertiaryColor={personalization?.tertiaryColor}
+        >
+          {downvotes.length}
+        </VoteCount>
         <VoteButton
+          $isPersonalizable={isPersonalizable}
+          $tertiaryColor={personalization?.tertiaryColor}
+          $secondaryColor={personalization?.secondaryColor}
           $canVote={isAuthenticated && userId !== user?.id}
           $votesLoading={isLoading}
           $voted={downvotes.includes(user?.id)}

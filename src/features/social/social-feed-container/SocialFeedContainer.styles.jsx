@@ -10,6 +10,11 @@ const StyledSocialFeedContainer = styled.div`
   display: flex;
   flex-direction: column;
 
+  font-family: ${(props) =>
+    props.$isPersonalizable && props.$fontLoaded
+      ? props.$fontFamily
+      : 'inherit'};
+
   @media (max-height: 65em) {
     height: 100%;
   }
@@ -23,7 +28,10 @@ const SocialFeedContent = styled.div`
   background-repeat: no-repeat;
   background-size: 25%;
 
-  background-color: var(--color-brand-700);
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$tertiaryColor
+      ? props.$tertiaryColor
+      : 'var(--color-brand-700)'};
 
   padding: 1.6rem;
   border-radius: 7px;
@@ -58,7 +66,21 @@ const SocialFeedButton = styled.button`
   ${CommonButton}
 
   background-color: ${(props) =>
-    props.$active ? 'var(--color-brand-700)' : 'var(--color-brand-600)'};
+    props.$active
+      ? props.$isPersonalizable && props.$tertiaryColor
+        ? props.$tertiaryColor
+        : 'var(--color-brand-700)'
+      : props.$isPersonalizable && props.$tertiaryColor
+      ? props.$tertiaryColor
+      : 'var(--color-brand-600)'};
+
+  filter: ${(props) =>
+    props.$isPersonalizable &&
+    props.$tertiaryColor &&
+    !props.$active &&
+    'brightness(75%)'};
+
+  color: ${(props) => props.$isPersonalizable && props.$secondaryColor};
 
   width: 20%;
 
@@ -69,6 +91,14 @@ const SocialFeedButton = styled.button`
 
   & div {
     cursor: pointer;
+  }
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$isPersonalizable && props.$tertiaryColor};
+
+    filter: ${(props) =>
+      props.$isPersonalizable && props.$tertiaryColor && 'brightness(75%)'};
   }
 `;
 

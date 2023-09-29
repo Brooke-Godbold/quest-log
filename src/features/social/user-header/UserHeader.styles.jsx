@@ -9,10 +9,19 @@ const StyledUserHeader = styled.div`
   margin-top: 4.2rem;
 
   flex: 0.5;
+
+  font-family: ${(props) =>
+    props.$isPersonalizable && props.$fontLoaded
+      ? props.$fontFamily
+      : 'inherit'};
 `;
 
 const UserProfile = styled.div`
-  background-color: var(--color-brand-500);
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$mainColor
+      ? props.$mainColor
+      : 'var(--color-brand-500)'};
+
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 7px;
   width: 100%;
@@ -50,6 +59,11 @@ const UserProfile = styled.div`
 `;
 
 const UserMain = styled.div`
+  color: ${(props) =>
+    props.$isPersonalizable && props.$primaryFontColor
+      ? props.$primaryFontColor
+      : 'inherit'};
+
   position: absolute;
   top: 0;
   left: 50%;
@@ -149,7 +163,12 @@ const DisplayName = styled.h3`
   margin-bottom: 0.8rem;
 `;
 
-const Heading = styled.h3``;
+const Heading = styled.h3`
+  color: ${(props) =>
+    props.$isPersonalizable && props.$tertiaryColor
+      ? props.$tertiaryColor
+      : 'inherit'};
+`;
 
 const FollowersCount = styled.p`
   margin-top: 0.8rem;
@@ -180,7 +199,11 @@ const SocialMediaButton = styled.a`
   width: 25%;
 
   background-color: ${(props) =>
-    props.$active ? 'var(--color-brand-700)' : 'rgba(122, 122, 122, 0.3)'};
+    props.$active
+      ? props.$isPersonalizable && props.$tertiaryColor
+        ? props.$tertiaryColor
+        : 'var(--color-brand-700)'
+      : 'rgba(122, 122, 122, 0.3)'};
 
   cursor: ${(props) => (props.$active ? 'pointer' : 'auto')};
 
@@ -196,14 +219,26 @@ const SocialMediaButton = styled.a`
 
   & svg {
     color: ${(props) =>
-      props.$active ? 'var(--color-brand-500)' : 'rgba(85, 85, 85, 0.3)'};
+      props.$active
+        ? props.$isPersonalizable && props.$secondaryColor
+          ? props.$secondaryColor
+          : 'var(--color-brand-500)'
+        : 'rgba(85, 85, 85, 0.3)'};
     transform: scale(150%);
   }
 `;
 
 const UserBio = styled.p`
-  background-color: var(--color-brand-700);
-  color: var(--color-brand-300);
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$tertiaryColor
+      ? props.$tertiaryColor
+      : 'var(--color-brand-700)'};
+
+  color: ${(props) =>
+    props.$isPersonalizable && props.$secondaryColor
+      ? props.$secondaryColor
+      : 'var(--color-brand-300)'};
+
   padding: 1.6rem;
   border-radius: 3px;
   height: 0;
@@ -257,20 +292,35 @@ const CurrentlyPlayingContainer = styled.div`
 `;
 
 const CurrentlyPlaying = styled(NavLink)`
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$secondaryColor
+      ? props.$secondaryColor
+      : 'var(--color-brand-200)'};
+
+  color: ${(props) =>
+    props.$isPersonalizable && props.$tertiaryColor
+      ? props.$tertiaryColor
+      : 'var(--color-brand-700)'};
+
   padding: 1.2rem 0;
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   width: 100%;
   border-radius: 5px;
   border: solid 2px rgba(34, 34, 34, 0.3);
-  background-color: var(--color-brand-200);
-  color: var(--color-brand-700);
   text-align: center;
 
   transition: all 0.3s;
 
   &:hover {
-    background-color: var(--color-brand-600);
-    color: var(--color-brand-100);
+    background-color: ${(props) =>
+      props.$isPersonalizable && props.$tertiaryColor
+        ? props.$tertiaryColor
+        : 'var(--color-brand-100)'};
+
+    color: ${(props) =>
+      props.$isPersonalizable && props.$secondaryColor
+        ? props.$secondaryColor
+        : 'var(--color-brand-600)'};
   }
 `;
 
@@ -289,22 +339,32 @@ const ActionButton = styled.button`
   background-color: ${(props) =>
     props.$interactable
       ? props.$active
-        ? 'var(--color-brand-700)'
+        ? props.$isPersonalizable && props.$tertiaryColor
+          ? props.$tertiaryColor
+          : 'var(--color-brand-700)'
+        : props.$isPersonalizable && props.$secondaryColor
+        ? props.$secondaryColor
         : 'var(--color-brand-400)'
       : 'rgba(71, 70, 64, 0.5)'};
+
   color: ${(props) =>
     props.$interactable
       ? props.$active
-        ? 'var(--color-brand-300)'
+        ? props.$isPersonalizable && props.$secondaryColor
+          ? props.$secondaryColor
+          : 'var(--color-brand-300)'
+        : props.$isPersonalizable && props.$tertiaryColor
+        ? props.$tertiaryColor
         : 'var(--color-brand-700)'
       : 'rgba(146, 141, 126, 0.5)'};
 
-  font-size: 2.4rem;
+  font-size: 1.8rem;
   font-weight: 700;
   transition: all 0.3s;
 
   display: flex;
   align-items: center;
+  gap: 1.2rem;
 
   cursor: ${(props) => !props.$interactable && 'auto'};
 
@@ -324,12 +384,25 @@ const ActionButton = styled.button`
 const AddNewPostButton = styled.button`
   ${CommonButton}
 
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$tertiaryColor};
+
+  color: ${(props) => props.$isPersonalizable && props.$secondaryColor};
+
   width: 15%;
 
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$isPersonalizable && props.$tertiaryColor};
+
+    filter: ${(props) =>
+      props.$isPersonalizable && props.$tertiaryColor && 'brightness(75%)'};
+  }
 
   @media (max-width: 75em) {
     width: 35%;

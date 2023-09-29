@@ -12,6 +12,7 @@ import { usePostById } from '../../../query/post/usePostById';
 import { useAllPosts } from '../../../query/post/useAllPosts';
 import { useProfileByUser } from '../../../query/profile/useProfileByUser';
 import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
+import { useHintsByGameIds } from '../../../query/hint/useHintsByGames';
 
 import { BiTime } from 'react-icons/bi';
 import { BsPeopleFill, BsPersonFillCheck } from 'react-icons/bs';
@@ -38,7 +39,9 @@ import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/R
 import { useSearch } from '../../../hooks/useSearch';
 import { useScrollToItem } from '../../../hooks/useScrollToItem';
 import { useIsBlocked } from '../../../hooks/useIsBlocked';
-import { useHintsByGameIds } from '../../../query/hint/useHintsByGames';
+import { useFonts } from '../../../hooks/useFonts';
+
+import { usePersonalization } from '../../../contexts/PersonalizationContext';
 
 function SocialFeedContainer() {
   const { username, postId } = useParams();
@@ -47,6 +50,9 @@ function SocialFeedContainer() {
   const { isAuthenticated, user } = useUser();
   const { profile: viewedProfile } = useProfilesByUsername(username);
   const userId = viewedProfile?.userId;
+
+  const { isPersonalizable, personalization } = usePersonalization();
+  const fontData = useFonts(viewedProfile?.personalization.fontFamily);
 
   const queryClient = useQueryClient();
 
@@ -260,7 +266,8 @@ function SocialFeedContainer() {
 
     if (
       searchParams.get('view') !== 'posts' &&
-      searchParams.get('view') !== 'hints'
+      searchParams.get('view') !== 'hints' &&
+      !searchParams.get('search')
     ) {
       searchParams.set('view', 'posts');
       setSearchParams(searchParams, { replace: true });
@@ -317,11 +324,18 @@ function SocialFeedContainer() {
       {(postId || userId) && isBlocked ? (
         <Blocked />
       ) : (
-        <StyledSocialFeedContainer>
+        <StyledSocialFeedContainer
+          $isPersonalizable={isPersonalizable}
+          $fontLoaded={fontData.fontLoaded}
+          $fontFamily={viewedProfile?.personalization.fontFamily}
+        >
           <SocialFeedButtons>
             {userId ? (
               <>
                 <SocialFeedButton
+                  $isPersonalizable={isPersonalizable}
+                  $secondaryColor={personalization?.secondaryColor}
+                  $tertiaryColor={personalization?.tertiaryColor}
                   $active={searchParams.get('view') === 'posts'}
                   onClick={() => setView('posts')}
                 >
@@ -331,6 +345,9 @@ function SocialFeedContainer() {
                   </ResponsiveButtonContent>
                 </SocialFeedButton>
                 <GameSelect
+                  $isPersonalizable={isPersonalizable}
+                  $secondaryColor={personalization?.secondaryColor}
+                  $tertiaryColor={personalization?.tertiaryColor}
                   value={searchParams.get('game') || -1}
                   onChange={setGameFilter}
                 >
@@ -348,6 +365,9 @@ function SocialFeedContainer() {
                     })}
                 </GameSelect>
                 <SocialFeedButton
+                  $isPersonalizable={isPersonalizable}
+                  $secondaryColor={personalization?.secondaryColor}
+                  $tertiaryColor={personalization?.tertiaryColor}
                   $active={searchParams.get('view') === 'hints'}
                   onClick={() => setView('hints')}
                 >
@@ -419,7 +439,10 @@ function SocialFeedContainer() {
               </>
             ) : null}
           </SocialFeedButtons>
-          <SocialFeedContent>
+          <SocialFeedContent
+            $isPersonalizable={isPersonalizable}
+            $tertiaryColor={personalization?.tertiaryColor}
+          >
             <TopScrollElement />
             {searchParams.get('search') && searchResults ? (
               <SearchResultList

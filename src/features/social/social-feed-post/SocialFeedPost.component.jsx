@@ -1,25 +1,26 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { format } from "date-fns";
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
-import { BsReplyFill } from "react-icons/bs";
-import { TbMessage2Search } from "react-icons/tb";
-import { IoArrowBackOutline } from "react-icons/io5";
-import { AiFillFire } from "react-icons/ai";
+import { BsReplyFill } from 'react-icons/bs';
+import { TbMessage2Search } from 'react-icons/tb';
+import { IoArrowBackOutline } from 'react-icons/io5';
+import { AiFillFire } from 'react-icons/ai';
 
-import { useLocations } from "../../../contexts/LocationsContext";
+import { useLocations } from '../../../contexts/LocationsContext';
 
-import { useUser } from "../../../query/auth/useUser";
-import { useReplyByPostId } from "../../../query/post/useReplyByPostId";
-import { useUpdatePost } from "../../../query/post/useUpdatePost";
-import { useProfileByUser } from "../../../query/profile/useProfileByUser";
+import { useUser } from '../../../query/auth/useUser';
+import { useReplyByPostId } from '../../../query/post/useReplyByPostId';
+import { useUpdatePost } from '../../../query/post/useUpdatePost';
+import { useProfileByUser } from '../../../query/profile/useProfileByUser';
 
-import AvatarNavLink from "../../../ui/avatar-nav-link/AvatarNavLink.component";
-import Modal from "../../../ui/modal/Modal.component";
-import AddPostForm from "../add-post-form/AddPostForm.component";
-import Votes from "../../../ui/votes/Votes.component";
-import GameTag from "../../../ui/game-tag/GameTag.component";
+import AvatarNavLink from '../../../ui/avatar-nav-link/AvatarNavLink.component';
+import Modal from '../../../ui/modal/Modal.component';
+import AddPostForm from '../add-post-form/AddPostForm.component';
+import Votes from '../../../ui/votes/Votes.component';
+import GameTag from '../../../ui/game-tag/GameTag.component';
+import ZoomableImage from '../../../ui/zoomable-image/ZoomableImage.component';
 
 import {
   DetailLink,
@@ -31,9 +32,10 @@ import {
   RepliesCount,
   ReplyButton,
   StyledSocialFeedPost,
-} from "./SocialFeedPost.styles";
-import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
-import ZoomableImage from "../../../ui/zoomable-image/ZoomableImage.component";
+} from './SocialFeedPost.styles';
+import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/ResponsiveButtonContent.styles';
+
+import { usePersonalization } from '../../../contexts/PersonalizationContext';
 
 function SocialFeedPost({
   post,
@@ -44,6 +46,8 @@ function SocialFeedPost({
   innerRef,
 }) {
   const { isAuthenticated, user } = useUser();
+
+  const { isPersonalizable, personalization } = usePersonalization();
 
   const navigate = useNavigate();
   const { previousLocation, setPreviousLocation } = useLocations();
@@ -57,17 +61,22 @@ function SocialFeedPost({
   const { profile: quotedUser } = useProfileByUser(quotedPost?.userId);
 
   function handleClickQuote() {
-    searchParams.set("post", post.quoteId);
+    searchParams.set('post', post.quoteId);
     setSearchParams(searchParams, { replace: true });
   }
 
   function onVoteSuccess() {
-    searchParams.set("post", post.id);
+    searchParams.set('post', post.id);
     setSearchParams(searchParams, { replace: true });
   }
 
   return (
-    <StyledSocialFeedPost id={id} ref={innerRef}>
+    <StyledSocialFeedPost
+      $isPersonalizable={isPersonalizable}
+      $mainColor={personalization?.mainColor}
+      id={id}
+      ref={innerRef}
+    >
       <AvatarNavLink userId={post.userId} />
       {quotedPost && (
         <QuoteBlock onClick={handleClickQuote}>
@@ -75,7 +84,12 @@ function SocialFeedPost({
           <p>{`" ${quotedPost.description} "`}</p>
         </QuoteBlock>
       )}
-      <PostContent>{post.description}</PostContent>
+      <PostContent
+        $isPersonalizable={isPersonalizable}
+        $tertiaryColor={personalization?.tertiaryColor}
+      >
+        {post.description}
+      </PostContent>
       {post.imageUrl && <ZoomableImage imageUrl={post.imageUrl} />}
       <PostDetails>
         {post.gameId && gameData && (
@@ -92,21 +106,34 @@ function SocialFeedPost({
           userId={post.userId}
           searchParam="post"
         />
-        <PostCreatedTime>{`Posted at: ${format(
+        <PostCreatedTime
+          $isPersonalizable={isPersonalizable}
+          $tertiaryColor={personalization?.tertiaryColor}
+        >{`Posted at: ${format(
           new Date(post.created_at),
-          "Pp"
+          'Pp'
         )}`}</PostCreatedTime>
       </PostDetails>
-      <PostButtonsContainer>
+      <PostButtonsContainer
+        $isPersonalizable={isPersonalizable}
+        $tertiaryColor={personalization?.tertiaryColor}
+      >
         {replies && replies.length > 20 && <AiFillFire />}
         {replies && replies.length > 0 && (
-          <RepliesCount>{`${replies.length} replies!`}</RepliesCount>
+          <RepliesCount
+            $isPersonalizable={isPersonalizable}
+            $tertiaryColor={personalization?.tertiaryColor}
+          >{`${replies.length} replies!`}</RepliesCount>
         )}
         {isAuthenticated && (
           <>
             <Modal>
               <Modal.Open opens="reply">
-                <ReplyButton>
+                <ReplyButton
+                  $isPersonalizable={isPersonalizable}
+                  $tertiaryColor={personalization?.tertiaryColor}
+                  $secondaryColor={personalization?.secondaryColor}
+                >
                   <ResponsiveButtonContent>
                     <p>Reply</p>
                     <BsReplyFill />
@@ -141,9 +168,12 @@ function SocialFeedPost({
         ) : (
           !post.postId && (
             <DetailLink
+              $isPersonalizable={isPersonalizable}
+              $tertiaryColor={personalization?.tertiaryColor}
+              $secondaryColor={personalization?.secondaryColor}
               onClick={() => {
                 setPreviousLocation();
-                searchParams.set("post", post.id);
+                searchParams.set('post', post.id);
                 setSearchParams(searchParams, { replace: true });
               }}
               to={`/social/post/${post.id}?view=recent`}

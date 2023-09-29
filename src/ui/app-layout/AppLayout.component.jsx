@@ -11,11 +11,14 @@ import { Main, StyledAppLayout } from './AppLayout.styles';
 import supabase from '../../services/supabase';
 import NewUserFlow from '../../features/account/new-user-flow/NewUserFlow.component';
 import { useActiveModal } from '../../contexts/ActiveModalContext';
+import { usePersonalization } from '../../contexts/PersonalizationContext';
 
 function AppLayout() {
   const { user } = useUser();
 
   const activeModalContext = useActiveModal();
+
+  const { isPersonalizable, personalization } = usePersonalization();
 
   const queryClient = useQueryClient();
 
@@ -36,7 +39,10 @@ function AppLayout() {
     <StyledAppLayout $modalOpen={activeModalContext.isModalOpen}>
       <Navigation />
       <NewUserFlow />
-      <Main>
+      <Main
+        $isPersonalizable={isPersonalizable}
+        $secondaryColor={personalization?.secondaryColor}
+      >
         <Outlet />
       </Main>
     </StyledAppLayout>

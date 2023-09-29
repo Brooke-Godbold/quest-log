@@ -59,7 +59,7 @@ function Open({ children, opens: opensWindowName, onOpenCallback }) {
   return cloneElement(children, { onClick: () => openModal() });
 }
 
-function Window({ children, name, onCloseCallback }) {
+function Window({ children, name, onCloseCallback, closeButton = true }) {
   const { openName, close } = useContext(ModalContext);
 
   if (name !== openName) return null;
@@ -72,9 +72,11 @@ function Window({ children, name, onCloseCallback }) {
   return createPortal(
     <Overlay>
       <StyledModal>
-        <ModalCloseButton onClick={closeModal}>
-          <HiX />
-        </ModalCloseButton>
+        {closeButton && (
+          <ModalCloseButton onClick={closeModal}>
+            <HiX />
+          </ModalCloseButton>
+        )}
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
@@ -87,6 +89,7 @@ Window.propTypes = {
   name: PropTypes.string.isRequired,
   onCloseCallback: PropTypes.func,
   onOpenCallback: PropTypes.func,
+  closeButton: PropTypes.bool,
 };
 
 Modal.Open = Open;

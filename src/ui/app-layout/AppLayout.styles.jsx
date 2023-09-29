@@ -15,7 +15,11 @@ const StyledAppLayout = styled.div`
 
 const Main = styled.div`
   flex: 1;
-  background-color: var(--color-brand-100);
+
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$secondaryColor
+      ? props.$secondaryColor
+      : 'var(--color-brand-100)'};
 `;
 
 export { StyledAppLayout, Main };

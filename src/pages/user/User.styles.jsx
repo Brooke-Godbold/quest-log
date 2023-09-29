@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledUser = styled.div`
   margin: 0 auto;
@@ -6,7 +6,11 @@ const StyledUser = styled.div`
   height: 100%;
   max-width: 50%;
   padding: 5rem;
-  background-color: var(--color-brand-200);
+
+  background-color: ${(props) =>
+    props.$isPersonalizable && props.$secondaryColor
+      ? props.$secondaryColor
+      : 'var(--color-brand-200)'};
 
   display: flex;
   flex-direction: column;

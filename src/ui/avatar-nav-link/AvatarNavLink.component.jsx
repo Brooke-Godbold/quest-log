@@ -13,12 +13,16 @@ import {
   UserName,
 } from './AvatarNavLink.styles';
 
+import { usePersonalization } from '../../contexts/PersonalizationContext';
+
 function AvatarNavLink({ userId, gameId, view = 'posts', gameData }) {
   const {
     profile,
     isGettingProfile,
     isError: isProfileError,
   } = useProfileByUser(userId);
+
+  const { isPersonalizable, personalization } = usePersonalization();
 
   return (
     <StyledAvatarNavLink
@@ -45,9 +49,17 @@ function AvatarNavLink({ userId, gameId, view = 'posts', gameData }) {
         ) : (
           <>
             <UserAvatar src={profile.avatarUrl} />
-            <UserName>{profile.displayName}</UserName>
+            <UserName
+              $isPersonalizable={isPersonalizable}
+              $tertiaryColor={personalization?.tertiaryColor}
+            >
+              {profile.displayName}
+            </UserName>
             {profile.displayName !== profile.username && (
-              <DisplayName>{`#${profile.username}`}</DisplayName>
+              <DisplayName
+                $isPersonalizable={isPersonalizable}
+                $tertiaryColor={personalization?.tertiaryColor}
+              >{`#${profile.username}`}</DisplayName>
             )}
           </>
         )

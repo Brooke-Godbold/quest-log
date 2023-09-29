@@ -32,6 +32,7 @@ import AccountUserSection from './features/account/account-user-section/AccountU
 import Notification from './ui/notification/Notification.component';
 import { LocationsProvider } from './contexts/LocationsContext';
 import { ActiveModalProvider } from './contexts/ActiveModalContext';
+import { PersonalizationProvider } from './contexts/PersonalizationContext';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -87,7 +88,9 @@ function App() {
               <LocationsProvider>
                 <ConversationsProvider>
                   <ActiveModalProvider>
-                    <AppLayout />
+                    <PersonalizationProvider>
+                      <AppLayout />
+                    </PersonalizationProvider>
                   </ActiveModalProvider>
                 </ConversationsProvider>
               </LocationsProvider>

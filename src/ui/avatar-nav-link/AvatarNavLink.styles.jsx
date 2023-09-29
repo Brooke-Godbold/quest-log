@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { styled } from "styled-components";
+import { NavLink } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 const StyledAvatarNavLink = styled(NavLink)`
   display: grid;
@@ -41,6 +41,8 @@ const UserAvatar = styled.img`
 `;
 
 const UserName = styled.h4`
+  color: ${(props) => props.$isPersonalizable && props.$tertiaryColor};
+
   margin-top: 0.5rem;
   align-self: start;
 
@@ -54,6 +56,8 @@ const UserName = styled.h4`
 `;
 
 const DisplayName = styled.h5`
+  color: ${(props) => props.$isPersonalizable && props.$tertiaryColor};
+
   font-size: 1.2rem;
   align-self: start;
 

@@ -10,12 +10,19 @@ const StyledHintItem = styled.div`
   box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
   border-radius: 5px;
   padding: 1.8rem 1.8rem;
-  background-color: var(--color-brand-500);
+
+  background-color: ${(props) =>
+    (props.$isPersonalizable && props.$mainColor) || 'var(--color-brand-500)'};
 
   transition: all 0.3s;
 
   &:hover {
-    background-color: var(--color-brand-400);
+    background-color: ${(props) =>
+      (props.$isPersonalizable && props.$mainColor) ||
+      'var(--color-brand-400)'};
+
+    filter: ${(props) =>
+      props.$isPersonalizable && props.$mainColor && 'brightness(125%)'};
   }
 
   @media (max-width: 30em) {
@@ -35,8 +42,14 @@ const HintTagsContainer = styled.div`
 `;
 
 const HintTag = styled.div`
-  background-color: var(--color-brand-700);
-  color: #bbb;
+  background-color: ${(props) =>
+    (props.$isPersonalizable && props.$tertiaryColor) ||
+    'var(--color-brand-700)'};
+
+  color: ${(props) =>
+    (props.$isPersonalizable && props.$secondaryColor) ||
+    'var(--color-brand-300)'};
+
   border-radius: 4px;
   padding: 0.25rem 1.5rem;
   margin-bottom: 1rem;
@@ -136,6 +149,8 @@ const Downvote = styled.button`
 `;
 
 const HintDescription = styled.p`
+  color: ${(props) => props.$isPersonalizable && props.$tertiaryColor};
+
   grid-column: 1 / -1;
   padding-bottom: 1.8rem;
 `;
@@ -160,6 +175,8 @@ const UserName = styled.h4`
 `;
 
 const HintCreatedTime = styled.p`
+  color: ${(props) => props.$isPersonalizable && props.$tertiaryColor};
+
   font-size: 1.2rem;
   font-weight: 700;
 

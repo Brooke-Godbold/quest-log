@@ -113,9 +113,10 @@ function NewUserFlowForm({ onCloseModal }) {
   function finishNewUserFlow(e) {
     e.preventDefault();
 
-    updateProfile({ userId: user.id, data: { newUser: false } });
-
-    onCloseModal?.();
+    updateProfile(
+      { userId: user.id, data: { newUser: false } },
+      { onSuccess: () => onCloseModal?.() }
+    );
   }
 
   useEffect(() => {

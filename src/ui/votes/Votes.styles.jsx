@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledVotes = styled.div`
   display: flex;
@@ -12,9 +12,12 @@ const VoteContainer = styled.div`
 `;
 
 const VoteCount = styled.p`
+  color: ${(props) =>
+    (props.$isPersonalizable && props.$tertiaryColor) ||
+    'var(--color-brand-700)'};
+
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--color-brand-700);
 `;
 
 const VoteButton = styled.button`
@@ -25,7 +28,7 @@ const VoteButton = styled.button`
   border: none;
   background-color: transparent;
 
-  cursor: ${(props) => !props.$canVote && "auto"};
+  cursor: ${(props) => !props.$canVote && 'auto'};
 
   &:focus {
     outline: none;
@@ -37,22 +40,33 @@ const VoteButton = styled.button`
     transform: scale(150%);
 
     color: ${(props) =>
-      props.$canVote ? "var(--color-brand-700)" : "var(--color-brand-600)"};
+      props.$canVote
+        ? (props.$isPersonalizable && props.$tertiaryColor) ||
+          'var(--color-brand-700)'
+        : (props.$isPersonalizable && props.$tertiaryColor) ||
+          'var(--color-brand-600)'};
+
+    opacity: ${(props) =>
+      !props.$canVote &&
+      props.$isPersonalizable &&
+      props.$tertiaryColor &&
+      '50%'};
+
     fill: ${(props) =>
-      props.$canVote && props.$voted ? "var(--color-brand-200)" : "none"};
+      props.$canVote && props.$voted ? 'var(--color-brand-200)' : 'none'};
   }
 
   &:hover {
     & svg {
       transform: ${(props) =>
-        props.$canVote && !props.$votesLoading && "scale(175%)"};
+        props.$canVote && !props.$votesLoading && 'scale(175%)'};
     }
   }
 
   &:active {
     & svg {
       transform: ${(props) =>
-        props.$canVote && !props.$votesLoading && "scale(200%)"};
+        props.$canVote && !props.$votesLoading && 'scale(200%)'};
     }
   }
 `;
