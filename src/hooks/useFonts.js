@@ -9,10 +9,9 @@ export function useFonts(fontFamily) {
   useEffect(() => {
     if (!fontData) return;
 
-    const fontFace = new FontFace(
-      fontData.items[0].family,
-      `url(${fontData.items[0].files.regular})`
-    );
+    const url = fontData.items[0].files.regular.replace('http', 'https');
+
+    const fontFace = new FontFace(fontData.items[0].family, `url(${url})`);
 
     async function loadFontFace(fontFace) {
       const loadedFont = await fontFace.load();
