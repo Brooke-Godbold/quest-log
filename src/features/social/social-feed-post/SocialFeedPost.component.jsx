@@ -129,19 +129,21 @@ function SocialFeedPost({
         )}
         {isAuthenticated && (
           <>
-            <Modal>
-              <Modal.Open opens="report">
-                <ReplyButton>
-                  <ResponsiveButtonContent>
-                    <p>Report</p>
-                    <RiMegaphoneFill />
-                  </ResponsiveButtonContent>
-                </ReplyButton>
-              </Modal.Open>
-              <Modal.Window name="report">
-                <ReportForm reportedPost={post} />
-              </Modal.Window>
-            </Modal>
+            {user.id !== post.userId && (
+              <Modal>
+                <Modal.Open opens="report">
+                  <ReplyButton>
+                    <ResponsiveButtonContent>
+                      <p>Report</p>
+                      <RiMegaphoneFill />
+                    </ResponsiveButtonContent>
+                  </ReplyButton>
+                </Modal.Open>
+                <Modal.Window name="report">
+                  <ReportForm reportedPost={post} />
+                </Modal.Window>
+              </Modal>
+            )}
 
             <Modal>
               <Modal.Open opens="reply">

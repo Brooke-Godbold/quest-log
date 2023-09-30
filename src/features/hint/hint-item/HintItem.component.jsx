@@ -36,7 +36,7 @@ import { ActionButton } from '../../social/user-header/UserHeader.styles';
 import { usePersonalization } from '../../../contexts/PersonalizationContext';
 
 function HintItem({ hint, id, innerRef }) {
-  const { user } = useUser();
+  const { isAuthenticated, user } = useUser();
 
   const { id: gameId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -76,7 +76,7 @@ function HintItem({ hint, id, innerRef }) {
         <AvatarNavLink userId={hint.userId} view="hints" gameId={hint.gameId} />
       </NavLinkContainer>
       <HintActionsContainer>
-        {user && (
+        {user?.id !== hint.userId && (
           <Modal>
             <Modal.Open opens="report">
               <ActionButton $active={true} $interactable={true}>
@@ -89,7 +89,7 @@ function HintItem({ hint, id, innerRef }) {
           </Modal>
         )}
 
-        {user && user.id === hint.userId && (
+        {isAuthenticated && user.id === hint.userId && (
           <Modal>
             <Modal.Open opens="confirmDelete">
               <HintDeleteButton>
