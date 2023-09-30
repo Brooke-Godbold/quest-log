@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledSignupForm = styled.form`
   display: flex;
@@ -20,6 +20,11 @@ const StyledSignupForm = styled.form`
 
   @media (max-width: 30em) {
     width: 100%;
+  }
+
+  @media (max-height: 80em) {
+    overflow-y: scroll;
+    justify-content: flex-start;
   }
 `;
 
