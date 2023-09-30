@@ -14,7 +14,7 @@ import { HiPlus } from 'react-icons/hi';
 import { HiCheck } from 'react-icons/hi';
 import { FaTwitch } from 'react-icons/fa';
 import { GrYoutube } from 'react-icons/gr';
-import { RiKickFill } from 'react-icons/ri';
+import { RiKickFill, RiMegaphoneFill } from 'react-icons/ri';
 import { ImBlocked } from 'react-icons/im';
 import { BiMessageDetail } from 'react-icons/bi';
 import { HiMiniPaintBrush } from 'react-icons/hi2';
@@ -25,6 +25,7 @@ import Notification from '../../../ui/notification/Notification.component';
 import DirectMessage from '../direct-message/DirectMessage.component';
 import AddPostButton from '../add-post-button/AddPostButton.component';
 import PersonalizationMenu from '../personalization-menu/PersonalizationMenu.component';
+import ReportForm from '../../moderation/ReportForm.component';
 
 import { useIsBlocked } from '../../../hooks/useIsBlocked';
 import { useIsFollowing } from '../../../hooks/useIsFollowing';
@@ -262,6 +263,22 @@ function UserHeader() {
                 user?.id !== viewedProfile?.userId &&
                 conversations && (
                   <UserActionsContainer>
+                    <Modal>
+                      <Modal.Open opens="report">
+                        <ActionButton
+                          $interactable={!isBlocked}
+                          disabled={
+                            isUpdatingProfile || isBlocked || isLoadingBlocked
+                          }
+                        >
+                          <RiMegaphoneFill />
+                        </ActionButton>
+                      </Modal.Open>
+                      <Modal.Window name="report">
+                        <ReportForm reportedUser={viewedProfile} />
+                      </Modal.Window>
+                    </Modal>
+
                     <ActionButton
                       $interactable={true}
                       disabled={isUpdatingProfile || isLoadingBlocked}
@@ -272,6 +289,7 @@ function UserHeader() {
                     >
                       <ImBlocked />
                     </ActionButton>
+
                     <ActionButton
                       $interactable={!isBlocked}
                       disabled={
@@ -288,6 +306,7 @@ function UserHeader() {
                         <HiPlus />
                       )}
                     </ActionButton>
+
                     {conversations.filter(
                       (c) =>
                         c.userIdA === viewedProfile.userId ||

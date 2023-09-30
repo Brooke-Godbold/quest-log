@@ -7,6 +7,7 @@ import { BsReplyFill } from 'react-icons/bs';
 import { TbMessage2Search } from 'react-icons/tb';
 import { IoArrowBackOutline } from 'react-icons/io5';
 import { AiFillFire } from 'react-icons/ai';
+import { RiMegaphoneFill } from 'react-icons/ri';
 
 import { useLocations } from '../../../contexts/LocationsContext';
 
@@ -21,6 +22,7 @@ import AddPostForm from '../add-post-form/AddPostForm.component';
 import Votes from '../../../ui/votes/Votes.component';
 import GameTag from '../../../ui/game-tag/GameTag.component';
 import ZoomableImage from '../../../ui/zoomable-image/ZoomableImage.component';
+import ReportForm from '../../moderation/ReportForm.component';
 
 import {
   DetailLink,
@@ -127,6 +129,20 @@ function SocialFeedPost({
         )}
         {isAuthenticated && (
           <>
+            <Modal>
+              <Modal.Open opens="report">
+                <ReplyButton>
+                  <ResponsiveButtonContent>
+                    <p>Report</p>
+                    <RiMegaphoneFill />
+                  </ResponsiveButtonContent>
+                </ReplyButton>
+              </Modal.Open>
+              <Modal.Window name="report">
+                <ReportForm reportedPost={post} />
+              </Modal.Window>
+            </Modal>
+
             <Modal>
               <Modal.Open opens="reply">
                 <ReplyButton

@@ -95,13 +95,16 @@ const UserMain = styled.div`
     position: static;
     transform: none;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: max-content 1fr;
     grid-template-rows: repeat(2, 1fr);
     column-gap: 1.2rem;
+
+    width: 0;
+    min-width: 100%;
   }
 
   @media (max-width: 30em) {
-    grid-template-columns: 1.5fr 2fr;
+    grid-template-columns: max-content 2fr;
   }
 
   @media (max-width: 20em) {
@@ -328,6 +331,20 @@ const UserActionsContainer = styled.div`
   margin-top: 1.2rem;
   display: flex;
   gap: 2.4rem;
+
+  justify-self: center;
+
+  @media (max-width: 27em) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+  }
+
+  @media (max-width: 20em) {
+    display: flex;
+  }
 `;
 
 const ActionButton = styled.button`
@@ -362,8 +379,11 @@ const ActionButton = styled.button`
   font-weight: 700;
   transition: all 0.3s;
 
+  width: fit-content;
+
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1.2rem;
 
   cursor: ${(props) => !props.$interactable && 'auto'};
@@ -378,6 +398,9 @@ const ActionButton = styled.button`
 
   @media (max-width: 35em) {
     font-size: 1.8rem;
+
+    align-self: center;
+    justify-self: center;
   }
 `;
 

@@ -98,7 +98,7 @@ const SocialFeedButton = styled.button`
       props.$isPersonalizable && props.$tertiaryColor};
 
     filter: ${(props) =>
-      props.$isPersonalizable && props.$tertiaryColor && 'brightness(75%)'};
+      props.$isPersonalizable && props.$tertiaryColor && 'brightness(125%)'};
   }
 `;
 

@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
 
 import { HiTrash } from 'react-icons/hi';
+import { RiMegaphoneFill } from 'react-icons/ri';
 
 import { useDeleteHint } from '../../../query/hint/useDeleteHint';
 import { useUpdateHint } from '../../../query/hint/useUpdateHint';
@@ -16,6 +17,7 @@ import AvatarNavLink from '../../../ui/avatar-nav-link/AvatarNavLink.component';
 import Votes from '../../../ui/votes/Votes.component';
 import GameTag from '../../../ui/game-tag/GameTag.component';
 import Notification from '../../../ui/notification/Notification.component';
+import ReportForm from '../../moderation/ReportForm.component';
 
 import {
   HintActionsContainer,
@@ -28,6 +30,7 @@ import {
   StyledHintItem,
 } from './HintItem.styles';
 import { ConfirmationText } from '../../../ui/confirmation-check/ConfirmationCheck.styles';
+import { ActionButton } from '../../social/user-header/UserHeader.styles';
 
 import { usePersonalization } from '../../../contexts/PersonalizationContext';
 
@@ -70,6 +73,19 @@ function HintItem({ hint, id, user, innerRef }) {
         <AvatarNavLink userId={hint.userId} view="hints" gameId={hint.gameId} />
       </NavLinkContainer>
       <HintActionsContainer>
+        {user && (
+          <Modal>
+            <Modal.Open opens="report">
+              <ActionButton $active={true} $interactable={true}>
+                <RiMegaphoneFill />
+              </ActionButton>
+            </Modal.Open>
+            <Modal.Window name="report">
+              <ReportForm reportedHint={hint} />
+            </Modal.Window>
+          </Modal>
+        )}
+
         {user && user.id === hint.userId && (
           <Modal>
             <Modal.Open opens="confirmDelete">
