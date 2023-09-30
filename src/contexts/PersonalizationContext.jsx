@@ -153,6 +153,7 @@ function PersonalizationProvider({ children }) {
   }
 
   useEffect(() => {
+    setIsPersonalizationOpen(false);
     setIsPersonalizationLoaded(false);
 
     ReinitializePersonalization();
