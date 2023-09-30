@@ -1,18 +1,22 @@
 import PropTypes from 'prop-types';
 
+import toast from 'react-hot-toast';
+import { useEffect, useRef, useState } from 'react';
+
+import { useUser } from '../../query/auth/useUser';
+import { useAddReport } from '../../query/report/useAddReport';
+
+import Button from '../../ui/button/Button.component';
+import Notification from '../../ui/notification/Notification.component';
+
 import {
   ReportSection,
   ReportTextField,
   StyledReportForm,
 } from './ReportForm.styles';
-import Button from '../../ui/button/Button.component';
-import { filterWhiteSpace } from '../../utils/filterWhiteSpace';
-import toast from 'react-hot-toast';
-import Notification from '../../ui/notification/Notification.component';
-import { useState } from 'react';
 import { GameSelect } from '../../ui/game-select/GameSelect.styles';
-import { useUser } from '../../query/auth/useUser';
-import { useAddReport } from '../../query/report/useAddReport';
+
+import { filterWhiteSpace } from '../../utils/filterWhiteSpace';
 
 function ReportForm({
   reportedUser,
@@ -25,6 +29,8 @@ function ReportForm({
 
   const [reportContent, setReportContent] = useState('');
   const [reportType, setReportType] = useState('');
+
+  const inputRef = useRef(null);
 
   function handleSubmitReport(e) {
     e.preventDefault();
@@ -57,6 +63,10 @@ function ReportForm({
     }
   }
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   return (
     <StyledReportForm onSubmit={handleSubmitReport}>
       <h2>{`Report ${
@@ -87,11 +97,12 @@ function ReportForm({
         </GameSelect>
       </ReportSection>
       <ReportTextField
+        ref={inputRef}
         value={reportContent}
         onChange={(e) => setReportContent(e.target.value)}
         disabled={isLoading}
       />
-      <Button>Submit Report</Button>
+      <Button disabled={isLoading}>Submit Report</Button>
     </StyledReportForm>
   );
 }

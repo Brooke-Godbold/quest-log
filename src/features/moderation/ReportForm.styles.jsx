@@ -5,6 +5,20 @@ const StyledReportForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  @media (max-width: 75em) {
+    width: 50vw;
+  }
+
+  @media (max-width: 50em) {
+    width: 75vw;
+  }
+
+  @media (max-width: 25em) {
+    width: 85vw;
+
+    font-size: 1.2rem;
+  }
 `;
 
 const ReportSection = styled.div`

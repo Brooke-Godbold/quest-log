@@ -21,12 +21,13 @@ function Search({ navigationActive }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setFocus } = useForm();
 
   function handleToggleSearch(e) {
     e.preventDefault();
 
     setSearchActive((searchActive) => !searchActive);
+    setFocus('search');
   }
 
   function preventEnter(e) {

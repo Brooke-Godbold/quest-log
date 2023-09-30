@@ -122,7 +122,7 @@ function AccountProfileDetailsSection() {
   useEffect(() => {
     if (
       JSON.stringify(currentlyPlaying.filter((game) => game)) ===
-        JSON.stringify(profile.currentGames) ||
+        JSON.stringify(profile?.currentGames) ||
       currentlyPlaying.length === 0
     )
       return;

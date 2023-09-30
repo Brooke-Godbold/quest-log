@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useParams } from 'react-router-dom';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
@@ -30,7 +30,7 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
 
   const newHintTags = useRef([]);
 
-  const { register, handleSubmit, clearErrors, watch } = useForm();
+  const { register, handleSubmit, clearErrors, watch, setFocus } = useForm();
 
   const watchContent = watch('content', '');
 
@@ -78,6 +78,10 @@ function NewHint({ onCloseModal, user: { id: userId } }) {
 
     clearErrors('tags');
   }
+
+  useEffect(() => {
+    setFocus('content');
+  }, [setFocus]);
 
   return (
     <StyledNewHint onSubmit={handleSubmit(onNewHint, onError)}>

@@ -18,7 +18,7 @@ export function useSearch(searchQuery) {
   useEffect(() => {
     function handleSearch() {
       setSearchResults({
-        gameResults: gameData,
+        gameResults: gameData?.filter((game) => game.isVisible),
         profileResults: profiles,
         postResults: uniqueArray([
           ...(postsByContent || []),

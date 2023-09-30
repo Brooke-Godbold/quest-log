@@ -1,10 +1,12 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import HintItem from "../hint-item/HintItem.component";
-import { refProps, useBatchLoading } from "../../../hooks/useBatchLoading";
-import { BATCH_ITEM_MULTIPLIER } from "../../../data/consts";
+import HintItem from '../hint-item/HintItem.component';
 
-function Hints({ hints, user }) {
+import { refProps, useBatchLoading } from '../../../hooks/useBatchLoading';
+
+import { BATCH_ITEM_MULTIPLIER } from '../../../data/consts';
+
+function Hints({ hints }) {
   const { batchNumber, ref } = useBatchLoading();
 
   return (
@@ -15,7 +17,6 @@ function Hints({ hints, user }) {
           <HintItem
             hint={hint}
             id={`hint_${hint.id}`}
-            user={user}
             key={`hint_${hint.id}`}
             {...refProps(index, batchNumber, ref)}
           />
@@ -26,7 +27,6 @@ function Hints({ hints, user }) {
 
 Hints.propTypes = {
   hints: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
 };
 
 export default Hints;

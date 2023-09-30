@@ -1,12 +1,12 @@
-import { NavLink } from "react-router-dom";
-import { styled } from "styled-components";
-import { CommonButton } from "../../../styles/GlobalStyles";
+import { NavLink } from 'react-router-dom';
+import { styled } from 'styled-components';
+import { CommonButton } from '../../../styles/GlobalStyles';
 
 const StyledAccountLayout = styled.div`
   max-width: 50%;
   height: 100%;
   margin: 0 auto;
-  background-color: var(--color-brand-400);
+  background-color: var(--color-brand-300);
 
   @media (max-width: 140em) {
     max-width: 75%;

@@ -1,4 +1,5 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
+import { CommonTextArea } from '../../../styles/GlobalStyles';
 
 const StyledNewHint = styled.form`
   z-index: 1;
@@ -37,18 +38,9 @@ const NewHintBody = styled.div`
 `;
 
 const NewHintTextArea = styled.textarea`
-  margin-top: 3rem;
-  padding: 1.5rem 2rem;
-  width: 100%;
-  height: 20rem;
-  border: none;
-  box-shadow: inset 0 0 1rem rgb(17, 17, 17, 0.2);
-  border: 4px solid transparent;
+  ${CommonTextArea}
 
-  &:focus {
-    outline: none;
-    border: 4px solid rgb(17, 17, 17, 0.4);
-  }
+  height: 20rem;
 `;
 
 const NewHintTagsContainer = styled.div`

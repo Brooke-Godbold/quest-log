@@ -51,12 +51,14 @@ function AutoOpen({ opens: opensWindowName }) {
 function Open({ children, opens: opensWindowName, onOpenCallback }) {
   const { open } = useContext(ModalContext);
 
-  function openModal() {
+  function openModal(e) {
+    e.preventDefault();
+
     open(opensWindowName);
     onOpenCallback?.();
   }
 
-  return cloneElement(children, { onClick: () => openModal() });
+  return cloneElement(children, { onClick: (e) => openModal(e) });
 }
 
 function Window({ children, name, onCloseCallback, closeButton = true }) {

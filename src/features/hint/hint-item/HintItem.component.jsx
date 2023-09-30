@@ -10,6 +10,7 @@ import { RiMegaphoneFill } from 'react-icons/ri';
 import { useDeleteHint } from '../../../query/hint/useDeleteHint';
 import { useUpdateHint } from '../../../query/hint/useUpdateHint';
 import { useAllGames } from '../../../query/game/useAllGames';
+import { useUser } from '../../../query/auth/useUser';
 
 import Modal from '../../../ui/modal/Modal.component';
 import ConfirmationCheck from '../../../ui/confirmation-check/ConfirmationCheck.component';
@@ -34,7 +35,9 @@ import { ActionButton } from '../../social/user-header/UserHeader.styles';
 
 import { usePersonalization } from '../../../contexts/PersonalizationContext';
 
-function HintItem({ hint, id, user, innerRef }) {
+function HintItem({ hint, id, innerRef }) {
+  const { user } = useUser();
+
   const { id: gameId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 

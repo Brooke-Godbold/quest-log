@@ -6,6 +6,7 @@ import { useSearchGames } from '../../query/game/useSearchGames';
 import { useGame } from '../../query/game/useGame';
 
 import { MiniSpinner } from '../spinner/Spinner';
+import GameSuggestion from '../game-suggestion-form/GameSuggestionForm.component';
 
 import {
   CurrentlyPlayingInput,
@@ -64,7 +65,7 @@ function CurrentlyPlaying({
         $inputPopulated={currentlyPlaying?.name}
       />
       <CurrentlyPlayingSuggestions $active={gameQuery?.length > 2}>
-        {gameData?.length > 0 ? (
+        {gameData?.filter((game) => game.isVisible).length > 0 ? (
           gameData.map(
             (game) =>
               !currentlyPlayingList.includes(game.id) && (
@@ -82,9 +83,11 @@ function CurrentlyPlaying({
             <MiniSpinner />
           </InfoContainer>
         ) : (
-          <InfoText>
-            We couldn&apos;t find anything for that, try another search?
-          </InfoText>
+          <GameSuggestion searchQuery={gameQuery}>
+            <CurrentlyPlayingSelection onClick={(e) => e.preventDefault()}>
+              We couldn&apos;t find anything for that, try another search?
+            </CurrentlyPlayingSelection>
+          </GameSuggestion>
         )}
       </CurrentlyPlayingSuggestions>
     </StyledCurrentlyPlaying>

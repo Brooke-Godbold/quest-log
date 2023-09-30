@@ -178,7 +178,7 @@ function HintListBody() {
         ) : searchParams.get('view') === 'posts' && gameData ? (
           <PostList posts={sortedFilteredData} gameData={gameData} />
         ) : (
-          <Hints hints={sortedFilteredData} user={user} />
+          <Hints hints={sortedFilteredData} />
         )}
       </HintList>
     </HintListContainer>

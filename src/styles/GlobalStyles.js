@@ -98,6 +98,21 @@ body {
   line-height: 1.5;
   font-size: 1.6rem;
   height: 100%;
+
+  &::-webkit-scrollbar {
+    width: 18px; /* width of the entire scrollbar */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-brand-600); /* color of the scroll thumb */
+    border: 3px solid var(--color-brand-600); /* creates padding around scroll thumb */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-brand-400); /* color of the scroll thumb */
+    border: 3px solid var(--color-brand-400); /* creates padding around scroll thumb */
+  }
+
+  scrollbar-color: var(--color-brand-600) transparent;
+  scroll-padding: 3px;
 }
 
 input,
@@ -307,6 +322,16 @@ const CommonCloseButton = css`
   }
 `;
 
+const CommonTextArea = css`
+  box-shadow: 0px 0px 5px 3px rgb(31, 31, 31, 0.1);
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-brand-50);
+  color: var(--color-brand-600);
+  width: 100%;
+  padding: 1.6rem;
+`;
+
 export default GlobalStyles;
 
 export {
@@ -316,4 +341,5 @@ export {
   CommonPage,
   CommonItem,
   CommonCloseButton,
+  CommonTextArea,
 };

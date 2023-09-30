@@ -52,6 +52,7 @@ function AddPostForm({
     watch,
     setError,
     clearErrors,
+    setFocus,
     formState: { errors },
   } = useForm();
   const watchPostContent = watch('postContent', '');
@@ -137,6 +138,10 @@ function AddPostForm({
       onErrorToast(errors, clearErrors);
     }
   }, [errors, clearErrors]);
+
+  useEffect(() => {
+    setFocus('postContent');
+  }, [setFocus]);
 
   return (
     <StyledAddPostForm onSubmit={handleSubmit(onPost, onError)}>

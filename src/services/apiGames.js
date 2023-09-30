@@ -53,3 +53,17 @@ export async function getAllGames() {
 
   return games;
 }
+
+export async function addGame(gameData) {
+  const { data: game, error } = await supabase
+    .from('game')
+    .insert(gameData)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+  }
+
+  return game;
+}
