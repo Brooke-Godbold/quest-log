@@ -15,6 +15,7 @@ Create your local .env file and add the Supabase API Key & Google Fonts API Key 
 ```yaml
 VITE_SUPABASE_KEY=SUPABASE_API_KEY
 VITE_GOOGLE_FONTS_KEY=GOOGLE_FONTS_API_KEY
+VITE_HCAPTCHA_KEY=HCAPTCHA_SITEKEY
 ```
 
 Run commands
@@ -53,3 +54,9 @@ The thunderfrost.com Domain Registrar is Netlify. Ensure that DNS Records are ma
 [Supabase Admin](https://supabase.com/dashboard/project/xhkwznfhytvgvorvkcdp)
 
 The Database is provided by Supabase, and the Database can be managed in the Admin Panel for quest-log. The Domain in use for Emails is thunderfrost.com.
+
+### hCaptcha
+
+[hCaptcha](https://dashboard.hcaptcha.com/overview)
+
+Captcha challenges are implemented via hCaptcha. This requires the Sitekey to access the API. If testing locally, this needs to be set to the test key provided by hCaptcha (see docs: [hCaptcha Integration-Testing](https://docs.hcaptcha.com/#integration-testing-test-keys)), otherwise this needs to be set to the standard key as required.

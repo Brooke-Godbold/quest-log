@@ -33,6 +33,7 @@ import Notification from './ui/notification/Notification.component';
 import { LocationsProvider } from './contexts/LocationsContext';
 import { ActiveModalProvider } from './contexts/ActiveModalContext';
 import { PersonalizationProvider } from './contexts/PersonalizationContext';
+import { CaptchaProvider } from './contexts/CaptchaContext';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -87,11 +88,13 @@ function App() {
             element={
               <LocationsProvider>
                 <ConversationsProvider>
-                  <ActiveModalProvider>
-                    <PersonalizationProvider>
-                      <AppLayout />
-                    </PersonalizationProvider>
-                  </ActiveModalProvider>
+                  <CaptchaProvider>
+                    <ActiveModalProvider>
+                      <PersonalizationProvider>
+                        <AppLayout />
+                      </PersonalizationProvider>
+                    </ActiveModalProvider>
+                  </CaptchaProvider>
                 </ConversationsProvider>
               </LocationsProvider>
             }
@@ -169,8 +172,24 @@ function App() {
               />
             </Route>
           </Route>
-          <Route path="signup" element={<Signup />} errorElement={<Error />} />
-          <Route path="login" element={<Login />} errorElement={<Error />} />
+          <Route
+            path="signup"
+            element={
+              <CaptchaProvider>
+                <Signup />
+              </CaptchaProvider>
+            }
+            errorElement={<Error />}
+          />
+          <Route
+            path="login"
+            element={
+              <CaptchaProvider>
+                <Login />
+              </CaptchaProvider>
+            }
+            errorElement={<Error />}
+          />
           <Route
             path="confirm-signup"
             element={<ConfirmSignup />}

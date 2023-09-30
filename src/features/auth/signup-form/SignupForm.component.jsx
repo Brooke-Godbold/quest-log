@@ -3,15 +3,21 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
+import { useCaptcha } from '../../../contexts/CaptchaContext';
+
 import { useUser } from '../../../query/auth/useUser';
 import { useProfile } from '../../../query/profile/useProfile';
 import { useSignup } from '../../../query/auth/useSignup';
 import { useAddProfile } from '../../../query/profile/useAddProfile';
 import { useProfilesByUsername } from '../../../query/profile/useProfilesByUsername';
+import { useAllGames } from '../../../query/game/useAllGames';
 
 import Button from '../../../ui/button/Button.component';
 import TextCount from '../../../ui/text-count/TextCount.component';
 import Notification from '../../../ui/notification/Notification.component';
+import Spinner from '../../../ui/spinner/Spinner';
+import CurrentlyPlaying from '../../../ui/currently-playing/CurrentlyPlaying.component';
+import Captcha from '../../../ui/captcha/Captcha.component';
 
 import {
   SignUpGridContainer,
@@ -23,9 +29,6 @@ import {
 } from './SIgnupForm.styles';
 import { ProfileDetailsLabel } from '../../account/account-profile-details-section/AccountProfileDetailsSection.styles';
 import { FormInput } from '../../../ui/FormInput/FormInput.styles';
-import { useAllGames } from '../../../query/game/useAllGames';
-import Spinner from '../../../ui/spinner/Spinner';
-//import { CurrentlyPlaying } from '../../account/currently-playing-row/CurrentlyPlayingRow.styles';
 
 import {
   PASSWORD_MIN_LENGTH,
@@ -34,13 +37,14 @@ import {
 } from '../../../data/consts';
 
 import { onErrorToast } from '../../../utils/onErrorToast';
-import CurrentlyPlaying from '../../../ui/currently-playing/CurrentlyPlaying.component';
 
 function SignupForm() {
   const { isAuthenticated } = useUser();
   const navigate = useNavigate();
 
   if (isAuthenticated) navigate('/search', { replace: true });
+
+  const { captchaToken, resetCaptcha } = useCaptcha();
 
   const {
     register,
@@ -105,9 +109,17 @@ function SignupForm() {
         toast.error(() => (
           <Notification text="That username is already in use!" />
         ));
+      } else if (!captchaToken) {
+        toast.error(() => (
+          <Notification text="Please verify your Captcha before continuing!" />
+        ));
       } else {
         signup(
-          { email: getValues().email, password: getValues().password },
+          {
+            email: getValues().email,
+            password: getValues().password,
+            captchaToken,
+          },
           {
             onSuccess: (user) => {
               addProfile(
@@ -119,7 +131,10 @@ function SignupForm() {
                   currentGames: currentlyPlayingIds,
                 },
                 {
-                  onSuccess: () => setSignupSuccess(true),
+                  onSuccess: () => {
+                    setSignupSuccess(true);
+                    resetCaptcha();
+                  },
                   onError: (error) => {
                     console.log(error);
                     toast.error((t) => (
@@ -151,6 +166,8 @@ function SignupForm() {
       getValues,
       currentlyPlayingIds,
       signingUp,
+      captchaToken,
+      resetCaptcha,
     ]
   );
 
@@ -274,6 +291,8 @@ function SignupForm() {
               />
             </SignUpGridItem>
           </SignUpGridContainer>
+
+          <Captcha />
 
           <Button disabled={isLoading} isLight={false}>
             Sign Up

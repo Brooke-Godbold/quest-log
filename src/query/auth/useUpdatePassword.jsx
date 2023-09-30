@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-hot-toast';
 
-import { updatePassword as updatePasswordApi } from "../../services/apiAuth";
+import { updatePassword as updatePasswordApi } from '../../services/apiAuth';
 
-import Notification from "../../ui/notification/Notification.component";
+import Notification from '../../ui/notification/Notification.component';
 
 export function useUpdatePassword() {
   const queryClient = useQueryClient();
@@ -20,7 +20,7 @@ export function useUpdatePassword() {
         <Notification toast={t} text="Successfully updated Password!" />
       ));
       queryClient.invalidateQueries({
-        queryKey: ["user"],
+        queryKey: ['user'],
       });
     },
     onError: () => {
@@ -32,22 +32,3 @@ export function useUpdatePassword() {
 
   return { updatePassword, isLoading, isError, isSuccess };
 }
-
-/*
-toast((t) => (
-        <Notification toast={t} text="Successfully updated Password!" />
-      ));
-      toast.error((t) => (
-        <Notification toast={t} text="Unable to update Password at this time" />
-      ));
-
-
-      onSuccess: () => setSignupSuccess(true),
-      onError: () =>
-        toast.error((t) => (
-          <Notification
-            toast={t}
-            text="Unable to Sign Up at this time"
-          />
-        )),
-*/

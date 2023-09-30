@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { useSearchGames } from '../../query/game/useSearchGames';
 import { useGame } from '../../query/game/useGame';
@@ -22,6 +23,8 @@ function CurrentlyPlaying({
   currentId,
   currentlyPlayingList = [],
 }) {
+  const location = useLocation();
+
   const [gameQuery, setGameQuery] = useState('');
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
 
@@ -82,12 +85,16 @@ function CurrentlyPlaying({
             <InfoText>Searching...</InfoText>
             <MiniSpinner />
           </InfoContainer>
-        ) : (
+        ) : !location.pathname.includes('signup') ? (
           <GameSuggestion searchQuery={gameQuery}>
             <CurrentlyPlayingSelection onClick={(e) => e.preventDefault()}>
               We couldn&apos;t find anything for that, try another search?
             </CurrentlyPlayingSelection>
           </GameSuggestion>
+        ) : (
+          <InfoText>
+            We couldn&apos;t find anything for that, try another search?
+          </InfoText>
         )}
       </CurrentlyPlayingSuggestions>
     </StyledCurrentlyPlaying>

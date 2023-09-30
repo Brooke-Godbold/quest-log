@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -25,6 +25,8 @@ import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/R
 import { FormInput } from '../../../ui/FormInput/FormInput.styles';
 
 import { onErrorToast } from '../../../utils/onErrorToast';
+import { useCaptcha } from '../../../contexts/CaptchaContext';
+import Captcha from '../../../ui/captcha/Captcha.component';
 
 function LoginForm({ onCloseModal, setIsResetPassword }) {
   const { register, handleSubmit } = useForm();
@@ -32,25 +34,40 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
 
   const navigate = useNavigate();
 
+  const { captchaToken, executeCaptcha, resetCaptcha } = useCaptcha();
+
+  const [loginData, setLoginData] = useState({});
   const [errors, setErrors] = useState({});
 
   function onSubmit(data) {
+    setLoginData(data);
+
+    executeCaptcha();
+  }
+
+  const handleLogin = useCallback(() => {
     setErrors({});
 
-    login(data, {
-      onSuccess: () => {
-        toast(() => <Notification text="Successfully logged in!" />),
+    login(
+      { ...loginData, captchaToken },
+      {
+        onSuccess: () => {
+          toast(() => <Notification text="Successfully logged in!" />);
           onCloseModal?.();
-      },
-      onError: () =>
-        toast.error((t) => (
-          <Notification
-            toast={t}
-            text="Unable to login at this time, check your credentials"
-          />
-        )),
-    });
-  }
+          resetCaptcha();
+        },
+        onError: () => {
+          toast.error((t) => (
+            <Notification
+              toast={t}
+              text="Unable to login at this time, check your credentials"
+            />
+          ));
+          resetCaptcha();
+        },
+      }
+    );
+  }, [captchaToken, login, loginData, onCloseModal, resetCaptcha]);
 
   function onError(e) {
     onErrorToast(e);
@@ -60,6 +77,12 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
     e.preventDefault();
     setIsResetPassword(true);
   }
+
+  useEffect(() => {
+    if (!captchaToken) return;
+
+    handleLogin();
+  }, [captchaToken, handleLogin]);
 
   if (isLoggingIn) return <Spinner />;
 
@@ -98,6 +121,8 @@ function LoginForm({ onCloseModal, setIsResetPassword }) {
               })}
             />
           </LoginFormInputTable>
+
+          <Captcha mode="invisible" />
 
           <LoginButtonsContainer>
             <Button disabled={isLoggingIn} isLight={true}>
