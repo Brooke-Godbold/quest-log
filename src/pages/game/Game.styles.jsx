@@ -1,8 +1,8 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledGame = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1.5fr;
+  grid-template-rows: auto 1fr;
   margin: 0 auto;
   gap: 2.4rem;
   height: 100%;
@@ -16,9 +16,7 @@ const StyledGame = styled.div`
 
   @media (max-width: 100em) {
     padding: 15rem 5rem 5rem 5rem;
-  }
 
-  @media (max-width: 75em) {
     grid-template-rows: auto 1fr;
     gap: 0;
   }

@@ -12,7 +12,7 @@ function Hints({ hints }) {
   return (
     <>
       {hints
-        .slice(0, batchNumber * BATCH_ITEM_MULTIPLIER)
+        ?.slice(0, batchNumber * BATCH_ITEM_MULTIPLIER)
         .map((hint, index) => (
           <HintItem
             hint={hint}

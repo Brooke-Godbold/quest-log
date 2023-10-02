@@ -1,9 +1,9 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 import {
   CommonButton,
   CommonInput,
   CommonScrollBar,
-} from "../../../styles/GlobalStyles";
+} from '../../../styles/GlobalStyles';
 
 const StyledHintListSection = styled.div`
   min-height: 0;
@@ -12,8 +12,8 @@ const StyledHintListSection = styled.div`
 
   max-width: 100%;
 
-  @media (max-width: 75em) {
-    display: ${(props) => (!props.$detailsActive ? "grid" : "none")};
+  @media (max-width: 100em) {
+    display: ${(props) => (!props.$detailsActive ? 'grid' : 'none')};
   }
 `;
 
@@ -43,7 +43,7 @@ const HintListContainer = styled.div`
 
   ${CommonScrollBar}
 
-  @media (max-width: 75em) {
+  @media (max-width: 100em) {
     height: auto;
   }
 `;
@@ -62,7 +62,7 @@ const NoHints = styled.p`
   font-size: 4.8rem;
   font-weight: 700;
   color: #aaa;
-  margin-top: 10rem;
+  margin: 10rem;
 `;
 
 const StyledHintListHeader = styled.div`

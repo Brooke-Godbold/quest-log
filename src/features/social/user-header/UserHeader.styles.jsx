@@ -318,12 +318,12 @@ const CurrentlyPlaying = styled(NavLink)`
     background-color: ${(props) =>
       props.$isPersonalizable && props.$tertiaryColor
         ? props.$tertiaryColor
-        : 'var(--color-brand-100)'};
+        : 'var(--color-brand-700)'};
 
     color: ${(props) =>
       props.$isPersonalizable && props.$secondaryColor
         ? props.$secondaryColor
-        : 'var(--color-brand-600)'};
+        : 'var(--color-brand-100)'};
   }
 `;
 

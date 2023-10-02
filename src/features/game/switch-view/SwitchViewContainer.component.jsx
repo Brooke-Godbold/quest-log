@@ -1,18 +1,25 @@
-import PropTypes from "prop-types";
-import { StyledSwitchViewContainer } from "./SwitchViewContainer.styles";
-import { SocialFeedButton } from "../../social/social-feed-container/SocialFeedContainer.styles";
+import PropTypes from 'prop-types';
 
-import { TbMessage2Search } from "react-icons/tb";
-import { BsStickyFill, BsTrophyFill } from "react-icons/bs";
-import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from 'react-router-dom';
+
+import { TbMessage2Search } from 'react-icons/tb';
+import { BsStickyFill, BsTrophyFill } from 'react-icons/bs';
+
+import { useGame } from '../../../query/game/useGame';
+
+import { StyledSwitchViewContainer } from './SwitchViewContainer.styles';
+import { SocialFeedButton } from '../../social/social-feed-container/SocialFeedContainer.styles';
+import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/ResponsiveButtonContent.styles';
 
 function SwitchViewContainer({ detailsActive, setDetailsActive }) {
+  const { id } = useParams();
+  const { gameData } = useGame(id);
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   function setView(view) {
-    searchParams.set("view", view);
-    searchParams.delete("search");
+    searchParams.set('view', view);
+    searchParams.delete('search');
     setSearchParams(searchParams, { replace: true });
   }
 
@@ -27,23 +34,25 @@ function SwitchViewContainer({ detailsActive, setDetailsActive }) {
           <TbMessage2Search />
         </ResponsiveButtonContent>
       </SocialFeedButton>
+      {gameData?.isReleased && (
+        <SocialFeedButton
+          $active={!detailsActive}
+          onClick={() => {
+            setDetailsActive(false);
+            setView('hints');
+          }}
+        >
+          <ResponsiveButtonContent>
+            <p>Game Hints</p>
+            <BsTrophyFill />
+          </ResponsiveButtonContent>
+        </SocialFeedButton>
+      )}
       <SocialFeedButton
         $active={!detailsActive}
         onClick={() => {
           setDetailsActive(false);
-          setView("hints");
-        }}
-      >
-        <ResponsiveButtonContent>
-          <p>Game Hints</p>
-          <BsTrophyFill />
-        </ResponsiveButtonContent>
-      </SocialFeedButton>
-      <SocialFeedButton
-        $active={!detailsActive}
-        onClick={() => {
-          setDetailsActive(false);
-          setView("posts");
+          setView('posts');
         }}
       >
         <ResponsiveButtonContent>

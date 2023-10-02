@@ -8,7 +8,7 @@ import { useCaptcha } from '../../contexts/CaptchaContext';
 
 import Notification from '../notification/Notification.component';
 
-import { StyledCaptcha } from './Captcha.styles';
+import { ComplianceStatement, StyledCaptcha } from './Captcha.styles';
 
 function Captcha({ mode = 'normal' }) {
   const { setCaptchaToken, captcha } = useCaptcha();
@@ -49,13 +49,34 @@ function Captcha({ mode = 'normal' }) {
           />
         </StyledCaptcha>
       ) : (
-        <HCaptcha
-          ref={captcha}
-          sitekey={import.meta.env.VITE_HCAPTCHA_KEY}
-          onVerify={(token) => verifyCaptcha(token)}
-          onError={handleCaptchaError}
-          size={mode}
-        />
+        <StyledCaptcha>
+          <ComplianceStatement>
+            This site is protected by hCaptcha and its{' '}
+            <a
+              href="https://www.hcaptcha.com/privacy"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Privacy Policy
+            </a>{' '}
+            and{' '}
+            <a
+              href="https://www.hcaptcha.com/terms"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Terms of Service
+            </a>{' '}
+            apply.
+          </ComplianceStatement>
+          <HCaptcha
+            ref={captcha}
+            sitekey={import.meta.env.VITE_HCAPTCHA_KEY}
+            onVerify={(token) => verifyCaptcha(token)}
+            onError={handleCaptchaError}
+            size={mode}
+          />
+        </StyledCaptcha>
       )}
     </>
   );

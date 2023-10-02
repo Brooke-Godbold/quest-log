@@ -90,10 +90,10 @@ function HintListHeader() {
             <div>
               {searchParams.get('view') === 'posts' ? (
                 <Modal>
-                  <Modal.Open opens="newHint">
+                  <Modal.Open opens="newPost">
                     <Button isLight={false}>New</Button>
                   </Modal.Open>
-                  <Modal.Window name="newHint">
+                  <Modal.Window name="newPost">
                     <AddPostForm
                       gameData={gameData}
                       currentGames={[Number(id)]}
@@ -102,14 +102,16 @@ function HintListHeader() {
                   </Modal.Window>
                 </Modal>
               ) : (
-                <Modal>
-                  <Modal.Open opens="newHint">
-                    <Button isLight={false}>New</Button>
-                  </Modal.Open>
-                  <Modal.Window name="newHint">
-                    <NewHint user={user} />
-                  </Modal.Window>
-                </Modal>
+                gameData?.find((game) => game.id === Number(id)).isReleased && (
+                  <Modal>
+                    <Modal.Open opens="newHint">
+                      <Button isLight={false}>New</Button>
+                    </Modal.Open>
+                    <Modal.Window name="newHint">
+                      <NewHint user={user} />
+                    </Modal.Window>
+                  </Modal>
+                )
               )}
             </div>
           )}

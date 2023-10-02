@@ -68,7 +68,8 @@ function CurrentlyPlaying({
         $inputPopulated={currentlyPlaying?.name}
       />
       <CurrentlyPlayingSuggestions $active={gameQuery?.length > 2}>
-        {gameData?.filter((game) => game.isVisible).length > 0 ? (
+        {gameData?.filter((game) => game.isVisible && game.isReleased).length >
+        0 ? (
           gameData.map(
             (game) =>
               !currentlyPlayingList.includes(game.id) && (

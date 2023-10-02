@@ -12,4 +12,16 @@ const StyledCaptcha = styled.div`
   justify-content: center;
 `;
 
-export { StyledCaptcha };
+const ComplianceStatement = styled.div`
+  & a {
+    transition: all 0.3s;
+
+    color: var(--color-brand-100);
+
+    &:hover {
+      color: var(--color-brand-800);
+    }
+  }
+`;
+
+export { StyledCaptcha, ComplianceStatement };

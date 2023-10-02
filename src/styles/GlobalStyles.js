@@ -85,6 +85,11 @@ const GlobalStyles = createGlobalStyle`
   margin: 0;
 }
 
+*::selection {
+  background: var(--color-red-400);
+  color: var(--color-red-100);
+}
+
 html {
   font-size: 62.5%;
   height: 100%;
@@ -202,6 +207,11 @@ const CommonButton = css`
   color: ${(props) => (props.$light ? '#333' : '#ddd')};
   border: 4px solid transparent;
   transition: all 0.3s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
   &:hover {
     background-color: ${(props) =>

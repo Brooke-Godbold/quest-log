@@ -1,9 +1,9 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 const StyledSwitchViewContainer = styled.div`
   display: none;
 
-  @media (max-width: 75em) {
+  @media (max-width: 100em) {
     display: flex;
     gap: 2.4rem;
     justify-content: space-around;

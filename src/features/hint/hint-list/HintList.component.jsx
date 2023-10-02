@@ -1,29 +1,34 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from 'react-router-dom';
 
-import { BsStickyFill, BsTrophyFill } from "react-icons/bs";
+import { BsStickyFill, BsTrophyFill } from 'react-icons/bs';
 
-import HintListHeader from "./HintListHeader.component";
-import HintListBody from "./HintListBody.component";
+import { useGame } from '../../../query/game/useGame';
+
+import HintListHeader from './HintListHeader.component';
+import HintListBody from './HintListBody.component';
 
 import {
   SocialFeedButton,
   SocialFeedButtons,
-} from "../../social/social-feed-container/SocialFeedContainer.styles";
-import { ResponsiveButtonContent } from "../../../ui/responsive-button-content/ResponsiveButtonContent.styles";
-import { StyledHintListSection } from "./HintList.styles";
+} from '../../social/social-feed-container/SocialFeedContainer.styles';
+import { ResponsiveButtonContent } from '../../../ui/responsive-button-content/ResponsiveButtonContent.styles';
+import { StyledHintListSection } from './HintList.styles';
 
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from '@uidotdev/usehooks';
 
 function HintListSection({ detailsActive }) {
-  const isSmallDevice = useMediaQuery("only screen and (max-width : 75em)");
+  const { id } = useParams();
+  const { gameData } = useGame(id);
+
+  const isSmallDevice = useMediaQuery('only screen and (max-width : 100em)');
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   function setView(view) {
-    searchParams.set("view", view);
-    searchParams.delete("search");
+    searchParams.set('view', view);
+    searchParams.delete('search');
     setSearchParams(searchParams, { replace: true });
   }
 
@@ -31,18 +36,20 @@ function HintListSection({ detailsActive }) {
     <StyledHintListSection $detailsActive={detailsActive}>
       {!isSmallDevice && (
         <SocialFeedButtons>
+          {gameData?.isReleased && (
+            <SocialFeedButton
+              $active={searchParams.get('view') === 'hints'}
+              onClick={() => setView('hints')}
+            >
+              <ResponsiveButtonContent>
+                <p>Hints</p>
+                <BsTrophyFill />
+              </ResponsiveButtonContent>
+            </SocialFeedButton>
+          )}
           <SocialFeedButton
-            $active={searchParams.get("view") === "hints"}
-            onClick={() => setView("hints")}
-          >
-            <ResponsiveButtonContent>
-              <p>Hints</p>
-              <BsTrophyFill />
-            </ResponsiveButtonContent>
-          </SocialFeedButton>
-          <SocialFeedButton
-            $active={searchParams.get("view") === "posts"}
-            onClick={() => setView("posts")}
+            $active={searchParams.get('view') === 'posts'}
+            onClick={() => setView('posts')}
           >
             <ResponsiveButtonContent>
               <p>Posts</p>
